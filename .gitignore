@@ -1,0 +1,11 @@
+
+
+
+#IDE Garbage
+Debug/
+Release/
+packages/
+bin/
+obj/
+.vs
+*.sdf
