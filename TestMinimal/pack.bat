@@ -1,5 +1,5 @@
 @echo off
 
-if not %1==Release exit
+if "%1"=="Debug" exit
 
-packfolder.exe res SciterArchive.cs -csharp
+packfolder.exe res ArchiveResources.cs -csharp

@@ -1,16 +1,18 @@
-﻿using System;
+﻿using AForge.Video.DirectShow;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AForge.Video.DirectShow;
 using SciterSharp;
-using System.Drawing.Imaging;
+using SciterSharp.Interop;
+using System.Web;
 
 namespace TestMinimal
 {
@@ -21,6 +23,8 @@ namespace TestMinimal
 		{
 			{
 				PInvokeUtils.OleInitialize(IntPtr.Zero);
+
+				string cwd = Environment.CurrentDirectory;
 
 				// Create the window
 				var wnd = new SciterWindow();
@@ -35,7 +39,7 @@ namespace TestMinimal
 
 				host.RegisterBehaviorHandler("camera", typeof(CameraEvh));
 				host.SetupPage("index.html");
-
+                
 				// Show window and Run message loop
 				wnd.Show();
 
@@ -166,14 +170,15 @@ namespace TestMinimal
             string url;
 #if DEBUG
             string cwd = System.Environment.CurrentDirectory;
-            url = "file:///" + cwd + "\\res\\" + path;
+            url = @"file:///D:\ProjetosSciter\Bootstrap\GeneratorCSharp\SciterBootstrap\res\index.html";
+            url = Uri.EscapeUriString(url);
 #else
             url = "archive://app/" + path;
 #endif
             _wnd.LoadPage(url);
         }
 
-		protected override uint OnLoadData(SciterXDef.SCN_LOAD_DATA sld)
+		protected override SciterXDef.LoadResult OnLoadData(SciterXDef.SCN_LOAD_DATA sld)
         {
             if(sld.uri.StartsWith("archive://app/"))
             {
@@ -182,7 +187,7 @@ namespace TestMinimal
                 if(data!=null)
                     _api.SciterDataReady(_wnd._hwnd, sld.uri, data, (uint) data.Length);
             }
-		    return 0;
+		    return SciterXDef.LoadResult.LOAD_OK;
         }
 	}
 }

@@ -1,10 +1,28 @@
-﻿using System;
+﻿// Copyright 2015 Ramon F. Mendes
+//
+// This file is part of SciterSharp.
+// 
+// SciterSharp is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// SciterSharp is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with SciterSharp.  If not, see <http://www.gnu.org/licenses/>.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using SciterSharp.Interop;
 
 namespace SciterSharp
 {
@@ -64,7 +82,7 @@ namespace SciterSharp
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_INITIALIZATION:
 					{
-						SciterXBehaviors.INITIALIZATION_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.INITIALIZATION_PARAMS>(prms);
+						SciterXBehaviors.INITIALIZATION_PARAMS p = (SciterXBehaviors.INITIALIZATION_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.INITIALIZATION_PARAMS));
 						if(p.cmd == SciterXBehaviors.INITIALIZATION_EVENTS.BEHAVIOR_ATTACH)
 						{
 #if DEBUG
@@ -88,25 +106,25 @@ namespace SciterSharp
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_MOUSE:
 					{
-						SciterXBehaviors.MOUSE_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.MOUSE_PARAMS>(prms);
+						SciterXBehaviors.MOUSE_PARAMS p = (SciterXBehaviors.MOUSE_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.MOUSE_PARAMS));
 						return OnMouse(se, p);
 					}
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_KEY:
 					{
-						SciterXBehaviors.KEY_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.KEY_PARAMS>(prms);
+						SciterXBehaviors.KEY_PARAMS p = (SciterXBehaviors.KEY_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.KEY_PARAMS));
 						return OnKey(se, p);
 					}
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_FOCUS:
 					{
-						SciterXBehaviors.FOCUS_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.FOCUS_PARAMS>(prms);
+						SciterXBehaviors.FOCUS_PARAMS p = (SciterXBehaviors.FOCUS_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.FOCUS_PARAMS));
 						return OnFocus(se, p);
 					}
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_TIMER:
 					{
-						SciterXBehaviors.TIMER_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.TIMER_PARAMS>(prms);
+						SciterXBehaviors.TIMER_PARAMS p = (SciterXBehaviors.TIMER_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.TIMER_PARAMS));
 						if(p.timerId!=IntPtr.Zero)
 							return OnTimer(se, p.timerId);
 						return OnTimer(se);
@@ -114,25 +132,25 @@ namespace SciterSharp
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_BEHAVIOR_EVENT:
 					{
-						SciterXBehaviors.BEHAVIOR_EVENT_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.BEHAVIOR_EVENT_PARAMS>(prms);
+						SciterXBehaviors.BEHAVIOR_EVENT_PARAMS p = (SciterXBehaviors.BEHAVIOR_EVENT_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.BEHAVIOR_EVENT_PARAMS));
 						return OnEvent(new SciterElement(p.he), se, (SciterXBehaviors.BEHAVIOR_EVENTS) p.cmd, p.reason, new SciterValue(p.data));// maybe I should not pass SciterValue to avoid add-refing the VALUE
 					}
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_METHOD_CALL:
 					{
-						SciterXDom.METHOD_PARAMS p = Marshal.PtrToStructure<SciterXDom.METHOD_PARAMS>(prms);
+						SciterXDom.METHOD_PARAMS p = (SciterXDom.METHOD_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXDom.METHOD_PARAMS));
 						return OnMethodCall(se, p.methodID);
 					}
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_DATA_ARRIVED:
 					{
-						SciterXBehaviors.DATA_ARRIVED_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.DATA_ARRIVED_PARAMS>(prms);
+						SciterXBehaviors.DATA_ARRIVED_PARAMS p = (SciterXBehaviors.DATA_ARRIVED_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.DATA_ARRIVED_PARAMS));
 						return OnDataArrived(se, p);
 					}
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_SCROLL:
 					{
-						SciterXBehaviors.SCROLL_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.SCROLL_PARAMS>(prms);
+						SciterXBehaviors.SCROLL_PARAMS p = (SciterXBehaviors.SCROLL_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.SCROLL_PARAMS));
 						return OnScroll(se, p);
 					}
 
@@ -147,7 +165,7 @@ namespace SciterSharp
 						else if(IntPtr.Size==8)
 							Debug.Assert(RESULT_OFFSET.ToInt32()==24);
 
-						SciterXBehaviors.SCRIPTING_METHOD_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.SCRIPTING_METHOD_PARAMS>(prms);
+						SciterXBehaviors.SCRIPTING_METHOD_PARAMS p = (SciterXBehaviors.SCRIPTING_METHOD_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.SCRIPTING_METHOD_PARAMS));
 						SciterXBehaviors.SCRIPTING_METHOD_PARAMS_Wraper pw = new SciterXBehaviors.SCRIPTING_METHOD_PARAMS_Wraper(p);
 
 						bool bOK = OnScriptCall(se, pw.name, pw.args, out pw.result);
@@ -175,7 +193,7 @@ namespace SciterSharp
 					
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_GESTURE:
 					{
-						SciterXBehaviors.GESTURE_PARAMS p = Marshal.PtrToStructure<SciterXBehaviors.GESTURE_PARAMS>(prms);
+						SciterXBehaviors.GESTURE_PARAMS p = (SciterXBehaviors.GESTURE_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.GESTURE_PARAMS));
 						return OnGesturel(se, p);
 					}
 					

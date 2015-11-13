@@ -1,4 +1,21 @@
-﻿using System;
+﻿// Copyright 2015 Ramon F. Mendes
+//
+// This file is part of SciterSharp.
+// 
+// SciterSharp is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// SciterSharp is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with SciterSharp.  If not, see <http://www.gnu.org/licenses/>.
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,6 +23,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using SciterSharp.Interop;
 
 namespace SciterSharp
 {
@@ -100,6 +118,10 @@ namespace SciterSharp
 			return sv;
 		}
 
+        /// <summary>
+        /// Returns SciterValue representing error.
+	    /// If such value is used as a return value from native function the script runtime will throw an error in script rather than returning that value.
+        /// </summary>
 		public static SciterValue MakeError(string msg)
 		{
 			if(msg==null)
@@ -109,6 +131,14 @@ namespace SciterSharp
 			_api.ValueStringDataSet(ref sv.data, msg, (uint) msg.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_ERROR);
 			return sv;
 		}
+		public static SciterValue MakeSymbol(string name)
+        {
+            if(name==null)
+				return null;
+            SciterValue sv = new SciterValue();
+			_api.ValueStringDataSet(ref sv.data, name, (uint) name.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL);
+			return sv;
+        }
 
 		public bool IsUndefined() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_UNDEFINED; }
 		public bool IsBool() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_BOOL; }
