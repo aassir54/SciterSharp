@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,8 +32,19 @@ namespace SciterSharp.Interop
 		public static ISciterAPI GetSicterAPI()
 		{
 			if(_api==null)
-				_api = (ISciterAPI) Marshal.PtrToStructure(IntPtr.Size==8 ? SciterAPI64() : SciterAPI32(), typeof(ISciterAPI));
-			return _api.Value;
+            {
+                _api = (ISciterAPI)Marshal.PtrToStructure(IntPtr.Size == 8 ? SciterAPI64() : SciterAPI32(), typeof(ISciterAPI));
+
+                // from time to time, Sciter changes its ABI
+                // here we test the minimum Sciter version this library is compatible with
+                uint major = _api.Value.SciterVersion(1);
+                uint minor = _api.Value.SciterVersion(0);
+                Debug.Assert(major == 0x00030003);
+                Debug.Assert(minor >= 0x00000006);
+                Debug.Assert(_api.Value.version==0);
+            }
+
+            return _api.Value;
 		}
 
 		[DllImport("sciter32", EntryPoint = "SciterAPI")]

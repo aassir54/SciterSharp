@@ -44,7 +44,21 @@ namespace TestMinimal
 				wnd.Show();
 
 				GC.Collect();
-				Application.Run();
+                //Application.Run();
+
+                Utils.MSG msg;
+                while(Utils.GetMessage(out msg, IntPtr.Zero, 0, 0)!=0)
+                {
+                    Utils.TranslateMessage(ref msg);
+                    try
+                    {
+                        Utils.DispatchMessage(ref msg);
+                    }
+                    catch(Exception)
+                    {
+                        throw;
+                    }
+                }
 			}
 			
 			GC.Collect();
@@ -170,7 +184,7 @@ namespace TestMinimal
             string url;
 #if DEBUG
             string cwd = System.Environment.CurrentDirectory;
-            url = @"file:///D:\ProjetosSciter\Bootstrap\GeneratorCSharp\SciterBootstrap\res\index.html";
+            url = @"file:///" + cwd + @"\res\index.html";
             url = Uri.EscapeUriString(url);
 #else
             url = "archive://app/" + path;

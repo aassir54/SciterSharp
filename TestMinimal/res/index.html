@@ -8,7 +8,13 @@
 </style>
 
 <script type="text/tiscript">
+
+	VM.unhandledExceptionHandler = function(err) {
+		stdout.println("unhandledExceptionHandler");
+	};
+
 	$(#btn-gc).on("click", function() {
+		stdout.println("MEOWWW");
 		view.gc();
 	});
 	$(#btn-start).on("click", function() {
