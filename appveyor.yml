@@ -1,5 +1,8 @@
 
 configuration: Release
 
+before_build:
+  - nuget restore
+  
 build:
   project: SciterSharp.sln

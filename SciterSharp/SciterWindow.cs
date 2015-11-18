@@ -125,6 +125,14 @@ namespace SciterSharp
 				Marshal.FreeHGlobal(strPtr);
 			}
 		}
+		
+		public SciterElement RootElement
+		{
+			get
+			{
+				// TODO
+			}
+		}
 
 #if WIN32
         protected virtual IntPtr ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled)
