@@ -27,6 +27,11 @@ namespace SciterSharp.Interop
 {
 	public static class SciterX
 	{
+		public static ISciterAPI API
+		{
+			get { return GetSicterAPI(); }
+		}
+
 		private static ISciterAPI? _api = null;
 
 		public static ISciterAPI GetSicterAPI()
@@ -291,7 +296,7 @@ namespace SciterSharp.Interop
 			public delegate bool FPTR_SciterTranslateMessage(IntPtr lpMsg);// TODO: MSG
 #endif
 			// BOOL	function(HWINDOW hWnd, UINT option, UINT_PTR value ) SciterSetOption;
-			public delegate bool FPTR_SciterSetOption(IntPtr hwnd, uint option, uint value);
+			public delegate bool FPTR_SciterSetOption(IntPtr hwnd, SciterXDef.SCITER_RT_OPTIONS option, IntPtr value);
 			// VOID	function(HWINDOW hWndSciter, UINT* px, UINT* py) SciterGetPPI;
 			public delegate void FPTR_SciterGetPPI(IntPtr hwnd, ref uint px, ref uint py);
 			// BOOL	function(HWINDOW hwnd, VALUE* pval ) SciterGetViewExpando;

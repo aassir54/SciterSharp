@@ -24,12 +24,12 @@ namespace TestMinimal
 			{
 				PInvokeUtils.OleInitialize(IntPtr.Zero);
 
-				string cwd = Environment.CurrentDirectory;
-
 				// Create the window
-				var wnd = new SciterWindow();
-				wnd.CreateMainWindow(new System.Drawing.Size(500, 500));
-				wnd.Title = "Sciter Bootstrap";
+				var wnd = new HostWindow();
+				wnd.CreateMainWindow(new System.Drawing.Size(1500, 900), SciterWindow.DefaultCreateFlags | SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_GLASSY);
+				wnd.EnableDwmClientArea();
+                wnd.CenterTopLevelWindow();
+                wnd.Title = "Sciter Bootstrap";
 				wnd.Icon = Properties.Resources.Icon1;
 
 				// Prepares SciterHost and then load the page

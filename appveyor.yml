@@ -1,0 +1,5 @@
+
+configuration: Release
+
+build:
+  project: SciterSharp.sln

@@ -29,8 +29,9 @@ namespace SciterSharp
 {
 	public class SciterWindow
 	{
-		private static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
-		public IntPtr _hwnd;
+		protected static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+        private SciterXDef.FPTR_SciterWindowDelegate _proc;
+        public IntPtr _hwnd;
 
 		public const SciterXDef.SCITER_CREATE_WINDOW_FLAGS DefaultCreateFlags =
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_MAIN |
@@ -43,15 +44,21 @@ namespace SciterSharp
         /// Creates the Sciter window and returns the native handle
         /// </summary>
         /// <param name="sz">Size of the window</param>
-        /// <param name="creationFlags">Flags for the window creation, defaults to SW_MAIN | SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_ENABLE_DEBUG.</param>
-		public void CreateMainWindow(Size sz, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
+        /// <param name="creationFlags">Flags for the window creation, defaults to SW_MAIN | SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_ENABLE_DEBUG</param>
+		public void CreateMainWindow(Size? sz = null, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
 		{
-			PInvokeUtils.RECT frame = new PInvokeUtils.RECT { Left = -1 };
+			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
+            if(sz != null)
+            {
+                frame.right = sz.Value.Width;
+                frame.bottom = sz.Value.Height;
+            }
 
+            _proc = ProcessWindowMessage;
             _hwnd = _api.SciterCreateWindow(
 				creationFlags,
 				ref frame, 
-				null,
+				_proc,
 				IntPtr.Zero,
 				IntPtr.Zero
 			);
@@ -61,7 +68,35 @@ namespace SciterSharp
                 throw new Exception("CreateMainWindow() failed");
 		}
 
-		public bool LoadPage(string url_or_filepath)
+        /// <summary>
+        /// Centers the window in the screen. You must call it after the window is created, but before it is shown to avoid flickering
+        /// </summary>
+        public void CenterTopLevelWindow()
+        {
+            IntPtr hwndParent = PInvokeUtils.GetDesktopWindow();
+            PInvokeUtils.RECT rectWindow, rectParent;
+
+            PInvokeUtils.GetWindowRect(_hwnd, out rectWindow);
+            PInvokeUtils.GetWindowRect(hwndParent, out rectParent);
+
+            int nWidth = rectWindow.right - rectWindow.left;
+            int nHeight = rectWindow.bottom - rectWindow.top;
+
+            int nX = ((rectParent.right - rectParent.left) - nWidth) / 2 + rectParent.left;
+            int nY = ((rectParent.bottom - rectParent.top) - nHeight) / 2 + rectParent.top;
+
+            int nScreenWidth = PInvokeUtils.GetSystemMetrics(PInvokeUtils.SystemMetric.SM_CXSCREEN);
+            int nScreenHeight = PInvokeUtils.GetSystemMetrics(PInvokeUtils.SystemMetric.SM_CYSCREEN);
+
+            if (nX < 0) nX = 0;
+            if (nY < 0) nY = 0;
+            if (nX + nWidth > nScreenWidth) nX = nScreenWidth - nWidth;
+            if (nY + nHeight > nScreenHeight) nY = nScreenHeight - nHeight;
+
+            PInvokeUtils.MoveWindow(_hwnd, nX, nY, nWidth, nHeight, false);
+        }
+
+        public bool LoadPage(string url_or_filepath)
 		{
             return _api.SciterLoadFile(_hwnd, url_or_filepath);
 		}
@@ -90,5 +125,12 @@ namespace SciterSharp
 				Marshal.FreeHGlobal(strPtr);
 			}
 		}
+
+#if WIN32
+        protected virtual IntPtr ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled)
+        {
+            return IntPtr.Zero;
+        }
+#endif
 	}
 }

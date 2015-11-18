@@ -44,32 +44,49 @@ namespace SciterSharp.Interop
             ForceMinimize = 11
         }
 
-		public enum Win32Msg : uint
-		{
-			WM_SETTEXT = 0x000C,
-			WM_SETICON = 0x0080,
-		}
+        public enum Win32Msg : uint
+        {
+            WM_SETTEXT = 0x000C,
+            WM_SETICON = 0x0080,
+            WM_NCCALCSIZE = 0x0083,
+            WM_NCHITTEST = 0x0084,
+        }
+
+        public enum SystemMetric : uint
+        {
+            SM_CXSCREEN = 0,
+            SM_CYSCREEN = 1,
+            SM_CYCAPTION = 4
+        }
 
         // PInvoke functions ===============================================================
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern bool ShowWindow(IntPtr hWnd, ShowWindowCommands nCmdShow);
+        public static extern bool ShowWindow(IntPtr hwnd, ShowWindowCommands nCmdShow);
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		public static extern IntPtr SendMessage(IntPtr hWnd, Win32Msg Msg, IntPtr wParam, IntPtr lParam);
-
-		[DllImport("user32.dll")]
-		public static extern bool IsWindow(IntPtr hWnd);
-
+		public static extern IntPtr SendMessage(IntPtr hwnd, Win32Msg Msg, IntPtr wParam, IntPtr lParam);
+		
         [DllImport("ole32.dll")]
         public static extern int OleInitialize(IntPtr pvReserved);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetDesktopWindow();
+
+        [DllImport("user32.dll", SetLastError=true)]
+        public static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
+
+        [DllImport("user32.dll")]
+        public static extern int GetSystemMetrics(SystemMetric smIndex);
+        
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
 
-        // PInvoke types ===============================================================
+        // PInvoke structs ===============================================================
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
-            public int Left, Top, Right, Bottom;
+            public int left, top, right, bottom;
         }
 
         [StructLayout(LayoutKind.Sequential)]

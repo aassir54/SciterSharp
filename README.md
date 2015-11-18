@@ -1,4 +1,4 @@
-ACTUAL SCITER VERSION: 3.3.0.6
+ACTUAL SCITER VERSION: 3.3.0.7
 
 **Sciter Bootstrap**: for quick starting your desktop app, [download](http://misoftware.rs/Bootstrap/Download) a package with a pre-made IDE project for the C# language, which comes with this library already configured.
 
