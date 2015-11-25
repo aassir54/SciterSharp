@@ -18,17 +18,22 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using SciterSharp.Interop;
+using System.Threading;
 
 namespace SciterSharp
 {
 	public abstract class SciterHost
 	{
+		const int INVOKE_NOTIFICATION = 0x8206241;
+
 		private static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+
 		private IntPtr _hwnd;
 		private Dictionary<string, Type> _behaviorMap = new Dictionary<string, Type>();
 		private SciterXDef.FPTR_SciterHostCallback _cbk;
@@ -75,18 +80,69 @@ namespace SciterSharp
 			return new SciterValue(vret);
 		}
 
-        /// <summary>
-        /// Sciter cross-platform alternative for posting a message in the message queue.
-        /// It will be received as a SC_POSTED_NOTIFICATION notification by this SciterHost instance.
-        /// You should override OnPostedNotification() to handle it.
-        /// </summary>
-        /// <param name="timeout">
-        /// If timeout is > 0 this methods SENDs the message instead of POSTing and this is the timeout for waiting the processing of the message. Leave it as 0 for actually POSTing the message.
-        /// </param>
-        public IntPtr PostNotification(IntPtr wparam, IntPtr lparam, uint timeout = 0)
-        {
-            return _api.SciterPostCallback(_hwnd, wparam, lparam, timeout);
-        }
+		/// <summary>
+		/// Post a message to the UI thread to invoke the given Action. This methods returns immediatly, does not wait for the message processing.
+		/// </summary>
+		/// <param name="what">The delegate which will be invoked</param>
+		public void InvokePost(Action what)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
+			Debug.Assert(what != null);
+
+			GCHandle handle = GCHandle.Alloc(what);
+			PostNotification(new IntPtr(INVOKE_NOTIFICATION), GCHandle.ToIntPtr(handle));
+		}
+
+		public void DebugInspect()
+		{
+#if WIN32
+			DebugInspect("inspector");
+#elif GTKMONO
+			DebugInspect("inspector64");
+#else
+#endif
+		}
+
+		/// <summary>
+		/// Runs the inspector process, waits 1 second, and calls view.connectToInspector() to inspect your page.
+		/// (Before everything it kills any previous instance of the inspector process)
+		/// </summary>
+		/// <param name="inspector_exe_path">Path to the inspector executable, can be an absolute or relative path.</param>
+		public void DebugInspect(string inspector_exe_path)
+		{
+			var ps = Process.GetProcessesByName(inspector_exe_path);
+			foreach(var p in ps)
+				p.Kill();
+
+			if(!File.Exists(inspector_exe_path))
+				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + inspector_exe_path;
+
+			var po = Process.Start(inspector_exe_path);
+			if(po.HasExited)
+				throw new Exception("Could not run inspector. Make sure Sciter DLL is also present in the inspector tool directory.");
+			
+			Task.Run(() =>
+			{
+				Thread.Sleep(1000);
+				InvokePost(() =>
+				{
+					SciterValue connect_api = EvalScript("view.connectToInspector()");
+				});
+			});
+		}
+		
+		/// <summary>
+		/// Sciter cross-platform alternative for posting a message in the message queue.
+		/// It will be received as a SC_POSTED_NOTIFICATION notification by this SciterHost instance.
+		/// You should override OnPostedNotification() to handle it.
+		/// </summary>
+		/// <param name="timeout">
+		/// If timeout is > 0 this methods SENDs the message instead of POSTing and this is the timeout for waiting the processing of the message. Leave it as 0 for actually POSTing the message.
+		/// </param>
+		public IntPtr PostNotification(IntPtr wparam, IntPtr lparam, uint timeout = 0)
+		{
+			return _api.SciterPostCallback(_hwnd, wparam, lparam, timeout);
+		}
 
 		// Behavior factory
 		public void RegisterBehaviorHandler(string behaviorName, Type eventHandlerType)
@@ -158,8 +214,8 @@ namespace SciterSharp
 				
 				case SciterXDef.SC_DATA_LOADED:
 					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
-                    OnDataLoaded(sdl);
-                    return 0;
+					OnDataLoaded(sdl);
+					return 0;
 				
 				case SciterXDef.SC_ATTACH_BEHAVIOR:
 					SciterXDef.SCN_ATTACH_BEHAVIOR sab = (SciterXDef.SCN_ATTACH_BEHAVIOR) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_ATTACH_BEHAVIOR));
@@ -190,11 +246,22 @@ namespace SciterSharp
 				
 				case SciterXDef.SC_POSTED_NOTIFICATION:
 					SciterXDef.SCN_POSTED_NOTIFICATION spn = (SciterXDef.SCN_POSTED_NOTIFICATION) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_POSTED_NOTIFICATION));
-                    IntPtr lreturn = OnPostedNotification(spn.wparam, spn.lparam);
+					IntPtr lreturn = IntPtr.Zero;
+					if(spn.wparam.ToInt32()==INVOKE_NOTIFICATION)
+					{
+						GCHandle handle = GCHandle.FromIntPtr(spn.lparam);
+						Action cbk = (Action) handle.Target;
+						cbk();
+						handle.Free();
+					}
+					else
+					{
+						lreturn = OnPostedNotification(spn.wparam, spn.lparam);
+					}
 
-                    IntPtr OFFSET_LRESULT = Marshal.OffsetOf(typeof(SciterXDef.SCN_POSTED_NOTIFICATION), "lreturn");
-                    Marshal.WriteIntPtr(ptrNotification, OFFSET_LRESULT.ToInt32(), lreturn);
-                    return 0;
+					IntPtr OFFSET_LRESULT = Marshal.OffsetOf(typeof(SciterXDef.SCN_POSTED_NOTIFICATION), "lreturn");
+					Marshal.WriteIntPtr(ptrNotification, OFFSET_LRESULT.ToInt32(), lreturn);
+					return 0;
 
 				default:
 					Debug.Assert(false);

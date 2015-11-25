@@ -38,7 +38,29 @@ namespace SciterSharp.Interop
 		{
 			if(_api==null)
             {
-                _api = (ISciterAPI)Marshal.PtrToStructure(IntPtr.Size == 8 ? SciterAPI64() : SciterAPI32(), typeof(ISciterAPI));
+				int api_struct_size = Marshal.SizeOf(typeof(ISciterAPI));
+				IntPtr api_ptr;
+
+			#if WIN32
+				if(IntPtr.Size == 8)
+				{
+					Debug.Assert(api_struct_size == 1320);
+					api_ptr = SciterAPI64();
+				}
+				else
+				{
+					Debug.Assert(api_struct_size == 660);
+					api_ptr = SciterAPI32();
+				}
+			#elif GTKMONO
+				if(IntPtr.Size != 8)
+					throw new Exception("SciterSharp GTK/Mono only supports 64bits builds");
+
+				Debug.Assert(api_struct_size == 1280);
+				api_ptr = SciterAPI();
+			#endif
+
+				_api = (ISciterAPI)Marshal.PtrToStructure(api_ptr, typeof(ISciterAPI));
 
                 // from time to time, Sciter changes its ABI
                 // here we test the minimum Sciter version this library is compatible with
@@ -52,11 +74,16 @@ namespace SciterSharp.Interop
             return _api.Value;
 		}
 
+
+#if WIN32
 		[DllImport("sciter32", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI32();
-
 		[DllImport("sciter64", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI64();
+#elif GTKMONO
+		[DllImport("sciter-gtk-64.so")]
+		private static extern IntPtr SciterAPI();
+#endif
 
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -99,6 +126,9 @@ namespace SciterSharp.Interop
 			public FPTR_SciterSetHomeURL SciterSetHomeURL;
 #if OSX
 			public FPTR_SciterCreateNSView SciterCreateNSView;
+#endif
+#if GTKMONO
+			public FPTR_SciterCreateWidget SciterCreateWidget;
 #endif
 			public FPTR_SciterCreateWindow SciterCreateWindow;
 			public FPTR_SciterSetupDebugOutput SciterSetupDebugOutput;
@@ -249,9 +279,10 @@ namespace SciterSharp.Interop
 			public FPTR_SciterGetCallbackParam SciterGetCallbackParam;
             public FPTR_SciterPostCallback SciterPostCallback;
 
+			// JUST FOR NOTE, IF NECESSARY TO DECORATED THE CallingConvention OR CharSet OF THE FPTR's
+			//[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
 
 			// LPCWSTR	function() SciterClassName;
-			[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
 			public delegate IntPtr FPTR_SciterClassName();// use Marshal.PtrToStringUni(returned IntPtr) to get the actual string
 			// UINT	function(BOOL major) SciterVersion;
 			public delegate uint FPTR_SciterVersion(int major);
@@ -288,7 +319,7 @@ namespace SciterSharp.Interop
 			//BOOL	function(HWINDOW hWnd, LPCSTR functionName, UINT argc, const SCITER_VALUE* argv, SCITER_VALUE* retval) SciterCall;
 			public delegate bool FPTR_SciterCall(IntPtr hwnd, [MarshalAs(UnmanagedType.LPStr)]string functionName, uint argc, SciterXValue.VALUE[] argv, out SciterXValue.VALUE retval);
 			// BOOL	function(HWINDOW hwnd, LPCWSTR script, UINT scriptLength, SCITER_VALUE* pretval) SciterEval;
-			public delegate bool FPTR_SciterEval(IntPtr hwnd, string script, uint scriptLength, out SciterXValue.VALUE pretval);
+			public delegate bool FPTR_SciterEval(IntPtr hwnd, [MarshalAs(UnmanagedType.LPWStr)]string script, uint scriptLength, out SciterXValue.VALUE pretval);
 			// VOID	function(HWINDOW hwnd) SciterUpdateWindow;
 			public delegate bool FPTR_SciterUpdateWindow(IntPtr hwnd);
 #if WIN32
@@ -315,7 +346,11 @@ namespace SciterSharp.Interop
 			public delegate bool FPTR_SciterSetHomeURL(IntPtr hwnd, string baseUrl);
 #if OSX
 			// HWINDOW function( LPRECT frame ) SciterCreateNSView;// returns NSView*
-			public delegate IntPtr FPTR_SciterCreateNSView(ref Types.RECT frame);
+			public delegate IntPtr FPTR_SciterCreateNSView(ref PInvokeUtils.RECT frame);
+#endif
+#if GTKMONO
+			// HWINDOW SCFN( SciterCreateWidget )( LPRECT frame ); // returns GtkWidget
+			public delegate IntPtr FPTR_SciterCreateWidget(ref PInvokeUtils.RECT frame);
 #endif
 			// HWINDOW	function(UINT creationFlags, LPRECT frame, SciterWindowDelegate* delegt, LPVOID delegateParam, HWINDOW parent) SciterCreateWindow;
 			public delegate IntPtr FPTR_SciterCreateWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags, ref PInvokeUtils.RECT frame, SciterXDef.FPTR_SciterWindowDelegate delegt, IntPtr delegateParam, IntPtr parent);
@@ -324,7 +359,7 @@ namespace SciterSharp.Interop
 			//  LPVOID                param,     // param to be passed "as is" to the pfOutput
 			//  DEBUG_OUTPUT_PROC     pfOutput   // output function, output stream alike thing.
 			//  ) SciterSetupDebugOutput;
-			public delegate IntPtr FPTR_SciterSetupDebugOutput(IntPtr hwndOrNull, IntPtr param, SciterXDef.FPTR_DEBUG_OUTPUT_PROC pfOutput);
+			public delegate void FPTR_SciterSetupDebugOutput(IntPtr hwndOrNull, IntPtr param, SciterXDef.FPTR_DEBUG_OUTPUT_PROC pfOutput);
 
 			//|
 			//| DOM Element API

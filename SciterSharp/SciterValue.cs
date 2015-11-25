@@ -212,7 +212,7 @@ namespace SciterSharp
 		}
 #endif
 		
-		public static SciterValue FromJSONString(string json, SciterXValue.VALUE_STRING_CVT_TYPE ct)
+		public static SciterValue FromJSONString(string json, SciterXValue.VALUE_STRING_CVT_TYPE ct = SciterXValue.VALUE_STRING_CVT_TYPE.CVT_JSON_LITERAL)
 		{
 			SciterValue val = new SciterValue();
 			_api.ValueFromString(ref val.data, json, (uint) json.Length, (uint) ct);

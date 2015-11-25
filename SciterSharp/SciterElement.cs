@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,10 @@ namespace SciterSharp
 
 		public SciterElement(IntPtr he)
 		{
+			Debug.Assert(he != IntPtr.Zero);
+			if(he == IntPtr.Zero)
+				throw new ArgumentException("IntPtr.Zero received at SciterElement constructor");
+
 			_he = he;
 		}
 	}
@@ -39,6 +44,10 @@ namespace SciterSharp
 
 		public SciterNode(IntPtr hn)
 		{
+			Debug.Assert(hn != IntPtr.Zero);
+			if(hn == IntPtr.Zero)
+				throw new ArgumentException("IntPtr.Zero received at SciterNode constructor");
+
 			_hn = hn;
 		}
 	}

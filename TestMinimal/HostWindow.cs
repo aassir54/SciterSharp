@@ -21,7 +21,7 @@ namespace TestMinimal
 				return result;
 			}
 
-			if(msg == (uint) PInvokeUtils.Win32Msg.WM_NCCALCSIZE)
+			if(msg == (uint) PInvokeWindows.Win32Msg.WM_NCCALCSIZE)
             {
                 bool bCalcValidRects = wParam.ToInt32()!=0;
                 if(bCalcValidRects)
@@ -41,7 +41,7 @@ namespace TestMinimal
                     return result;
                 }
             }
-            else if (msg == (uint)PInvokeUtils.Win32Msg.WM_NCHITTEST)
+            else if (msg == (uint) PInvokeWindows.Win32Msg.WM_NCHITTEST)
             {
                 
             }

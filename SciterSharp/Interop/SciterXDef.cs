@@ -118,8 +118,8 @@ namespace SciterSharp.Interop
 
 		public struct SCN_POSTED_NOTIFICATION
 		{
-			public uint	code;		// UINT - [in] one of the codes above.*/
-			public IntPtr	hwnd;	// HWINDOW - [in] HWINDOW of the window this callback was attached to.*/
+			public uint	code;		// UINT - [in] one of the codes above.
+			public IntPtr	hwnd;	// HWINDOW - [in] HWINDOW of the window this callback was attached to.
 			public IntPtr	wparam;	// UINT_PTR
 			public IntPtr	lparam;	// UINT_PTR
 			public IntPtr	lreturn;// UINT_PTR
@@ -194,9 +194,9 @@ namespace SciterSharp.Interop
 #if WIN32
 		public delegate IntPtr FPTR_SciterWindowDelegate(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled);
 #elif OSX
-		SciterWindowDelegate = void*		Obj-C id, NSWindowDelegate and NSResponder
-#elif LINUX
-		SciterWindowDelegate = void*
+		public delegate void FPTR_SciterWindowDelegate();// void*		Obj-C id, NSWindowDelegate and NSResponder
+#elif GTKMONO
+		public delegate void FPTR_SciterWindowDelegate();// void*
 #endif
 
 
@@ -242,7 +242,7 @@ namespace SciterSharp.Interop
 
 
 		// alias DEBUG_OUTPUT_PROC = VOID function(LPVOID param, UINT subsystem /*OUTPUT_SUBSYTEMS*/, UINT severity, LPCWSTR text, UINT text_length);
-		public delegate IntPtr FPTR_DEBUG_OUTPUT_PROC(IntPtr param, uint subsystem /*OUTPUT_SUBSYTEMS*/, uint severity /*OUTPUT_SEVERITY*/, string text, uint text_length);// TODO this string
+		public delegate IntPtr FPTR_DEBUG_OUTPUT_PROC(IntPtr param, uint subsystem /*OUTPUT_SUBSYTEMS*/, uint severity /*OUTPUT_SEVERITY*/, IntPtr text_ptr, uint text_length);
 
 	}
 }

@@ -69,7 +69,10 @@ namespace SciterSharp
 		// EventProc
 		private bool EventProc(IntPtr tag, IntPtr he, uint evtg, IntPtr prms)
 		{
-			SciterElement se = new SciterElement(he);
+			SciterElement se = null;
+			if(he != IntPtr.Zero)
+				se = new SciterElement(he);
+
 			switch((SciterXBehaviors.EVENT_GROUPS) evtg)
 			{
 				case SciterXBehaviors.EVENT_GROUPS.SUBSCRIPTIONS_REQUEST:
@@ -133,7 +136,8 @@ namespace SciterSharp
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_BEHAVIOR_EVENT:
 					{
 						SciterXBehaviors.BEHAVIOR_EVENT_PARAMS p = (SciterXBehaviors.BEHAVIOR_EVENT_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.BEHAVIOR_EVENT_PARAMS));
-						return OnEvent(new SciterElement(p.he), se, (SciterXBehaviors.BEHAVIOR_EVENTS) p.cmd, p.reason, new SciterValue(p.data));// maybe I should not pass SciterValue to avoid add-refing the VALUE
+						SciterElement se2 = p.he!=IntPtr.Zero ? new SciterElement(p.he) : null;
+						return OnEvent(se, se2, (SciterXBehaviors.BEHAVIOR_EVENTS) p.cmd, p.reason, new SciterValue(p.data));// maybe I should not pass SciterValue to avoid add-refing the VALUE
 					}
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_METHOD_CALL:

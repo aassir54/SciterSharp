@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <style>
 	html {
 		background: transparent;
@@ -11,10 +11,14 @@
 </style>
 
 <script type="text/tiscript">
-
 	VM.unhandledExceptionHandler = function(err) {
 		stdout.println("unhandledExceptionHandler");
 	};
+	
+	$(#btn-inspect).on("click", function() {
+		var res = view.connectToInspector($(div));
+		stdout.println("inspect", res);
+	});
 
 	$(#btn-gc).on("click", function() {
 		stdout.println("MEOWWW");
@@ -38,6 +42,7 @@
 		}
 	});
 
+
 	$(#btn-snap).on("click", function() {
 		var img = new Image(640, 480, $(video));
 		view.clipboard(#put, img);
@@ -51,7 +56,11 @@
 
 <body>
 	<div>
-		Click to start capturing video stream from the first camera device: <button #btn-start>Start</button> <button #btn-gc>GC</button>
+		Click to start capturing video stream from the first camera device:
+		<button #btn-start>Start</button>
+		<button #btn-gc>GC</button>
+		<button #btn-inspect>Inspect</button>
+
 		<video />
 		FPS: <span #fps />
 	</div>

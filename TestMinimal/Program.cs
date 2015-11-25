@@ -22,23 +22,31 @@ namespace TestMinimal
 		static void Main(string[] args)
 		{
 			{
-				PInvokeUtils.OleInitialize(IntPtr.Zero);
+				var os = System.Environment.OSVersion;
+
+				PInvokeWindows.OleInitialize(IntPtr.Zero);
 
 				// Create the window
 				var wnd = new HostWindow();
-				wnd.CreateMainWindow(new System.Drawing.Size(1500, 900), SciterWindow.DefaultCreateFlags | SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_GLASSY);
-				wnd.EnableDwmClientArea();
+				wnd.CreateMainWindow(1500, 900, SciterWindow.DefaultCreateFlags | SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_GLASSY);
+				//wnd.EnableDwmClientArea();
                 wnd.CenterTopLevelWindow();
                 wnd.Title = "Sciter Bootstrap";
 				wnd.Icon = Properties.Resources.Icon1;
+
 
 				// Prepares SciterHost and then load the page
 				var host = new Host(wnd);
 				host.AttachEvh(new HostEvh());
 				GC.Collect();
 
+				// Prepares SciterDebugOutput
+				//var dbg = new DebugHandler(wnd);
+
 				host.RegisterBehaviorHandler("camera", typeof(CameraEvh));
-				host.SetupPage("index.html");
+				host.SetupPage("unittest.html");
+
+                host.DebugInspect();
                 
 				// Show window and Run message loop
 				wnd.Show();

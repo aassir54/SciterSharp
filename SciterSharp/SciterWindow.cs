@@ -17,11 +17,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using SciterSharp.Interop;
 
@@ -30,8 +30,12 @@ namespace SciterSharp
 	public class SciterWindow
 	{
 		protected static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+
         private SciterXDef.FPTR_SciterWindowDelegate _proc;
         public IntPtr _hwnd;
+#if GTKMONO
+		public IntPtr _gtkwindow;
+#endif
 
 		public const SciterXDef.SCITER_CREATE_WINDOW_FLAGS DefaultCreateFlags =
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_MAIN |
@@ -40,22 +44,33 @@ namespace SciterSharp
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CONTROLS |
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_ENABLE_DEBUG;
 
+		public void CreateMainWindow(int width, int height, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
+		{
+			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
+            frame.right = width;
+            frame.bottom = height;
+			CreateMainWindow(frame, creationFlags);
+		}
+
+		public void CreateMainWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
+		{
+			CreateMainWindow(new PInvokeUtils.RECT(), creationFlags);
+		}
+
         /// <summary>
         /// Creates the Sciter window and returns the native handle
         /// </summary>
-        /// <param name="sz">Size of the window</param>
+        /// <param name="frame">Rectangle of the window</param>
         /// <param name="creationFlags">Flags for the window creation, defaults to SW_MAIN | SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_ENABLE_DEBUG</param>
-		public void CreateMainWindow(Size? sz = null, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
+		public void CreateMainWindow(PInvokeUtils.RECT frame, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
 		{
-			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
-            if(sz != null)
-            {
-                frame.right = sz.Value.Width;
-                frame.bottom = sz.Value.Height;
-            }
-
+#if WIN32
             _proc = ProcessWindowMessage;
-            _hwnd = _api.SciterCreateWindow(
+#else
+			_proc = null;
+#endif
+
+			_hwnd = _api.SciterCreateWindow(
 				creationFlags,
 				ref frame, 
 				_proc,
@@ -66,18 +81,25 @@ namespace SciterSharp
 
             if(_hwnd == IntPtr.Zero)
                 throw new Exception("CreateMainWindow() failed");
+
+#if GTKMONO
+			_gtkwindow = PInvokeGTK.gtk_widget_get_toplevel(_hwnd);
+			Debug.Assert(_gtkwindow != IntPtr.Zero);
+#endif
 		}
 
+		
         /// <summary>
         /// Centers the window in the screen. You must call it after the window is created, but before it is shown to avoid flickering
         /// </summary>
         public void CenterTopLevelWindow()
         {
-            IntPtr hwndParent = PInvokeUtils.GetDesktopWindow();
+#if WIN32
+			IntPtr hwndParent = PInvokeWindows.GetDesktopWindow();
             PInvokeUtils.RECT rectWindow, rectParent;
 
-            PInvokeUtils.GetWindowRect(_hwnd, out rectWindow);
-            PInvokeUtils.GetWindowRect(hwndParent, out rectParent);
+            PInvokeWindows.GetWindowRect(_hwnd, out rectWindow);
+            PInvokeWindows.GetWindowRect(hwndParent, out rectParent);
 
             int nWidth = rectWindow.right - rectWindow.left;
             int nHeight = rectWindow.bottom - rectWindow.top;
@@ -85,32 +107,65 @@ namespace SciterSharp
             int nX = ((rectParent.right - rectParent.left) - nWidth) / 2 + rectParent.left;
             int nY = ((rectParent.bottom - rectParent.top) - nHeight) / 2 + rectParent.top;
 
-            int nScreenWidth = PInvokeUtils.GetSystemMetrics(PInvokeUtils.SystemMetric.SM_CXSCREEN);
-            int nScreenHeight = PInvokeUtils.GetSystemMetrics(PInvokeUtils.SystemMetric.SM_CYSCREEN);
+            int nScreenWidth = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CXSCREEN);
+            int nScreenHeight = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CYSCREEN);
 
             if (nX < 0) nX = 0;
             if (nY < 0) nY = 0;
             if (nX + nWidth > nScreenWidth) nX = nScreenWidth - nWidth;
             if (nY + nHeight > nScreenHeight) nY = nScreenHeight - nHeight;
 
-            PInvokeUtils.MoveWindow(_hwnd, nX, nY, nWidth, nHeight, false);
-        }
+            PInvokeWindows.MoveWindow(_hwnd, nX, nY, nWidth, nHeight, false);
+#elif GTKMONO
+			int screen_width = PInvokeGTK.gdk_screen_width();
+			int screen_height = PInvokeGTK.gdk_screen_height();
 
+			int window_width, window_height;
+			PInvokeGTK.gtk_window_get_size(_gtkwindow, out window_width, out window_height);
+
+			int nX = (screen_width - window_width) / 2;
+			int nY = (screen_height - window_height) / 2;
+
+			PInvokeGTK.gtk_window_move(_gtkwindow, nX, nY);
+#endif
+		}
+
+		/// <summary>
+		/// Loads the page resource from the given URL or file path
+		/// </summary>
+		/// <param name="url_or_filepath">URL or file path of the page</param>
         public bool LoadPage(string url_or_filepath)
 		{
             return _api.SciterLoadFile(_hwnd, url_or_filepath);
 		}
 
+		/// <summary>
+		/// Loads HTML input from a string
+		/// </summary>
+		/// <param name="html">HTML of the page to be loaded</param>
+		/// <param name="baseUrl">Base Url given to the loaded page</param>
+		public bool LoadHtml(string html, string baseUrl = null)
+		{
+			var bytes = Encoding.UTF8.GetBytes(html);
+			return _api.SciterLoadHtml(_hwnd, bytes, (uint) bytes.Length, baseUrl);
+		}
+
 		public void Show(bool show = true)
 		{
-			PInvokeUtils.ShowWindow(_hwnd, show ? PInvokeUtils.ShowWindowCommands.Show : PInvokeUtils.ShowWindowCommands.Hide);
+#if WIN32
+			PInvokeWindows.ShowWindow(_hwnd, show ? PInvokeWindows.ShowWindowCommands.Show : PInvokeWindows.ShowWindowCommands.Hide);
+#elif GTKMONO
+			PInvokeGTK.gtk_window_present(_gtkwindow);
+#endif
 		}
 
 		public Icon Icon
         {
             set
             {
-                PInvokeUtils.SendMessage(_hwnd, PInvokeUtils.Win32Msg.WM_SETICON, IntPtr.Zero, value.Handle);
+#if WIN32
+                PInvokeWindows.SendMessage(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, IntPtr.Zero, value.Handle);
+#endif
             }
         }
 
@@ -120,9 +175,13 @@ namespace SciterSharp
 			{
 				Debug.Assert(_hwnd!=IntPtr.Zero);
 
+#if WIN32
 				IntPtr strPtr = Marshal.StringToHGlobalUni(value);
-				PInvokeUtils.SendMessage(_hwnd, PInvokeUtils.Win32Msg.WM_SETTEXT, IntPtr.Zero, strPtr);
+				PInvokeWindows.SendMessage(_hwnd, PInvokeWindows.Win32Msg.WM_SETTEXT, IntPtr.Zero, strPtr);
 				Marshal.FreeHGlobal(strPtr);
+#elif GTKMONO
+				PInvokeGTK.gtk_window_set_title(_gtkwindow, value);
+#endif
 			}
 		}
 		
@@ -130,8 +189,23 @@ namespace SciterSharp
 		{
 			get
 			{
-				// TODO
+				Debug.Assert(_hwnd != IntPtr.Zero);
+				IntPtr he;
+				_api.SciterGetRootElement(_hwnd, out he);
+				return new SciterElement(he);
 			}
+		}
+		
+		public uint GetMinWidth()
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero);
+			return _api.SciterGetMinWidth(_hwnd);
+		}
+
+		public uint GetMinHeight(uint for_width)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero);
+			return _api.SciterGetMinHeight(_hwnd, for_width);
 		}
 
 #if WIN32
