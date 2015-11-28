@@ -41,7 +41,7 @@ namespace SciterSharp.Interop
 				int api_struct_size = Marshal.SizeOf(typeof(ISciterAPI));
 				IntPtr api_ptr;
 
-			#if WIN32
+			#if WINDOWS
 				if(IntPtr.Size == 8)
 				{
 					Debug.Assert(api_struct_size == 1320);
@@ -75,7 +75,7 @@ namespace SciterSharp.Interop
 		}
 
 
-#if WIN32
+#if WINDOWS
 		[DllImport("sciter32", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI32();
 		[DllImport("sciter64", EntryPoint = "SciterAPI")]
@@ -94,7 +94,7 @@ namespace SciterSharp.Interop
 			public FPTR_SciterVersion SciterVersion;
 			public FPTR_SciterDataReady SciterDataReady;
 			public FPTR_SciterDataReadyAsync SciterDataReadyAsync;
-#if WIN32
+#if WINDOWS
 			public FPTR_SciterProc SciterProc;
 			public FPTR_SciterProcND SciterProcND;
 #endif
@@ -111,13 +111,13 @@ namespace SciterSharp.Interop
 			public FPTR_SciterCall SciterCall;
 			public FPTR_SciterEval SciterEval;
 			public FPTR_SciterUpdateWindow SciterUpdateWindow;
-#if WIN32
+#if WINDOWS
 			public FPTR_SciterTranslateMessage SciterTranslateMessage;
 #endif
 			public FPTR_SciterSetOption SciterSetOption;
 			public FPTR_SciterGetPPI SciterGetPPI;
 			public FPTR_SciterGetViewExpando SciterGetViewExpando;
-#if WIN32
+#if WINDOWS
 			public FPTR_SciterRenderD2D SciterRenderD2D;
 			public FPTR_SciterD2DFactory SciterD2DFactory;
 			public FPTR_SciterDWFactory SciterDWFactory;
@@ -290,11 +290,11 @@ namespace SciterSharp.Interop
 			public delegate bool FPTR_SciterDataReady(IntPtr hwnd, [MarshalAs(UnmanagedType.LPWStr)]string uri, byte[] data, uint dataLength);
 			// BOOL	function(HWINDOW hwnd, LPCWSTR uri, LPCBYTE data, UINT dataLength, LPVOID requestId) SciterDataReadyAsync;
 			public delegate bool FPTR_SciterDataReadyAsync(IntPtr hwnd, string uri, byte[] data, uint dataLength, IntPtr requestId);
-#if WIN32
+#if WINDOWS
 			// LRESULT	function(HWINDOW hwnd, UINT msg, WPARAM wParam, LPARAM lParam) SciterProc;
-			public delegate IntPtr FPTR_SciterProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam);
+			public delegate IntPtr FPTR_SciterProc(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam);
 			// LRESULT	function(HWINDOW hwnd, UINT msg, WPARAM wParam, LPARAM lParam, BOOL* pbHandled) SciterProcND;
-			public delegate IntPtr FPTR_SciterProcND(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool pbHandled);
+			public delegate IntPtr FPTR_SciterProcND(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, ref bool pbHandled);
 #endif
 			// BOOL	function(HWINDOW hWndSciter, LPCWSTR filename) SciterLoadFile;
 			public delegate bool FPTR_SciterLoadFile(IntPtr hwnd, [MarshalAs(UnmanagedType.LPWStr)]string filename);
@@ -322,7 +322,7 @@ namespace SciterSharp.Interop
 			public delegate bool FPTR_SciterEval(IntPtr hwnd, [MarshalAs(UnmanagedType.LPWStr)]string script, uint scriptLength, out SciterXValue.VALUE pretval);
 			// VOID	function(HWINDOW hwnd) SciterUpdateWindow;
 			public delegate bool FPTR_SciterUpdateWindow(IntPtr hwnd);
-#if WIN32
+#if WINDOWS
 			// BOOL	function(MSG* lpMsg) SciterTranslateMessage;
 			public delegate bool FPTR_SciterTranslateMessage(IntPtr lpMsg);// TODO: MSG
 #endif
@@ -332,7 +332,7 @@ namespace SciterSharp.Interop
 			public delegate void FPTR_SciterGetPPI(IntPtr hwnd, ref uint px, ref uint py);
 			// BOOL	function(HWINDOW hwnd, VALUE* pval ) SciterGetViewExpando;
 			public delegate bool FPTR_SciterGetViewExpando(IntPtr hwnd, IntPtr pval);// TODO
-#if WIN32
+#if WINDOWS
 			// BOOL	function(HWINDOW hWndSciter, ID2D1RenderTarget* prt) SciterRenderD2D;
 			public delegate bool FPTR_SciterRenderD2D(IntPtr hwnd, IntPtr prt);// TODO
 			// BOOL	function(ID2D1Factory ** ppf) SciterD2DFactory;

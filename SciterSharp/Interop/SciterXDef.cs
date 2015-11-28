@@ -191,7 +191,7 @@ namespace SciterSharp.Interop
 			SCITER_ALPHA_WINDOW = 12,
 		}
 
-#if WIN32
+#if WINDOWS
 		public delegate IntPtr FPTR_SciterWindowDelegate(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled);
 #elif OSX
 		public delegate void FPTR_SciterWindowDelegate();// void*		Obj-C id, NSWindowDelegate and NSResponder

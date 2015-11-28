@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="res\index.html" />
+    <Content Include="res\unittest.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

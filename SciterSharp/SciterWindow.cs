@@ -30,9 +30,8 @@ namespace SciterSharp
 	public class SciterWindow
 	{
 		protected static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
-
-        private SciterXDef.FPTR_SciterWindowDelegate _proc;
         public IntPtr _hwnd;
+        private SciterXDef.FPTR_SciterWindowDelegate _proc;
 #if GTKMONO
 		public IntPtr _gtkwindow;
 #endif
@@ -64,8 +63,8 @@ namespace SciterSharp
         /// <param name="creationFlags">Flags for the window creation, defaults to SW_MAIN | SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_ENABLE_DEBUG</param>
 		public void CreateMainWindow(PInvokeUtils.RECT frame, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
 		{
-#if WIN32
-            _proc = ProcessWindowMessage;
+#if WINDOWS
+            _proc = InternalProcessSciterWindowMessage;
 #else
 			_proc = null;
 #endif
@@ -88,13 +87,12 @@ namespace SciterSharp
 #endif
 		}
 
-		
         /// <summary>
         /// Centers the window in the screen. You must call it after the window is created, but before it is shown to avoid flickering
         /// </summary>
         public void CenterTopLevelWindow()
         {
-#if WIN32
+#if WINDOWS
 			IntPtr hwndParent = PInvokeWindows.GetDesktopWindow();
             PInvokeUtils.RECT rectWindow, rectParent;
 
@@ -152,7 +150,7 @@ namespace SciterSharp
 
 		public void Show(bool show = true)
 		{
-#if WIN32
+#if WINDOWS
 			PInvokeWindows.ShowWindow(_hwnd, show ? PInvokeWindows.ShowWindowCommands.Show : PInvokeWindows.ShowWindowCommands.Hide);
 #elif GTKMONO
 			PInvokeGTK.gtk_window_present(_gtkwindow);
@@ -163,8 +161,8 @@ namespace SciterSharp
         {
             set
             {
-#if WIN32
-                PInvokeWindows.SendMessage(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, IntPtr.Zero, value.Handle);
+#if WINDOWS
+                PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, IntPtr.Zero, value.Handle);
 #endif
             }
         }
@@ -174,15 +172,29 @@ namespace SciterSharp
 			set
 			{
 				Debug.Assert(_hwnd!=IntPtr.Zero);
-
-#if WIN32
+#if WINDOWS
 				IntPtr strPtr = Marshal.StringToHGlobalUni(value);
-				PInvokeWindows.SendMessage(_hwnd, PInvokeWindows.Win32Msg.WM_SETTEXT, IntPtr.Zero, strPtr);
+				PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETTEXT, IntPtr.Zero, strPtr);
 				Marshal.FreeHGlobal(strPtr);
 #elif GTKMONO
 				PInvokeGTK.gtk_window_set_title(_gtkwindow, value);
 #endif
 			}
+
+            get
+            {
+				Debug.Assert(_hwnd!=IntPtr.Zero);
+#if WINDOWS
+                IntPtr unmanagedPointer = Marshal.AllocHGlobal(2048);
+				IntPtr chars_copied = PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_GETTEXT, new IntPtr(2048), unmanagedPointer);
+                string title = Marshal.PtrToStringUni(unmanagedPointer, chars_copied.ToInt32());
+                Marshal.FreeHGlobal(unmanagedPointer);
+                return title;
+#elif GTKMONO
+                IntPtr str_ptr = PInvokeGTK.gtk_window_get_title(_gtkwindow);
+                return Marshal.PtrToStringAnsi(str_ptr);
+#endif
+            }
 		}
 		
 		public SciterElement RootElement
@@ -208,10 +220,20 @@ namespace SciterSharp
 			return _api.SciterGetMinHeight(_hwnd, for_width);
 		}
 
-#if WIN32
-        protected virtual IntPtr ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled)
+#if WINDOWS
+        private IntPtr InternalProcessSciterWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled)
         {
-            return IntPtr.Zero;
+            Debug.Assert(pParam.ToInt32()==0);
+            Debug.Assert(_hwnd.ToInt32()==0 || hwnd==_hwnd);
+            
+            IntPtr lResult = IntPtr.Zero;
+            handled = ProcessWindowMessage(hwnd, msg, wParam, lParam, ref lResult);
+            return lResult;
+        }
+
+        protected virtual bool ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, ref IntPtr lResult)// overrisable
+        {
+            return false;
         }
 #endif
 	}

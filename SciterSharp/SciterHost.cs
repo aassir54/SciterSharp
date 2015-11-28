@@ -95,7 +95,7 @@ namespace SciterSharp
 
 		public void DebugInspect()
 		{
-#if WIN32
+#if WINDOWS
 			DebugInspect("inspector");
 #elif GTKMONO
 			DebugInspect("inspector64");
@@ -114,8 +114,13 @@ namespace SciterSharp
 			foreach(var p in ps)
 				p.Kill();
 
+#if WINDOWS
+			if(!File.Exists(inspector_exe_path) && !File.Exists(inspector_exe_path + ".exe"))
+				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + inspector_exe_path;
+#else
 			if(!File.Exists(inspector_exe_path))
 				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + inspector_exe_path;
+#endif
 
 			var po = Process.Start(inspector_exe_path);
 			if(po.HasExited)
@@ -134,7 +139,7 @@ namespace SciterSharp
 		/// <summary>
 		/// Sciter cross-platform alternative for posting a message in the message queue.
 		/// It will be received as a SC_POSTED_NOTIFICATION notification by this SciterHost instance.
-		/// You should override OnPostedNotification() to handle it.
+		/// Override OnPostedNotification() to handle it.
 		/// </summary>
 		/// <param name="timeout">
 		/// If timeout is > 0 this methods SENDs the message instead of POSTing and this is the timeout for waiting the processing of the message. Leave it as 0 for actually POSTing the message.

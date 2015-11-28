@@ -203,7 +203,7 @@ namespace SciterSharp
 			return null;
 		}
 
-#if WIN32
+#if WINDOWS
 		public DateTime GetDate()
 		{
 			long v;
