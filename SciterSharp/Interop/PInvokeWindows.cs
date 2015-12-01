@@ -52,15 +52,12 @@ namespace SciterSharp.Interop
 			WM_SETTEXT = 0x000C,
 			WM_GETTEXT = 0x000D,
 			WM_SETICON = 0x0080,
-			WM_NCCALCSIZE = 0x0083,
-			WM_NCHITTEST = 0x0084,
 		}
 
 		public enum SystemMetric : uint
 		{
 			SM_CXSCREEN = 0,
-			SM_CYSCREEN = 1,
-			SM_CYCAPTION = 4
+			SM_CYSCREEN = 1
 		}
 
 

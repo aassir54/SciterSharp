@@ -343,9 +343,7 @@ namespace TestMinimal
         {
 			IntPtr result = IntPtr.Zero;
 			
-
-
-			if(msg == (uint) PInvokeWindows.Win32Msg.WM_NCCALCSIZE)
+			if(msg == Utils.WM_NCCALCSIZE)
             {
                 bool bCalcValidRects = wParam.ToInt32()!=0;
                 if(bCalcValidRects)
@@ -363,9 +361,8 @@ namespace TestMinimal
                     return true;
                 }
             }
-            else if (msg == (uint) PInvokeWindows.Win32Msg.WM_NCHITTEST)
+            else if(msg == Utils.WM_NCHITTEST)
             {
-                int r = 234;
             }
             return false;
         }

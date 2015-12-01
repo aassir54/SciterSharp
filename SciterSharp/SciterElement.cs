@@ -21,11 +21,13 @@ using System.Linq;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using SciterSharp.Interop;
 
 namespace SciterSharp
 {
 	public class SciterElement
 	{
+		private static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
 		private IntPtr _he;
 
 		public SciterElement(IntPtr he)
@@ -35,6 +37,18 @@ namespace SciterSharp
 				throw new ArgumentException("IntPtr.Zero received at SciterElement constructor");
 
 			_he = he;
+		}
+
+		public void SetState(SciterXDom.ELEMENT_STATE_BITS bitsToSet, SciterXDom.ELEMENT_STATE_BITS bitsToClear = 0, bool update = true)
+		{
+			_api.SciterSetElementState(_he, (uint) bitsToSet, (uint) bitsToClear, update);
+		}
+
+		public IntPtr GetNativeHwnd(bool rootWindow = true)
+		{
+			IntPtr hwnd;
+			_api.SciterGetElementHwnd(_he, out hwnd, rootWindow);
+			return hwnd;
 		}
 	}
 

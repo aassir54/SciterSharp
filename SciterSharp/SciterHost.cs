@@ -50,6 +50,11 @@ namespace SciterSharp
 			_api.SciterSetCallback(hwnd, Marshal.GetFunctionPointerForDelegate(_cbk), IntPtr.Zero);
 		}
 
+		/// <summary>
+		/// Attacheds a window level event-handler: it receives every event for all elements of the page.
+		/// You can only attach a single event-handler.
+		/// </summary>
+		/// <param name="evh"></param>
 		public void AttachEvh(SciterEventHandler evh)
 		{
 			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");

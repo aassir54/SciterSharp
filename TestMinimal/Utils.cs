@@ -8,6 +8,9 @@ namespace TestMinimal
 {
 	class Utils
 	{
+        public const uint WM_NCCALCSIZE = 0x0083;
+		public const uint WM_NCHITTEST = 0x0084;
+
 		public enum NCCALCSIZE
 		{
 			WVR_ALIGHTOP = 0x10,
@@ -56,8 +59,7 @@ namespace TestMinimal
 
 
 		[DllImport("user32.dll")]
-		public static extern sbyte GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin,
-		uint wMsgFilterMax);
+		public static extern sbyte GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
 
 		[DllImport("user32.dll")]
 		public static extern bool TranslateMessage([In] ref MSG lpMsg);
