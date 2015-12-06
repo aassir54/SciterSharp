@@ -26,6 +26,20 @@ namespace SciterSharp.Interop
 {
     public static class PInvokeUtils
     {
+		public static void RunMsgLoop()
+		{
+#if WINDOWS
+			PInvokeWindows.MSG msg;
+			while(PInvokeWindows.GetMessage(out msg, IntPtr.Zero, 0, 0)!=0)
+			{
+				PInvokeWindows.TranslateMessage(ref msg);
+				PInvokeWindows.DispatchMessage(ref msg);
+			}
+#elif GTKMONO
+			PInvokeGTK.gtk_main();
+#endif
+		}
+
         // PInvoke structs ===============================================================
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT

@@ -36,6 +36,15 @@ namespace SciterSharp
 		public IntPtr _gtkwindow;
 #endif
 
+		public SciterWindow()
+		{
+#if WINDOWS
+            _proc = InternalProcessSciterWindowMessage;
+#else
+			_proc = null;
+#endif
+		}
+
 		public const SciterXDef.SCITER_CREATE_WINDOW_FLAGS DefaultCreateFlags =
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_MAIN |
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_TITLEBAR |
@@ -63,12 +72,6 @@ namespace SciterSharp
         /// <param name="creationFlags">Flags for the window creation, defaults to SW_MAIN | SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_ENABLE_DEBUG</param>
 		public void CreateMainWindow(PInvokeUtils.RECT frame, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
 		{
-#if WINDOWS
-            _proc = InternalProcessSciterWindowMessage;
-#else
-			_proc = null;
-#endif
-
 			_hwnd = _api.SciterCreateWindow(
 				creationFlags,
 				ref frame, 
@@ -86,6 +89,18 @@ namespace SciterSharp
 			Debug.Assert(_gtkwindow != IntPtr.Zero);
 #endif
 		}
+
+#if WINDOWS
+		public void CreateChildWindow(IntPtr hwnd_parent)
+		{
+			if(PInvokeWindows.IsWindow(hwnd_parent) == false) throw new ArgumentException("Invalid parent window");
+
+			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
+			_hwnd = _api.SciterCreateWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CHILD, ref frame, _proc, IntPtr.Zero, hwnd_parent);
+			if(_hwnd == IntPtr.Zero)
+                throw new Exception("CreateChildWindow() failed");
+		}
+#endif
 
         /// <summary>
         /// Centers the window in the screen. You must call it after the window is created, but before it is shown to avoid flickering

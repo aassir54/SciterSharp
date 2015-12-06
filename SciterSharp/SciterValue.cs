@@ -131,12 +131,12 @@ namespace SciterSharp
 			_api.ValueStringDataSet(ref sv.data, msg, (uint) msg.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_ERROR);
 			return sv;
 		}
-		public static SciterValue MakeSymbol(string name)
+		public static SciterValue MakeSymbol(string sym)
         {
-            if(name==null)
+            if(sym==null)
 				return null;
             SciterValue sv = new SciterValue();
-			_api.ValueStringDataSet(ref sv.data, name, (uint) name.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL);
+			_api.ValueStringDataSet(ref sv.data, sym, (uint) sym.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL);
 			return sv;
         }
 
@@ -261,15 +261,36 @@ namespace SciterSharp
 			}
 		}
 
+		public SciterValue this[string key]
+		{
+			get
+			{
+				return GetItem(key);
+			}
+			set
+			{
+				SetItem(key, value);
+			}
+		}
+
 
 		public void SetItem(int i, SciterValue val)
 		{
-			_api.ValueNthElementValueSet(ref data, i, ref val.data);
+			var vr = _api.ValueNthElementValueSet(ref data, i, ref val.data);
+			Debug.Assert(vr == SciterXValue.VALUE_RESULT.HV_OK);
 		}
 
 		public void SetItem(SciterValue key, SciterValue val)
 		{
-			_api.ValueSetValueToKey(ref data, ref key.data, ref val.data);
+			var vr = _api.ValueSetValueToKey(ref data, ref key.data, ref val.data);
+			Debug.Assert(vr == SciterXValue.VALUE_RESULT.HV_OK);
+		}
+
+		public void SetItem(string key, SciterValue val)
+		{
+			SciterValue svkey = SciterValue.MakeSymbol(key);
+			var vr = _api.ValueSetValueToKey(ref data, ref svkey.data, ref val.data);
+			Debug.Assert(vr == SciterXValue.VALUE_RESULT.HV_OK);
 		}
 
 		public void Append(SciterValue val)
@@ -280,6 +301,14 @@ namespace SciterSharp
 		public SciterValue GetItem(SciterValue vkey)
 		{
 			SciterValue vret = new SciterValue();
+			_api.ValueGetValueOfKey(ref data, ref vkey.data, out vret.data);
+			return vret;
+		}
+
+		public SciterValue GetItem(string strkey)
+		{
+			SciterValue vret = new SciterValue();
+			SciterValue vkey = SciterValue.MakeSymbol(strkey);
 			_api.ValueGetValueOfKey(ref data, ref vkey.data, out vret.data);
 			return vret;
 		}

@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-//#if GTKMONO
+#if GTKMONO
 namespace SciterSharp.Interop
 {
 	public static class PInvokeGTK
@@ -58,4 +58,4 @@ namespace SciterSharp.Interop
 		public static extern int gtk_window_move(IntPtr window, int x, int y);
 	}
 }
-//#endif
+#endif

@@ -40,7 +40,7 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct METHOD_PARAMS
 		{
-			public uint methodID;
+			public SciterXBehaviors.BEHAVIOR_METHOD_IDENTIFIERS methodID;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]

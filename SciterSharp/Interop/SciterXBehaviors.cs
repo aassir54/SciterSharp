@@ -266,13 +266,13 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DRAW_PARAMS
 		{
-			public uint				cmd;
+			public uint					cmd;
 			public IntPtr				gfx;// SCITER_GRAPHICS*
 			public PInvokeUtils.RECT	area;
-			public uint				reserved;
+			public DRAW_EVENTS			draw_type;
 		}
 
-		public enum CONTENT_CHANGE_BITS : uint	// for CONTENT_CHANGED reason
+		public enum CONTENT_CHANGE_BITS : uint // for CONTENT_CHANGED reason
 		{
 			CONTENT_ADDED = 0x01,
 			CONTENT_REMOVED = 0x02,
@@ -288,28 +288,28 @@ namespace SciterSharp.Interop
 			SELECT_SELECTION_CHANGED = 5,  // selection in <select> changed
 			SELECT_STATE_CHANGED = 6,      // node in select expanded/collapsed, heTarget is the node
 
-			POPUP_REQUEST   = 7,           // request to show popup just received,
-			//     here DOM of popup element can be modifed.
-			POPUP_READY     = 8,           // popup element has been measured and ready to be shown on screen,
-			//     here you can use functions like ScrollToView.
-			POPUP_DISMISSED = 9,           // popup element is closed,
-			//     here DOM of popup element can be modifed again - e.g. some items can be removed
-			//     to free memory.
+			POPUP_REQUEST   = 7,			// request to show popup just received,
+											//     here DOM of popup element can be modifed.
+			POPUP_READY     = 8,			// popup element has been measured and ready to be shown on screen,
+											//     here you can use functions like ScrollToView.
+			POPUP_DISMISSED = 9,			// popup element is closed,
+											//     here DOM of popup element can be modifed again - e.g. some items can be removed
+											//     to free memory.
 
-			MENU_ITEM_ACTIVE = 0xA,        // menu item activated by mouse hover or by keyboard,
-			MENU_ITEM_CLICK = 0xB,         // menu item click,
-			//   BEHAVIOR_EVENT_PARAMS structure layout
-			//   BEHAVIOR_EVENT_PARAMS.cmd - MENU_ITEM_CLICK/MENU_ITEM_ACTIVE
-			//   BEHAVIOR_EVENT_PARAMS.heTarget - owner(anchor) of the menu
-			//   BEHAVIOR_EVENT_PARAMS.he - the menu item, presumably <li> element
-			//   BEHAVIOR_EVENT_PARAMS.reason - BY_MOUSE_CLICK | BY_KEY_CLICK
+			MENU_ITEM_ACTIVE = 0xA,			// menu item activated by mouse hover or by keyboard,
+			MENU_ITEM_CLICK = 0xB,			// menu item click,
+											//   BEHAVIOR_EVENT_PARAMS structure layout
+											//   BEHAVIOR_EVENT_PARAMS.cmd - MENU_ITEM_CLICK/MENU_ITEM_ACTIVE
+											//   BEHAVIOR_EVENT_PARAMS.heTarget - owner(anchor) of the menu
+											//   BEHAVIOR_EVENT_PARAMS.he - the menu item, presumably <li> element
+											//   BEHAVIOR_EVENT_PARAMS.reason - BY_MOUSE_CLICK | BY_KEY_CLICK
 
 
-			CONTEXT_MENU_REQUEST = 0x10,   // "right-click", BEHAVIOR_EVENT_PARAMS::he is current popup menu HELEMENT being processed or NULL.
-			// application can provide its own HELEMENT here (if it is NULL) or modify current menu element.
+			CONTEXT_MENU_REQUEST = 0x10,	// "right-click", BEHAVIOR_EVENT_PARAMS::he is current popup menu HELEMENT being processed or NULL.
+											// application can provide its own HELEMENT here (if it is NULL) or modify current menu element.
 
-			VISIUAL_STATUS_CHANGED = 0x11, // broadcast notification, sent to all elements of some container being shown or hidden
-			DISABLED_STATUS_CHANGED = 0x12,// broadcast notification, sent to all elements of some container that got new value of :disabled state
+			VISIUAL_STATUS_CHANGED = 0x11,	// broadcast notification, sent to all elements of some container being shown or hidden
+			DISABLED_STATUS_CHANGED = 0x12,	// broadcast notification, sent to all elements of some container that got new value of :disabled state
 
 			POPUP_DISMISSING = 0x13,		// popup is about to be closed
 
@@ -334,49 +334,49 @@ namespace SciterSharp.Interop
 			ELEMENT_COLLAPSED = 0x90,      // element was collapsed, so far only behavior:tabs is sending these two to the panels
 			ELEMENT_EXPANDED,              // element was expanded,
 
-			ACTIVATE_CHILD,                // activate (select) child,
-			// used for example by accesskeys behaviors to send activation request, e.g. tab on behavior:tabs.
+			ACTIVATE_CHILD,					// activate (select) child,
+											// used for example by accesskeys behaviors to send activation request, e.g. tab on behavior:tabs.
 
 			//DO_SWITCH_TAB = ACTIVATE_CHILD,// command to switch tab programmatically, handled by behavior:tabs
 			//                               // use it as HTMLayoutPostEvent(tabsElementOrItsChild, DO_SWITCH_TAB, tabElementToShow, 0);
 
 			INIT_DATA_VIEW,                // request to virtual grid to initialize its view
 
-			ROWS_DATA_REQUEST,             // request from virtual grid to data source behavior to fill data in the table
-			// parameters passed throug DATA_ROWS_PARAMS structure.
+			ROWS_DATA_REQUEST,				// request from virtual grid to data source behavior to fill data in the table
+											// parameters passed throug DATA_ROWS_PARAMS structure.
 
-			UI_STATE_CHANGED,              // ui state changed, observers shall update their visual states.
-			// is sent for example by behavior:richtext when caret position/selection has changed.
+			UI_STATE_CHANGED,				// ui state changed, observers shall update their visual states.
+											// is sent for example by behavior:richtext when caret position/selection has changed.
 
-			FORM_SUBMIT,                   // behavior:form detected submission event. BEHAVIOR_EVENT_PARAMS::data field contains data to be posted.
-			// BEHAVIOR_EVENT_PARAMS::data is of type T_MAP in this case key/value pairs of data that is about 
-			// to be submitted. You can modify the data or discard submission by returning true from the handler.
-			FORM_RESET,                    // behavior:form detected reset event (from button type=reset). BEHAVIOR_EVENT_PARAMS::data field contains data to be reset.
-			// BEHAVIOR_EVENT_PARAMS::data is of type T_MAP in this case key/value pairs of data that is about 
-			// to be rest. You can modify the data or discard reset by returning true from the handler.
+			FORM_SUBMIT,					// behavior:form detected submission event. BEHAVIOR_EVENT_PARAMS::data field contains data to be posted.
+											// BEHAVIOR_EVENT_PARAMS::data is of type T_MAP in this case key/value pairs of data that is about 
+											// to be submitted. You can modify the data or discard submission by returning true from the handler.
+			FORM_RESET,						// behavior:form detected reset event (from button type=reset). BEHAVIOR_EVENT_PARAMS::data field contains data to be reset.
+											// BEHAVIOR_EVENT_PARAMS::data is of type T_MAP in this case key/value pairs of data that is about 
+											// to be rest. You can modify the data or discard reset by returning true from the handler.
 
-			DOCUMENT_COMPLETE,             // document in behavior:frame or root document is complete.
+			DOCUMENT_COMPLETE,				// document in behavior:frame or root document is complete.
 
-			HISTORY_PUSH,                  // requests to behavior:history (commands)
+			HISTORY_PUSH,					// requests to behavior:history (commands)
 			HISTORY_DROP,                     
 			HISTORY_PRIOR,
 			HISTORY_NEXT,
-			HISTORY_STATE_CHANGED,         // behavior:history notification - history stack has changed
+			HISTORY_STATE_CHANGED,			// behavior:history notification - history stack has changed
 
-			CLOSE_POPUP,                   // close popup request,
-			REQUEST_TOOLTIP,               // request tooltip, evt.source <- is the tooltip element.
+			CLOSE_POPUP,					// close popup request,
+			REQUEST_TOOLTIP,				// request tooltip, evt.source <- is the tooltip element.
 
-			ANIMATION         = 0xA0,      // animation started (reason=1) or ended(reason=0) on the element.
-			DOCUMENT_CREATED  = 0xC0,      // document created, script namespace initialized. target -> the document
-			DOCUMENT_CLOSE_REQUEST = 0xC1, // document is about to be closed, to cancel closing do: evt.data = sciter::value("cancel");
-			DOCUMENT_CLOSE    = 0xC2,      // last notification before document removal from the DOM
-			DOCUMENT_READY    = 0xC3,      // document has got DOM structure, styles and behaviors of DOM elements. Script loading run is complete at this moment. 
+			ANIMATION         = 0xA0,		// animation started (reason=1) or ended(reason=0) on the element.
+			DOCUMENT_CREATED  = 0xC0,		// document created, script namespace initialized. target -> the document
+			DOCUMENT_CLOSE_REQUEST = 0xC1,	// document is about to be closed, to cancel closing do: evt.data = sciter::value("cancel");
+			DOCUMENT_CLOSE    = 0xC2,		// last notification before document removal from the DOM
+			DOCUMENT_READY    = 0xC3,		// document has got DOM structure, styles and behaviors of DOM elements. Script loading run is complete at this moment. 
 
 
-			VIDEO_INITIALIZED = 0xD1,      // <video> "ready" notification   
-			VIDEO_STARTED     = 0xD2,      // <video> playback started notification   
-			VIDEO_STOPPED     = 0xD3,      // <video> playback stoped/paused notification   
-			VIDEO_BIND_RQ     = 0xD4,      // <video> request for frame source binding, 
+			VIDEO_INITIALIZED = 0xD1,		// <video> "ready" notification   
+			VIDEO_STARTED     = 0xD2,		// <video> playback started notification   
+			VIDEO_STOPPED     = 0xD3,		// <video> playback stoped/paused notification   
+			VIDEO_BIND_RQ     = 0xD4,		// <video> request for frame source binding, 
 											//   If you want to provide your own video frames source for the given target <video> element do the following:
 											//   1. Handle and consume this VIDEO_BIND_RQ request 
 											//   2. You will receive second VIDEO_BIND_RQ request/event for the same <video> element
@@ -386,16 +386,16 @@ namespace SciterSharp.Interop
 											//      call sciter::video_destination::render_frame(...) as soon as they are available
 											//      call sciter::video_destination::stop_streaming() to stop the rendering (a.k.a. end of movie reached)
 		
-			PAGINATION_STARTS  = 0xE0,     // behavior:pager starts pagination
-			PAGINATION_PAGE    = 0xE1,     // behavior:pager paginated page no, reason -> page no
-			PAGINATION_ENDS    = 0xE2,     // behavior:pager end pagination, reason -> total pages
+			PAGINATION_STARTS  = 0xE0,		// behavior:pager starts pagination
+			PAGINATION_PAGE    = 0xE1,		// behavior:pager paginated page no, reason -> page no
+			PAGINATION_ENDS    = 0xE2,		// behavior:pager end pagination, reason -> total pages
 		
 			FIRST_APPLICATION_EVENT_CODE = 0x100
 			// all custom event codes shall be greater
 			// than this number. All codes below this will be used
-			// solely by application - HTMLayout will not intrepret it
+			// solely by application - HTMLayout will not interpret it
 			// and will do just dispatching.
-			// To send event notifications with  these codes use
+			// To send event notifications with these codes use
 			// HTMLayoutSend/PostEvent API.
 		}
 
@@ -459,7 +459,6 @@ namespace SciterSharp.Interop
 			public SciterXValue.VALUE result;	// plz note, Sciter will internally call ValueClear to this VALUE,
 												// that is, it own this data, so always assign a copy with a positive ref-count of your VALUE to this variable
 												// you will know that if you get an "Access Violation" error
-												// see json_value.copy() - midi
 		}
 
 		// SCRIPTING_METHOD_PARAMS wraper

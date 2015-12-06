@@ -61,6 +61,18 @@ namespace SciterSharp.Interop
 		}
 
 
+		// PInvoke structs ===============================================================
+		[StructLayout(LayoutKind.Sequential)]
+		public struct MSG
+		{
+			public IntPtr hwnd;
+			public UInt32 message;
+			public IntPtr wParam;
+			public IntPtr lParam;
+			public UInt32 time;
+			public PInvokeUtils.POINT pt;
+		}
+
 		// PInvoke functions ===============================================================
 		[DllImport("user32.dll")]
 		public static extern IntPtr SendMessageW(IntPtr hwnd, Win32Msg Msg, IntPtr wParam, IntPtr lParam);
@@ -82,6 +94,20 @@ namespace SciterSharp.Interop
 		
 		[DllImport("user32.dll")]
 		public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool IsWindow(IntPtr hWnd);
+
+
+		[DllImport("user32.dll")]
+		public static extern sbyte GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+
+		[DllImport("user32.dll")]
+		public static extern bool TranslateMessage([In] ref MSG lpMsg);
+
+		[DllImport("user32.dll")]
+		public static extern IntPtr DispatchMessage([In] ref MSG lpmsg);
 	}
 }
 #endif

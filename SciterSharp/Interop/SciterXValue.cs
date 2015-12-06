@@ -26,7 +26,7 @@ namespace SciterSharp.Interop
 {
 	public static class SciterXValue
 	{
-		public enum VALUE_RESULT
+		public enum VALUE_RESULT : int
 		{
 			HV_OK_TRUE = -1,
 			HV_OK = 0,

@@ -70,7 +70,7 @@ namespace SciterSharp.Interop
 			[MarshalAs(UnmanagedType.LPWStr)]
 			public string uri;				// LPCWSTR - [in] Zero terminated string, fully qualified uri, for example "http://server/folder/file.ext".
 
-			public byte[] outData;			// LPCBYTE - [in,out] pointer to loaded data to return. if data exists in the cache then this field contain pointer to it
+			public IntPtr outData;			// LPCBYTE - [in,out] pointer to loaded data to return. if data exists in the cache then this field contain pointer to it
 			public uint outDataSize;		// UINT - [in,out] loaded data size to return.
 			public uint dataType;			// UINT - [in] SciterResourceType
 

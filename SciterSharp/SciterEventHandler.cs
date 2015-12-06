@@ -50,14 +50,13 @@ namespace SciterSharp
 		protected virtual bool OnMouse(SciterElement se, SciterXBehaviors.MOUSE_PARAMS prms)	{ return false; }
 		protected virtual bool OnKey(SciterElement se, SciterXBehaviors.KEY_PARAMS prms)		{ return false; }
 		protected virtual bool OnFocus(SciterElement se, SciterXBehaviors.FOCUS_PARAMS prms)	{ return false; }
-		protected virtual bool OnDraw(SciterElement se, SciterXBehaviors.DRAW_PARAMS prms)		{ return false; }
 
 		protected virtual bool OnTimer(SciterElement se)										{ return false; }
 		protected virtual bool OnTimer(SciterElement se, IntPtr extTimerId)						{ return false; }
 		protected virtual bool OnSize(SciterElement se)											{ return false; }
 
-		protected virtual bool OnMethodCall(SciterElement se, uint methodID)					{ return false; }
-		protected virtual bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result) { result = null; return false; }
+		protected virtual bool OnMethodCall(SciterElement se, SciterXBehaviors.BEHAVIOR_METHOD_IDENTIFIERS methodID)	{ return false; }
+		protected virtual bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)	{ result = null; return false; }
 
 		protected virtual bool OnEvent(SciterElement elSource, SciterElement elTarget, SciterXBehaviors.BEHAVIOR_EVENTS type, IntPtr reason, SciterValue data)	{ return false; }
 

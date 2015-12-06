@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using SciterSharp;
 using SciterSharp.Interop;
 
@@ -13,15 +12,16 @@ namespace TestMinimal
 {
 	class Program
 	{
-        //[STAThread]
+        [STAThread]
 		static void Main(string[] args)
 		{
-            //PInvokeWindows.OleInitialize(IntPtr.Zero);
+            PInvokeWindows.OleInitialize(IntPtr.Zero);
 
 			// Create the window
 			var wnd = new HostWindow();
 			wnd.CreateMainWindowNative(1500, 800);
             wnd.EnableDwmClientArea();
+
             //wnd.CenterTopLevelWindow();
             //wnd.AfterWindowCreate();
 			//wnd.Title = "Sciter Bootstrap";
@@ -29,12 +29,12 @@ namespace TestMinimal
 			// Prepares SciterHost and then load the page
 			var host = new Host();
 			host.SetupWindow(wnd);
-			/*host.AttachEvh(new HostEvh());
-			host.SetupPage("index.html");*/
+			host.AttachEvh(new HostEvh());
+			host.SetupPage("index.html");
 
 			// Show window and Run message loop
 			wnd.Show();
-			Application.Run();
+			PInvokeUtils.RunMsgLoop();
 		}
 	}
 

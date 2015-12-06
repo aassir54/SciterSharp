@@ -105,6 +105,7 @@ namespace SciterSharp
 #elif GTKMONO
 			DebugInspect("inspector64");
 #else
+			throw new Exception("Not supported");
 #endif
 		}
 

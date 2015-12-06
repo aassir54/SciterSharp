@@ -50,6 +50,51 @@ namespace SciterSharp
 			_api.SciterGetElementHwnd(_he, out hwnd, rootWindow);
 			return hwnd;
 		}
+
+		public SciterValue GetValue()
+		{
+			SciterXValue.VALUE val;
+			_api.SciterGetValue(_he, out val);
+			return new SciterValue(val);
+		}
+
+		public SciterValue GetExpando()
+		{
+			SciterXValue.VALUE val;
+			_api.SciterGetExpando(_he, out val, true);
+			return new SciterValue(val);
+		}
+
+		// call scripting method attached to the element (directly or through of scripting behavior)  
+		// Example, script:
+		//   var elem = ...
+		//   elem.foo = function() {...}
+		// Native code: 
+		//   SciterElement elem = ...
+		//   elem.CallMethod("foo");
+		public SciterValue CallMethod(string name, params SciterValue[] args)
+		{
+			Debug.Assert(name != null);
+
+			SciterXValue.VALUE vret;
+			_api.SciterCallScriptingMethod(_he, name, SciterValue.ToVALUEArray(args), (uint) args.Length, out vret);
+			return new SciterValue(vret);
+		}
+
+		// call scripting function defined on global level   
+		// Example, script:
+		//   function foo() {...}
+		// Native code: 
+		//   dom::element root = ... get root element of main document or some frame inside it
+		//   root.call_function("foo"); // call the function
+		public SciterValue CallFunction(string name, params SciterValue[] args)
+		{
+			Debug.Assert(name != null);
+
+			SciterXValue.VALUE vret;
+			_api.SciterCallScriptingFunction(_he, name, SciterValue.ToVALUEArray(args), (uint) args.Length, out vret);
+			return new SciterValue(vret);
+		}
 	}
 
 	public class SciterNode

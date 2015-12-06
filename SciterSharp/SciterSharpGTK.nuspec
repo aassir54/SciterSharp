@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<title>$title$</title>
+		<authors>$author$</authors>
+		<owners>$author$</owners>
+		<licenseUrl>http://www.gnu.org/licenses/gpl-3.0.html</licenseUrl>
+        <projectUrl>https://github.com/midiway/SciterSharp</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+		<iconUrl>http://cdn.misoftware.rs/PublicThings/icon_sciter.png</iconUrl>
+		
+		<description>$description$</description>
+		<releaseNotes></releaseNotes>
+		<copyright>MI Software Copyright 2015</copyright>
+        <tags>Sciter HTML VisualStudio</tags>
+	</metadata>
+	<files>
+        <file src="bin\Release\SciterSharpGTK.dll" target="lib\mono45\SciterSharp.dll" />
+        <file src="bin\Release\SciterSharpGTK.XML" target="lib\mono45\SciterSharp.XML" />
+    </files>
+</package>

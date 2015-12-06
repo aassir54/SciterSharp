@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterSharp", "SciterSharp\SciterSharp.csproj", "{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMinimal", "TestMinimal\TestMinimal.csproj", "{BAD1F9FD-2FA7-44A7-85F3-BD2ACA077044}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{79D83D95-E87F-48DC-A653-1998BA9602E2}"
@@ -12,20 +10,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestForms", "TestForms\TestForms.csproj", "{B7F8726F-4B56-4A2A-8DFD-A0B525D58B5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterSharpWindows", "SciterSharp\SciterSharpWindows.csproj", "{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterSharpGTK", "SciterSharp\SciterSharpGTK.csproj", "{D60ACAE0-C246-4936-B92B-B756841DB545}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BAD1F9FD-2FA7-44A7-85F3-BD2ACA077044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BAD1F9FD-2FA7-44A7-85F3-BD2ACA077044}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAD1F9FD-2FA7-44A7-85F3-BD2ACA077044}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAD1F9FD-2FA7-44A7-85F3-BD2ACA077044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F8726F-4B56-4A2A-8DFD-A0B525D58B5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F8726F-4B56-4A2A-8DFD-A0B525D58B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F8726F-4B56-4A2A-8DFD-A0B525D58B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F8726F-4B56-4A2A-8DFD-A0B525D58B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D60ACAE0-C246-4936-B92B-B756841DB545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D60ACAE0-C246-4936-B92B-B756841DB545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D60ACAE0-C246-4936-B92B-B756841DB545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D60ACAE0-C246-4936-B92B-B756841DB545}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
