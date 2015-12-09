@@ -29,51 +29,77 @@ namespace SciterSharp.Interop
 	{
 		public static ISciterAPI API
 		{
-			get { return GetSicterAPI(); }
+			get { return LoadAPI(); }
+		}
+		public static SciterGraphics.ISciterGraphicsAPI GraphicsAPI
+		{
+			get { return LoadGraphicsAPI(); }
 		}
 
 		private static ISciterAPI? _api = null;
+		private static SciterGraphics.ISciterGraphicsAPI? _gapi = null;
 
-		public static ISciterAPI GetSicterAPI()
+		private static ISciterAPI LoadAPI()
 		{
 			if(_api==null)
-            {
+			{
 				int api_struct_size = Marshal.SizeOf(typeof(ISciterAPI));
 				IntPtr api_ptr;
 
 			#if WINDOWS
 				if(IntPtr.Size == 8)
 				{
-					Debug.Assert(api_struct_size == 1320);
+					Debug.Assert(api_struct_size == 1328);
 					api_ptr = SciterAPI64();
 				}
 				else
 				{
-					Debug.Assert(api_struct_size == 660);
+					Debug.Assert(api_struct_size == 664);
 					api_ptr = SciterAPI32();
 				}
 			#elif GTKMONO
 				if(IntPtr.Size != 8)
 					throw new Exception("SciterSharp GTK/Mono only supports 64bits builds");
 
-				Debug.Assert(api_struct_size == 1280);
+				Debug.Assert(api_struct_size == 1288);
 				api_ptr = SciterAPI();
 			#endif
 
 				_api = (ISciterAPI)Marshal.PtrToStructure(api_ptr, typeof(ISciterAPI));
 
-                // from time to time, Sciter changes its ABI
-                // here we test the minimum Sciter version this library is compatible with
-                uint major = _api.Value.SciterVersion(1);
-                uint minor = _api.Value.SciterVersion(0);
-                Debug.Assert(major == 0x00030003);
-                Debug.Assert(minor >= 0x00000006);
-                Debug.Assert(_api.Value.version==0);
-            }
+				// from time to time, Sciter changes its ABI
+				// here we test the minimum Sciter version this library is compatible with
+				uint major = _api.Value.SciterVersion(1);
+				uint minor = _api.Value.SciterVersion(0);
+				Debug.Assert(major == 0x00030003);
+				Debug.Assert(minor >= 0x00000006);
+				Debug.Assert(_api.Value.version==0);
+			}
 
-            return _api.Value;
+			return _api.Value;
 		}
 
+		private static SciterGraphics.ISciterGraphicsAPI LoadGraphicsAPI()
+		{
+			uint minor = API.SciterVersion(0);
+			if(minor >= 0x00010000)
+			{
+				throw new Exception("Graphics API needs at least Sciter 3.1.0.0");
+			}
+
+			if(_gapi==null)
+			{
+				int api_struct_size = Marshal.SizeOf(typeof(SciterGraphics.ISciterGraphicsAPI));
+				if(IntPtr.Size == 8)
+					Debug.Assert(api_struct_size == 464);
+				else
+					Debug.Assert(api_struct_size == 232);
+
+				IntPtr api_ptr = API.GetSciterGraphicsAPI();
+				_gapi = (SciterGraphics.ISciterGraphicsAPI)Marshal.PtrToStructure(api_ptr, typeof(SciterGraphics.ISciterGraphicsAPI));
+			}
+			return _gapi.Value;
+		}
 
 #if WINDOWS
 		[DllImport("sciter32", EntryPoint = "SciterAPI")]
@@ -84,7 +110,6 @@ namespace SciterSharp.Interop
 		[DllImport("sciter-gtk-64.so")]
 		private static extern IntPtr SciterAPI();
 #endif
-
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct ISciterAPI
@@ -250,13 +275,13 @@ namespace SciterSharp.Interop
 			public FPTR_ValueFloatDataSet ValueFloatDataSet;
 			public FPTR_ValueBinaryData ValueBinaryData;
 			public FPTR_ValueBinaryDataSet ValueBinaryDataSet;
-            public FPTR_ValueElementsCount ValueElementsCount;
+			public FPTR_ValueElementsCount ValueElementsCount;
 			public FPTR_ValueNthElementValue ValueNthElementValue;
 			public FPTR_ValueNthElementValueSet ValueNthElementValueSet;
 			public FPTR_ValueNthElementKey ValueNthElementKey;
 			public FPTR_ValueEnumElements ValueEnumElements;
 			public FPTR_ValueSetValueToKey ValueSetValueToKey;
-            public FPTR_ValueGetValueOfKey ValueGetValueOfKey;
+			public FPTR_ValueGetValueOfKey ValueGetValueOfKey;
 			public FPTR_ValueToString ValueToString;
 			public FPTR_ValueFromString ValueFromString;
 			public FPTR_ValueInvoke ValueInvoke;
@@ -271,13 +296,14 @@ namespace SciterSharp.Interop
 			public FPTR_Sciter_V2v Sciter_V2v;
 
 			public FPTR_SciterOpenArchive SciterOpenArchive;
-            public FPTR_SciterGetArchiveItem SciterGetArchiveItem;
-            public FPTR_SciterCloseArchive SciterCloseArchive;
+			public FPTR_SciterGetArchiveItem SciterGetArchiveItem;
+			public FPTR_SciterCloseArchive SciterCloseArchive;
 
 			public FPTR_SciterFireEvent SciterFireEvent;
 
 			public FPTR_SciterGetCallbackParam SciterGetCallbackParam;
-            public FPTR_SciterPostCallback SciterPostCallback;
+			public FPTR_SciterPostCallback SciterPostCallback;
+			public FPTR_GetSciterGraphicsAPI GetSciterGraphicsAPI;
 
 			// JUST FOR NOTE, IF NECESSARY TO DECORATED THE CallingConvention OR CharSet OF THE FPTR's
 			//[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
@@ -366,117 +392,117 @@ namespace SciterSharp.Interop
 			//|
 
 			// SCDOM_RESULT function(HELEMENT he) Sciter_UseElement;
-			public delegate int FPTR_Sciter_UseElement(IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_Sciter_UseElement(IntPtr he);
 			// SCDOM_RESULT function(HELEMENT he) Sciter_UnuseElement;
-			public delegate int FPTR_Sciter_UnuseElement(IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_Sciter_UnuseElement(IntPtr he);
 			//SCDOM_RESULT function(HWINDOW hwnd, HELEMENT *phe) SciterGetRootElement;
-			public delegate int FPTR_SciterGetRootElement(IntPtr hwnd, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetRootElement(IntPtr hwnd, out IntPtr phe);
 			//SCDOM_RESULT function(HWINDOW hwnd, HELEMENT *phe) SciterGetFocusElement;
-			public delegate int FPTR_SciterGetFocusElement(IntPtr hwnd, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetFocusElement(IntPtr hwnd, out IntPtr phe);
 			//SCDOM_RESULT function(HWINDOW hwnd, POINT pt, HELEMENT* phe) SciterFindElement;
-			public delegate int FPTR_SciterFindElement(IntPtr hwnd, PInvokeUtils.POINT pt, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterFindElement(IntPtr hwnd, PInvokeUtils.POINT pt, out IntPtr phe);
 			//SCDOM_RESULT function(HELEMENT he, UINT* count) SciterGetChildrenCount;
-			public delegate int FPTR_SciterGetChildrenCount(IntPtr he, ref uint count);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetChildrenCount(IntPtr he, out uint count);
 			//SCDOM_RESULT function(HELEMENT he, UINT n, HELEMENT* phe) SciterGetNthChild;
-			public delegate int FPTR_SciterGetNthChild(IntPtr he, uint n, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetNthChild(IntPtr he, uint n, out IntPtr phe);
 			//SCDOM_RESULT function(HELEMENT he, HELEMENT* p_parent_he) SciterGetParentElement;
-			public delegate int FPTR_SciterGetParentElement(IntPtr he, out IntPtr p_parent_he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetParentElement(IntPtr he, out IntPtr p_parent_he);
 			//SCDOM_RESULT function(HELEMENT he, BOOL outer, LPCBYTE_RECEIVER rcv, LPVOID rcv_param) SciterGetElementHtmlCB;
-			public delegate int FPTR_SciterGetElementHtmlCB(IntPtr he, bool outer, SciterXDom.FPTR_LPCBYTE_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementHtmlCB(IntPtr he, bool outer, SciterXDom.FPTR_LPCBYTE_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, LPCWSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetElementTextCB;
-			public delegate int FPTR_SciterGetElementTextCB(IntPtr he, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementTextCB(IntPtr he, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, LPCWSTR utf16, UINT length) SciterSetElementText;
-			public delegate int FPTR_SciterSetElementText(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string utf16, uint length);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetElementText(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string utf16, uint length);
 			//SCDOM_RESULT function(HELEMENT he, LPUINT p_count) SciterGetAttributeCount;
-			public delegate int FPTR_SciterGetAttributeCount(IntPtr he, ref uint p_count);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetAttributeCount(IntPtr he, out uint p_count);
 			//SCDOM_RESULT function(HELEMENT he, UINT n, LPCSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetNthAttributeNameCB;
-			public delegate int FPTR_SciterGetNthAttributeNameCB(IntPtr he, uint n, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetNthAttributeNameCB(IntPtr he, uint n, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, UINT n, LPCWSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetNthAttributeValueCB;
-			public delegate int FPTR_SciterGetNthAttributeValueCB(IntPtr he, uint n, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetNthAttributeValueCB(IntPtr he, uint n, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, LPCSTR name, LPCWSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetAttributeByNameCB;
-			public delegate int FPTR_SciterGetAttributeByNameCB(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetAttributeByNameCB(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, LPCSTR name, LPCWSTR value) SciterSetAttributeByName;
-			public delegate int FPTR_SciterSetAttributeByName(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, [MarshalAs(UnmanagedType.LPWStr)]string value);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetAttributeByName(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, [MarshalAs(UnmanagedType.LPWStr)]string value);
 			//SCDOM_RESULT function(HELEMENT he) SciterClearAttributes;
-			public delegate int FPTR_SciterClearAttributes(IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterClearAttributes(IntPtr he);
 			//SCDOM_RESULT function(HELEMENT he, LPUINT p_index) SciterGetElementIndex;
-			public delegate int FPTR_SciterGetElementIndex(IntPtr he, ref uint p_index);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementIndex(IntPtr he, out uint p_index);
 			//SCDOM_RESULT function(HELEMENT he, LPCSTR* p_type) SciterGetElementType;
-			public delegate int FPTR_SciterGetElementType(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]out string p_type);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementType(IntPtr he, out IntPtr p_type);
 			//SCDOM_RESULT function(HELEMENT he, LPCSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetElementTypeCB;
-			public delegate int FPTR_SciterGetElementTypeCB(IntPtr he, SciterXDom.FPTR_LPCSTR_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementTypeCB(IntPtr he, SciterXDom.FPTR_LPCSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, LPCSTR name, LPCWSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetStyleAttributeCB;
-			public delegate int FPTR_SciterGetStyleAttributeCB(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetStyleAttributeCB(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, LPCSTR name, LPCWSTR value) SciterSetStyleAttribute;
-			public delegate int FPTR_SciterSetStyleAttribute(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, [MarshalAs(UnmanagedType.LPWStr)]string value);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetStyleAttribute(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, [MarshalAs(UnmanagedType.LPWStr)]string value);
 			//SCDOM_RESULT function(HELEMENT he, LPRECT p_location, UINT areas /*ELEMENT_AREAS*/) SciterGetElementLocation;
-			public delegate int FPTR_SciterGetElementLocation(IntPtr he, ref PInvokeUtils.RECT p_location, uint areas);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementLocation(IntPtr he, out PInvokeUtils.RECT p_location, SciterXDom.ELEMENT_AREAS areas);
 			//SCDOM_RESULT function(HELEMENT he, UINT SciterScrollFlags) SciterScrollToView;
-			public delegate int FPTR_SciterScrollToView(IntPtr he, uint SciterScrollFlags);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterScrollToView(IntPtr he, uint SciterScrollFlags);
 			//SCDOM_RESULT function(HELEMENT he, BOOL andForceRender) SciterUpdateElement;
-			public delegate int FPTR_SciterUpdateElement(IntPtr he, bool andForceRender);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterUpdateElement(IntPtr he, bool andForceRender);
 			//SCDOM_RESULT function(HELEMENT he, RECT rc) SciterRefreshElementArea;
-			public delegate int FPTR_SciterRefreshElementArea(IntPtr he, PInvokeUtils.RECT rc);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterRefreshElementArea(IntPtr he, PInvokeUtils.RECT rc);
 			//SCDOM_RESULT function(HELEMENT he) SciterSetCapture;
-			public delegate int FPTR_SciterSetCapture(IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetCapture(IntPtr he);
 			//SCDOM_RESULT function(HELEMENT he) SciterReleaseCapture;
-			public delegate int FPTR_SciterReleaseCapture(IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterReleaseCapture(IntPtr he);
 			//SCDOM_RESULT function(HELEMENT he, HWINDOW* p_hwnd, BOOL rootWindow) SciterGetElementHwnd;
-			public delegate int FPTR_SciterGetElementHwnd(IntPtr he, out IntPtr p_hwnd, bool rootWindow);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementHwnd(IntPtr he, out IntPtr p_hwnd, bool rootWindow);
 			//SCDOM_RESULT function(HELEMENT he, LPWSTR szUrlBuffer, UINT UrlBufferSize) SciterCombineURL;
-			public delegate int FPTR_SciterCombineURL(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string szUrlBuffer, uint UrlBufferSize);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCombineURL(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string szUrlBuffer, uint UrlBufferSize);
 			//SCDOM_RESULT function(HELEMENT  he, LPCSTR    CSS_selectors, SciterElementCallback callback, LPVOID param) SciterSelectElements;
-			public delegate int FPTR_SciterSelectElements(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string CSS_selectors, SciterXDom.FPTR_SciterElementCallback callback, IntPtr param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSelectElements(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string CSS_selectors, SciterXDom.FPTR_SciterElementCallback callback, IntPtr param);
 			//SCDOM_RESULT function(HELEMENT  he, LPCWSTR   CSS_selectors, SciterElementCallback callback, LPVOID param) SciterSelectElementsW;
-			public delegate int FPTR_SciterSelectElementsW(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string CSS_selectors, SciterXDom.FPTR_SciterElementCallback callback, IntPtr param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSelectElementsW(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string CSS_selectors, SciterXDom.FPTR_SciterElementCallback callback, IntPtr param);
 			//SCDOM_RESULT function(HELEMENT  he, LPCSTR    selector, UINT      depth, HELEMENT* heFound) SciterSelectParent;
-			public delegate int FPTR_SciterSelectParent(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string selector, uint depth, out IntPtr heFound);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSelectParent(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string selector, uint depth, out IntPtr heFound);
 			//SCDOM_RESULT function(HELEMENT  he, LPCWSTR   selector, UINT      depth, HELEMENT* heFound) SciterSelectParentW;
-			public delegate int FPTR_SciterSelectParentW(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string selector, uint depth, out IntPtr heFound);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSelectParentW(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string selector, uint depth, out IntPtr heFound);
 			//SCDOM_RESULT function(HELEMENT he, const BYTE* html, UINT htmlLength, UINT where) SciterSetElementHtml;
-			public delegate int FPTR_SciterSetElementHtml(IntPtr he, byte[] html, uint htmlLength, uint where);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetElementHtml(IntPtr he, byte[] html, uint htmlLength, uint where);
 			//SCDOM_RESULT function(HELEMENT he, UINT* puid) SciterGetElementUID;
-			public delegate int FPTR_SciterGetElementUID(IntPtr he, ref uint puid);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementUID(IntPtr he, out uint puid);
 			//SCDOM_RESULT function(HWINDOW hwnd, UINT uid, HELEMENT* phe) SciterGetElementByUID;
-			public delegate int FPTR_SciterGetElementByUID(IntPtr hwnd, uint uid, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementByUID(IntPtr hwnd, uint uid, out IntPtr phe);
 			//SCDOM_RESULT function(HELEMENT hePopup, HELEMENT heAnchor, UINT placement) SciterShowPopup;
-			public delegate int FPTR_SciterShowPopup(IntPtr he, IntPtr heAnchor, uint placement);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterShowPopup(IntPtr he, IntPtr heAnchor, uint placement);
 			//SCDOM_RESULT function(HELEMENT hePopup, POINT pos, BOOL animate) SciterShowPopupAt;
-			public delegate int FPTR_SciterShowPopupAt(IntPtr he, PInvokeUtils.POINT pos, bool animate);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterShowPopupAt(IntPtr he, PInvokeUtils.POINT pos, bool animate);
 			//SCDOM_RESULT function(HELEMENT he) SciterHidePopup;
-			public delegate int FPTR_SciterHidePopup(IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterHidePopup(IntPtr he);
 			//SCDOM_RESULT function( HELEMENT he, UINT* pstateBits) SciterGetElementState;
-			public delegate int FPTR_SciterGetElementState(IntPtr he, ref uint pstateBits);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementState(IntPtr he, out uint pstateBits);
 			//SCDOM_RESULT function( HELEMENT he, UINT stateBitsToSet, UINT stateBitsToClear, BOOL updateView) SciterSetElementState;
-			public delegate int FPTR_SciterSetElementState(IntPtr he, uint stateBitsToSet, uint stateBitsToClear, bool updateView);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetElementState(IntPtr he, uint stateBitsToSet, uint stateBitsToClear, bool updateView);
 			//SCDOM_RESULT function( LPCSTR tagname, LPCWSTR textOrNull, /*out*/ HELEMENT *phe ) SciterCreateElement;
-			public delegate int FPTR_SciterCreateElement(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string textOrNull, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateElement(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string textOrNull, out IntPtr phe);
 			//SCDOM_RESULT function( HELEMENT he, /*out*/ HELEMENT *phe ) SciterCloneElement;
-			public delegate int FPTR_SciterCloneElement(IntPtr he, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCloneElement(IntPtr he, out IntPtr phe);
 			//SCDOM_RESULT function( HELEMENT he, HELEMENT hparent, UINT index ) SciterInsertElement;
-			public delegate int FPTR_SciterInsertElement(IntPtr he, IntPtr hparent, uint index);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterInsertElement(IntPtr he, IntPtr hparent, uint index);
 			//SCDOM_RESULT function( HELEMENT he ) SciterDetachElement;
-			public delegate int FPTR_SciterDetachElement(IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterDetachElement(IntPtr he);
 			//SCDOM_RESULT function(HELEMENT he) SciterDeleteElement;
-			public delegate int FPTR_SciterDeleteElement(IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterDeleteElement(IntPtr he);
 			//SCDOM_RESULT function( HELEMENT he, UINT milliseconds, UINT_PTR timer_id ) SciterSetTimer;
-			public delegate int FPTR_SciterSetTimer(IntPtr he, uint milliseconds, IntPtr timer_id);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetTimer(IntPtr he, uint milliseconds, IntPtr timer_id);
 			//SCDOM_RESULT function( HELEMENT he, LPELEMENT_EVENT_PROC pep, LPVOID tag ) SciterDetachEventHandler;
-			public delegate int FPTR_SciterDetachEventHandler(IntPtr he, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterDetachEventHandler(IntPtr he, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag);
 			//SCDOM_RESULT function( HELEMENT he, LPELEMENT_EVENT_PROC pep, LPVOID tag ) SciterAttachEventHandler;
-			public delegate int FPTR_SciterAttachEventHandler(IntPtr he, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterAttachEventHandler(IntPtr he, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag);
 			//SCDOM_RESULT function( HWINDOW hwndLayout, LPELEMENT_EVENT_PROC pep, LPVOID tag, UINT subscription ) SciterWindowAttachEventHandler;
-			public delegate int FPTR_SciterWindowAttachEventHandler(IntPtr hwndLayout, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag, uint subscription);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterWindowAttachEventHandler(IntPtr hwndLayout, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag, uint subscription);
 			//SCDOM_RESULT function( HWINDOW hwndLayout, LPELEMENT_EVENT_PROC pep, LPVOID tag ) SciterWindowDetachEventHandler;
-			public delegate int FPTR_SciterWindowDetachEventHandler(IntPtr hwndLayout, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterWindowDetachEventHandler(IntPtr hwndLayout, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag);
 			//SCDOM_RESULT function( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT_PTR reason, /*out*/ BOOL* handled) SciterSendEvent;
-			public delegate int FPTR_SciterSendEvent(IntPtr he, uint appEventCode, IntPtr heSource, IntPtr reason);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSendEvent(IntPtr he, uint appEventCode, IntPtr heSource, IntPtr reason);
 			//SCDOM_RESULT function( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT_PTR reason) SciterPostEvent;
-			public delegate int FPTR_SciterPostEvent(IntPtr he, uint appEventCode, IntPtr heSource, IntPtr reason);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterPostEvent(IntPtr he, uint appEventCode, IntPtr heSource, IntPtr reason);
 			//SCDOM_RESULT function(HELEMENT he, METHOD_PARAMS* params) SciterCallBehaviorMethod;
-			public delegate int FPTR_SciterCallBehaviorMethod(IntPtr he, ref SciterXDom.METHOD_PARAMS param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCallBehaviorMethod(IntPtr he, ref SciterXDom.METHOD_PARAMS param);
 			//SCDOM_RESULT function( HELEMENT he, LPCWSTR url, UINT dataType, HELEMENT initiator ) SciterRequestElementData;
-			public delegate int FPTR_SciterRequestElementData(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string url, uint dataType, IntPtr initiator);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterRequestElementData(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string url, uint dataType, IntPtr initiator);
 			//SCDOM_RESULT function( HELEMENT he,						// element to deliver data 
 			//							LPCWSTR         url,			// url 
 			//							UINT            dataType,		// data type, see SciterResourceType.
@@ -484,90 +510,90 @@ namespace SciterSharp.Interop
 			//							REQUEST_PARAM*  requestParams,	// parameters
 			//							UINT            nParams			// number of parameters 
 			//							) SciterHttpRequest;
-			public delegate int FPTR_SciterHttpRequest(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string url, uint dataType, uint requestType, ref SciterXDom.REQUEST_PARAM requestParams, uint nParams);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterHttpRequest(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string url, uint dataType, uint requestType, ref SciterXDom.REQUEST_PARAM requestParams, uint nParams);
 			//SCDOM_RESULT function( HELEMENT he, LPPOINT scrollPos, LPRECT viewRect, LPSIZE contentSize ) SciterGetScrollInfo;
-			public delegate int FPTR_SciterGetScrollInfo(IntPtr he, ref PInvokeUtils.POINT scrollPos, ref PInvokeUtils.RECT viewRect, ref PInvokeUtils.SIZE contentSize);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetScrollInfo(IntPtr he, out PInvokeUtils.POINT scrollPos, out PInvokeUtils.RECT viewRect, out PInvokeUtils.SIZE contentSize);
 			//SCDOM_RESULT function( HELEMENT he, POINT scrollPos, BOOL smooth ) SciterSetScrollPos;
-			public delegate int FPTR_SciterSetScrollPos(IntPtr he, PInvokeUtils.POINT scrollPos, bool smooth);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetScrollPos(IntPtr he, PInvokeUtils.POINT scrollPos, bool smooth);
 			//SCDOM_RESULT function( HELEMENT he, INT* pMinWidth, INT* pMaxWidth ) SciterGetElementIntrinsicWidths;
-			public delegate int FPTR_SciterGetElementIntrinsicWidths(IntPtr he, ref int pMinWidth, ref int pMaxWidth);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementIntrinsicWidths(IntPtr he, out int pMinWidth, out int pMaxWidth);
 			//SCDOM_RESULT function( HELEMENT he, INT forWidth, INT* pHeight ) SciterGetElementIntrinsicHeight;
-			public delegate int FPTR_SciterGetElementIntrinsicHeight(IntPtr he, int forWidth, ref int pHeight);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementIntrinsicHeight(IntPtr he, int forWidth, out int pHeight);
 			//SCDOM_RESULT function( HELEMENT he, BOOL* pVisible) SciterIsElementVisible;
-			public delegate int FPTR_SciterIsElementVisible(IntPtr he, ref bool pVisible);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterIsElementVisible(IntPtr he, out bool pVisible);
 			//SCDOM_RESULT function( HELEMENT he, BOOL* pEnabled ) SciterIsElementEnabled;
-			public delegate int FPTR_SciterIsElementEnabled(IntPtr he, ref bool pEnabled);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterIsElementEnabled(IntPtr he, out bool pEnabled);
 			//SCDOM_RESULT function( HELEMENT he, UINT firstIndex, UINT lastIndex, ELEMENT_COMPARATOR* cmpFunc, LPVOID cmpFuncParam ) SciterSortElements;
-			public delegate int FPTR_SciterSortElements(IntPtr he, uint firstIndex, uint lastIndex, SciterXDom.FPTR_ELEMENT_COMPARATOR cmpFunc, IntPtr cmpFuncParam);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSortElements(IntPtr he, uint firstIndex, uint lastIndex, SciterXDom.FPTR_ELEMENT_COMPARATOR cmpFunc, IntPtr cmpFuncParam);
 			//SCDOM_RESULT function( HELEMENT he1, HELEMENT he2 ) SciterSwapElements;
-			public delegate int FPTR_SciterSwapElements(IntPtr he, IntPtr he2);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSwapElements(IntPtr he, IntPtr he2);
 			//SCDOM_RESULT function( UINT evt, LPVOID eventCtlStruct, BOOL* bOutProcessed ) SciterTraverseUIEvent;
-			public delegate int FPTR_SciterTraverseUIEvent(IntPtr he, IntPtr eventCtlStruct, ref bool bOutProcessed);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterTraverseUIEvent(IntPtr he, IntPtr eventCtlStruct, out bool bOutProcessed);
 			//SCDOM_RESULT function( HELEMENT he, LPCSTR name, const VALUE* argv, UINT argc, VALUE* retval ) SciterCallScriptingMethod;
-			public delegate int FPTR_SciterCallScriptingMethod(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, SciterXValue.VALUE[] argv, uint argc, out SciterXValue.VALUE retval);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCallScriptingMethod(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, SciterXValue.VALUE[] argv, uint argc, out SciterXValue.VALUE retval);
 			//SCDOM_RESULT function( HELEMENT he, LPCSTR name, const VALUE* argv, UINT argc, VALUE* retval ) SciterCallScriptingFunction;
-			public delegate int FPTR_SciterCallScriptingFunction(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, SciterXValue.VALUE[] argv, uint argc, out SciterXValue.VALUE retval);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCallScriptingFunction(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string name, SciterXValue.VALUE[] argv, uint argc, out SciterXValue.VALUE retval);
 			//SCDOM_RESULT function( HELEMENT he, LPCWSTR script, UINT scriptLength, VALUE* retval ) SciterEvalElementScript;
-			public delegate int FPTR_SciterEvalElementScript(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string script, uint scriptLength, out SciterXValue.VALUE retval);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterEvalElementScript(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string script, uint scriptLength, out SciterXValue.VALUE retval);
 			//SCDOM_RESULT function( HELEMENT he, HWINDOW hwnd) SciterAttachHwndToElement;
-			public delegate int FPTR_SciterAttachHwndToElement(IntPtr he, IntPtr hwnd);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterAttachHwndToElement(IntPtr he, IntPtr hwnd);
 			//SCDOM_RESULT function( HELEMENT he, /*CTL_TYPE*/ UINT *pType ) SciterControlGetType;
-			public delegate int FPTR_SciterControlGetType(IntPtr he, ref uint pType);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterControlGetType(IntPtr he, out uint pType);
 			//SCDOM_RESULT function( HELEMENT he, VALUE* pval ) SciterGetValue;
-			public delegate int FPTR_SciterGetValue(IntPtr he, out SciterXValue.VALUE pval);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetValue(IntPtr he, out SciterXValue.VALUE pval);
 			//SCDOM_RESULT function( HELEMENT he, const VALUE* pval ) SciterSetValue;
-			public delegate int FPTR_SciterSetValue(IntPtr he, ref SciterXValue.VALUE pval);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetValue(IntPtr he, ref SciterXValue.VALUE pval);
 			//SCDOM_RESULT function( HELEMENT he, VALUE* pval, BOOL forceCreation ) SciterGetExpando;
-			public delegate int FPTR_SciterGetExpando(IntPtr he, out SciterXValue.VALUE pval, bool forceCreation);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetExpando(IntPtr he, out SciterXValue.VALUE pval, bool forceCreation);
 			//SCDOM_RESULT function( HELEMENT he, tiscript_value* pval, BOOL forceCreation ) SciterGetObject;
-			public delegate int FPTR_SciterGetObject(IntPtr he, ref TIScript.tiscript_value pval, bool forceCreation);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetObject(IntPtr he, out TIScript.tiscript_value pval, bool forceCreation);
 			//SCDOM_RESULT function( HELEMENT he, tiscript_value* pval) SciterGetElementNamespace;
-			public delegate int FPTR_SciterGetElementNamespace(IntPtr he, out TIScript.tiscript_value pval);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementNamespace(IntPtr he, out TIScript.tiscript_value pval);
 			//SCDOM_RESULT function( HWINDOW hwnd, HELEMENT* phe) SciterGetHighlightedElement;
-			public delegate int FPTR_SciterGetHighlightedElement(IntPtr hwnd, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetHighlightedElement(IntPtr hwnd, out IntPtr phe);
 			//SCDOM_RESULT function( HWINDOW hwnd, HELEMENT he) SciterSetHighlightedElement;
-			public delegate int FPTR_SciterSetHighlightedElement(IntPtr hwnd, IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetHighlightedElement(IntPtr hwnd, IntPtr he);
 
 			//|
 			//| DOM Node API
 			//|
 
 			//SCDOM_RESULT function(HNODE hn) SciterNodeAddRef;
-			public delegate int FPTR_SciterNodeAddRef(IntPtr hn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeAddRef(IntPtr hn);
 			//SCDOM_RESULT function(HNODE hn) SciterNodeRelease;
-			public delegate int FPTR_SciterNodeRelease(IntPtr hn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeRelease(IntPtr hn);
 			//SCDOM_RESULT function(HELEMENT he, HNODE* phn) SciterNodeCastFromElement;
-			public delegate int FPTR_SciterNodeCastFromElement(IntPtr hn, ref IntPtr phn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeCastFromElement(IntPtr hn, out IntPtr phn);
 			//SCDOM_RESULT function(HNODE hn, HELEMENT* he) SciterNodeCastToElement;
-			public delegate int FPTR_SciterNodeCastToElement(IntPtr hn, ref IntPtr he);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeCastToElement(IntPtr hn, out IntPtr he);
 			//SCDOM_RESULT function(HNODE hn, HNODE* phn) SciterNodeFirstChild;
-			public delegate int FPTR_SciterNodeFirstChild(IntPtr hn, ref IntPtr phn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeFirstChild(IntPtr hn, out IntPtr phn);
 			//SCDOM_RESULT function(HNODE hn, HNODE* phn) SciterNodeLastChild;
-			public delegate int FPTR_SciterNodeLastChild(IntPtr hn, ref IntPtr phn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeLastChild(IntPtr hn, out IntPtr phn);
 			//SCDOM_RESULT function(HNODE hn, HNODE* phn) SciterNodeNextSibling;
-			public delegate int FPTR_SciterNodeNextSibling(IntPtr hn, ref IntPtr phn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeNextSibling(IntPtr hn, out IntPtr phn);
 			//SCDOM_RESULT function(HNODE hn, HNODE* phn) SciterNodePrevSibling;
-			public delegate int FPTR_SciterNodePrevSibling(IntPtr hn, ref IntPtr phn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodePrevSibling(IntPtr hn, out IntPtr phn);
 			//SCDOM_RESULT function(HNODE hnode, HELEMENT* pheParent) SciterNodeParent;
-			public delegate int FPTR_SciterNodeParent(IntPtr hn, ref IntPtr pheParent);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeParent(IntPtr hn, out IntPtr pheParent);
 			//SCDOM_RESULT function(HNODE hnode, UINT n, HNODE* phn) SciterNodeNthChild;
-			public delegate int FPTR_SciterNodeNthChild(IntPtr hn, uint n, ref IntPtr phn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeNthChild(IntPtr hn, uint n, out IntPtr phn);
 			//SCDOM_RESULT function(HNODE hnode, UINT* pn) SciterNodeChildrenCount;
-			public delegate int FPTR_SciterNodeChildrenCount(IntPtr hn, ref uint pn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeChildrenCount(IntPtr hn, out uint pn);
 			//SCDOM_RESULT function(HNODE hnode, UINT* pNodeType /*NODE_TYPE*/) SciterNodeType;
-			public delegate int FPTR_SciterNodeType(IntPtr hn, ref uint pn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeType(IntPtr hn, out uint pn);
 			//SCDOM_RESULT function(HNODE hnode, LPCWSTR_RECEIVER rcv, LPVOID rcv_param) SciterNodeGetText;
-			public delegate int FPTR_SciterNodeGetText(IntPtr hn, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeGetText(IntPtr hn, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HNODE hnode, LPCWSTR text, UINT textLength) SciterNodeSetText;
-			public delegate int FPTR_SciterNodeSetText(IntPtr hn, [MarshalAs(UnmanagedType.LPWStr)]string text, uint textLength);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeSetText(IntPtr hn, [MarshalAs(UnmanagedType.LPWStr)]string text, uint textLength);
 			//SCDOM_RESULT function(HNODE hnode, UINT where /*NODE_INS_TARGET*/, HNODE what) SciterNodeInsert;
-			public delegate int FPTR_SciterNodeInsert(IntPtr hn, uint where, IntPtr what);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeInsert(IntPtr hn, uint where, IntPtr what);
 			//SCDOM_RESULT function(HNODE hnode, BOOL finalize) SciterNodeRemove;
-			public delegate int FPTR_SciterNodeRemove(IntPtr hn, bool finalize);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeRemove(IntPtr hn, bool finalize);
 			//SCDOM_RESULT function(LPCWSTR text, UINT textLength, HNODE* phnode) SciterCreateTextNode;
-			public delegate int FPTR_SciterCreateTextNode(IntPtr hn, uint textLength, ref IntPtr phnode);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateTextNode(IntPtr hn, uint textLength, out IntPtr phnode);
 			//SCDOM_RESULT function(LPCWSTR text, UINT textLength, HNODE* phnode) SciterCreateCommentNode;
-			public delegate int FPTR_SciterCreateCommentNode(IntPtr hn, uint textLength, ref IntPtr phnode);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateCommentNode(IntPtr hn, uint textLength, out IntPtr phnode);
 
 			//|
 			//| Value API
@@ -619,7 +645,7 @@ namespace SciterSharp.Interop
 			// UINT function( const VALUE* pval, const VALUE* pkey, VALUE* pretval) ValueGetValueOfKey;
 			public delegate SciterXValue.VALUE_RESULT FPTR_ValueGetValueOfKey(ref SciterXValue.VALUE pval, ref SciterXValue.VALUE pkey, out SciterXValue.VALUE pretval);
 			// UINT function( VALUE* pval, /*VALUE_STRING_CVT_TYPE*/ UINT how ) ValueToString;
-			public delegate SciterXValue.VALUE_RESULT FPTR_ValueToString(ref SciterXValue.VALUE pval, uint how);
+			public delegate SciterXValue.VALUE_RESULT FPTR_ValueToString(ref SciterXValue.VALUE pval, SciterXValue.VALUE_STRING_CVT_TYPE how);
 			// UINT function( VALUE* pval, LPCWSTR str, UINT strLength, /*VALUE_STRING_CVT_TYPE*/ UINT how ) ValueFromString;
 			public delegate SciterXValue.VALUE_RESULT FPTR_ValueFromString(ref SciterXValue.VALUE pval, [MarshalAs(UnmanagedType.LPWStr)]string str, uint strLength, uint how);
 			// UINT function( VALUE* pval, VALUE* pthis, UINT argc, const VALUE* argv, VALUE* pretval, LPCWSTR url) ValueInvoke;
@@ -629,15 +655,15 @@ namespace SciterSharp.Interop
 			// BOOL function( const VALUE* pval) ValueIsNativeFunctor;
 			public delegate SciterXValue.VALUE_RESULT FPTR_ValueIsNativeFunctor(ref SciterXValue.VALUE pval);
 
-            // tiscript VM API
-            // tiscript_native_interface* function() TIScriptAPI;
+			// tiscript VM API
+			// tiscript_native_interface* function() TIScriptAPI;
 			public delegate IntPtr FPTR_TIScriptAPI();
-            // HVM function(HWINDOW hwnd) SciterGetVM;
+			// HVM function(HWINDOW hwnd) SciterGetVM;
 			public delegate IntPtr FPTR_SciterGetVM();
 
-            // BOOL function(HVM vm, tiscript_value script_value, VALUE* value, BOOL isolate) Sciter_v2V;
+			// BOOL function(HVM vm, tiscript_value script_value, VALUE* value, BOOL isolate) Sciter_v2V;
 			public delegate bool FPTR_Sciter_v2V(IntPtr vm, TIScript.tiscript_value script_value, ref SciterXValue.VALUE value, bool isolate);
-            // BOOL function(HVM vm, const VALUE* valuev, tiscript_value* script_value) Sciter_V2v;
+			// BOOL function(HVM vm, const VALUE* valuev, tiscript_value* script_value) Sciter_V2v;
 			public delegate bool FPTR_Sciter_V2v(IntPtr vm, ref SciterXValue.VALUE value, ref TIScript.tiscript_value script_value);
 
 			// HSARCHIVE function(LPCBYTE archiveData, UINT archiveDataLength) SciterOpenArchive;
@@ -654,6 +680,9 @@ namespace SciterSharp.Interop
 			public delegate IntPtr FPTR_SciterGetCallbackParam(IntPtr hwnd);
 			// UINT_PTR function(HWINDOW hwnd, UINT_PTR wparam, UINT_PTR lparam, UINT timeoutms) SciterPostCallback;// if timeoutms>0 then it is a send, not a post
 			public delegate IntPtr FPTR_SciterPostCallback(IntPtr hwnd, IntPtr wparam, IntPtr lparam, uint timeoutms);
+
+			// LPSciterGraphicsAPI function() GetSciterGraphicsAPI;
+			public delegate IntPtr FPTR_GetSciterGraphicsAPI();
 		}
 	}
 }

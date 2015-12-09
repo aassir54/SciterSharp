@@ -32,7 +32,7 @@ namespace SciterSharp
 	{
 		const int INVOKE_NOTIFICATION = 0x8206241;
 
-		private static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+		private static SciterX.ISciterAPI _api = SciterX.API;
 
 		private IntPtr _hwnd;
 		private Dictionary<string, Type> _behaviorMap = new Dictionary<string, Type>();

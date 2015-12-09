@@ -29,13 +29,16 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct HPOSITION { public IntPtr hn; public int pos; }
 
-		public const int SCDOM_OK = 0;
-		public const int SCDOM_INVALID_HWND = 1;
-		public const int SCDOM_INVALID_HANDLE = 2;
-		public const int SCDOM_PASSIVE_HANDLE = 3;
-		public const int SCDOM_INVALID_PARAMETER = 4;
-		public const int SCDOM_OPERATION_FAILED = 5;
-		public const int SCDOM_OK_NOT_HANDLED = (-1);
+		public enum SCDOM_RESULT : int
+		{
+			SCDOM_OK = 0,
+			SCDOM_INVALID_HWND = 1,
+			SCDOM_INVALID_HANDLE = 2,
+			SCDOM_PASSIVE_HANDLE = 3,
+			SCDOM_INVALID_PARAMETER = 4,
+			SCDOM_OPERATION_FAILED = 5,
+			SCDOM_OK_NOT_HANDLED = (-1)
+		}
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct METHOD_PARAMS
@@ -54,11 +57,11 @@ namespace SciterSharp.Interop
 
 
 		// alias LPCBYTE_RECEIVER = void function(LPCBYTE bytes, UINT num_bytes, LPVOID param);
-		public delegate bool FPTR_LPCBYTE_RECEIVER(IntPtr bytes, uint num_bytes);
+		public delegate void FPTR_LPCBYTE_RECEIVER(IntPtr bytes, uint num_bytes);
 		// alias LPCWSTR_RECEIVER = void function(LPCWSTR str, UINT str_length, LPVOID param);
-		public delegate bool FPTR_LPCWSTR_RECEIVER(IntPtr str, uint str_length, IntPtr param);
+		public delegate void FPTR_LPCWSTR_RECEIVER(IntPtr str, uint str_length, IntPtr param);
 		// alias LPCSTR_RECEIVER = void function(LPCSTR str, UINT str_length, LPVOID param);
-		public delegate bool FPTR_LPCSTR_RECEIVER(IntPtr str, uint str_length);
+		public delegate void FPTR_LPCSTR_RECEIVER(IntPtr str, uint str_length);
 
 
 		public enum ELEMENT_AREAS : uint

@@ -28,7 +28,7 @@ namespace SciterSharp
 {
 	public class SciterArchive
 	{
-		private static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+		private static SciterX.ISciterAPI _api = SciterX.API;
 		private IntPtr _har;
 
 		public void Open(byte[] res_array)

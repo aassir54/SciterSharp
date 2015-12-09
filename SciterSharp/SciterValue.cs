@@ -30,7 +30,7 @@ namespace SciterSharp
 	public class SciterValue
 	{
 		private SciterXValue.VALUE data;
-		private static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+		private static SciterX.ISciterAPI _api = SciterX.API;
 
 		public static readonly SciterValue Undefined;
 		public static readonly SciterValue Null;
@@ -224,9 +224,9 @@ namespace SciterSharp
 			if(how==SciterXValue.VALUE_STRING_CVT_TYPE.CVT_SIMPLE && IsString())
 				return Get("");
 
-			SciterValue val = new SciterValue(this);
-			_api.ValueToString(ref val.data, (uint) how);
-			return val.Get("");
+			SciterXValue.VALUE outdata = this.data;
+			_api.ValueToString(ref outdata, how);
+			return new SciterValue(outdata).Get("");
 		}
 
 		public void Clear()
@@ -337,11 +337,20 @@ namespace SciterSharp
 
 		public SciterValue Call(IList<SciterValue> args, SciterValue self = null, string url_or_script_name = null)
 		{
+			Debug.Assert(IsFunction() || IsObjectFunction());
+
 			SciterValue rv = new SciterValue();
 			SciterXValue.VALUE[] arr_VALUE = args.Select(sv => sv.data).ToArray();
+			if(self == null)
+				self = SciterValue.Undefined;
 
-			_api.ValueInvoke(ref data, ref self.data, (uint) args.Count, arr_VALUE, out rv.data, null);
+			_api.ValueInvoke(ref data, ref self.data, (uint) args.Count, args.Count==0 ? null : arr_VALUE, out rv.data, null);
 			return rv;
+		}
+
+		public SciterValue Call(params SciterValue[] args)
+		{
+			return Call((IList<SciterValue>) args);
 		}
 
 		public void Isolate()

@@ -11,7 +11,7 @@ namespace SciterSharp
 {
 	public abstract class SciterDebugOutputHandler
 	{
-		private static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+		private static SciterX.ISciterAPI _api = SciterX.API;
 		private readonly SciterXDef.FPTR_DEBUG_OUTPUT_PROC _proc;// keep a copy of the delegate so it survives GC
 
 		/// <summary>

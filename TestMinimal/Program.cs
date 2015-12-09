@@ -22,6 +22,9 @@ namespace TestMinimal
 			wnd.CreateMainWindowNative(1500, 800);
             wnd.EnableDwmClientArea();
 
+			var cv = new SciterValue(12);
+			cv.Call();
+
             //wnd.CenterTopLevelWindow();
             //wnd.AfterWindowCreate();
 			//wnd.Title = "Sciter Bootstrap";
@@ -32,6 +35,11 @@ namespace TestMinimal
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
 
+			var val = wnd.RootElement.ExpandoValue;
+			string str = val.ToString();
+			var e = val["prooop"];
+
+			
 			// Show window and Run message loop
 			wnd.Show();
 			PInvokeUtils.RunMsgLoop();
@@ -63,7 +71,7 @@ namespace TestMinimal
 
 	class BaseHost : SciterHost
 	{
-		protected static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+		protected static SciterX.ISciterAPI _api = SciterX.API;
 		protected SciterArchive _archive = new SciterArchive();
 		protected SciterWindow _wnd;
 

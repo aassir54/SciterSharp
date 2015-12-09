@@ -29,7 +29,7 @@ namespace SciterSharp
 {
 	public class SciterWindow
 	{
-		protected static SciterX.ISciterAPI _api = SciterX.GetSicterAPI();
+		protected static SciterX.ISciterAPI _api = SciterX.API;
         public IntPtr _hwnd;
         private SciterXDef.FPTR_SciterWindowDelegate _proc;
 #if GTKMONO

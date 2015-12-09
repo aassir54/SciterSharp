@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveResources.cs" />
+    <Compile Include="Behaviors\BehaviorDrawing.cs" />
     <Compile Include="DebugHandler.cs" />
     <Compile Include="HostWindow.cs" />
     <Compile Include="Utils.cs" />
