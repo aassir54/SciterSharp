@@ -46,6 +46,12 @@ namespace SciterSharp.Interop
 		public static extern void gtk_window_present(IntPtr window);
 
 		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void gtk_widget_hide(IntPtr window);
+
+		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		public static extern void gtk_window_close(IntPtr window);
+
+		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_window_get_size(IntPtr window, out int width, out int height);
 
 		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]

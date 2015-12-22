@@ -168,9 +168,22 @@ namespace SciterSharp
 #if WINDOWS
 			PInvokeWindows.ShowWindow(_hwnd, show ? PInvokeWindows.ShowWindowCommands.Show : PInvokeWindows.ShowWindowCommands.Hide);
 #elif GTKMONO
-			PInvokeGTK.gtk_window_present(_gtkwindow);
+			if(show)
+				PInvokeGTK.gtk_window_present(_gtkwindow);
+			else
+				PInvokeGTK.gtk_widget_hide(_hwnd);
 #endif
 		}
+
+		public void Close()
+		{
+#if WINDOWS
+			PInvokeWindows.PostMessage(_hwnd, PInvokeWindows.Win32Msg.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+#elif GTKMONO
+			PInvokeGTK.gtk_window_close(_gtkwindow);
+#endif
+		}
+
 
 		public Icon Icon
         {
@@ -233,6 +246,14 @@ namespace SciterSharp
 		{
 			Debug.Assert(_hwnd != IntPtr.Zero);
 			return _api.SciterGetMinHeight(_hwnd, for_width);
+		}
+
+		/// <summary>
+		/// Update pending changes in Sciter window and forces painting if necessary
+		/// </summary>
+		public void UpdateWindow()
+		{
+			_api.SciterUpdateWindow(_hwnd);
 		}
 
 #if WINDOWS

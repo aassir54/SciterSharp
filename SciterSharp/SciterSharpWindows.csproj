@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Interop\PInvokeWindows.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
+    <Compile Include="Interop\SciterXGraphics.cs" />
     <Compile Include="Properties\AssemblyInfoWindows.cs" />
     <Compile Include="SciterArchive.cs" />
     <Compile Include="SciterDebugOutputHandler.cs" />

@@ -31,13 +31,13 @@ namespace SciterSharp.Interop
 		{
 			get { return LoadAPI(); }
 		}
-		public static SciterGraphics.ISciterGraphicsAPI GraphicsAPI
+		public static SciterXGraphics.ISciterGraphicsAPI GraphicsAPI
 		{
 			get { return LoadGraphicsAPI(); }
 		}
 
 		private static ISciterAPI? _api = null;
-		private static SciterGraphics.ISciterGraphicsAPI? _gapi = null;
+		private static SciterXGraphics.ISciterGraphicsAPI? _gapi = null;
 
 		private static ISciterAPI LoadAPI()
 		{
@@ -79,24 +79,24 @@ namespace SciterSharp.Interop
 			return _api.Value;
 		}
 
-		private static SciterGraphics.ISciterGraphicsAPI LoadGraphicsAPI()
+		private static SciterXGraphics.ISciterGraphicsAPI LoadGraphicsAPI()
 		{
 			uint minor = API.SciterVersion(0);
-			if(minor >= 0x00010000)
+			if(minor < 0x00010000)
 			{
 				throw new Exception("Graphics API needs at least Sciter 3.1.0.0");
 			}
 
 			if(_gapi==null)
 			{
-				int api_struct_size = Marshal.SizeOf(typeof(SciterGraphics.ISciterGraphicsAPI));
+				int api_struct_size = Marshal.SizeOf(typeof(SciterXGraphics.ISciterGraphicsAPI));
 				if(IntPtr.Size == 8)
 					Debug.Assert(api_struct_size == 464);
 				else
 					Debug.Assert(api_struct_size == 232);
 
 				IntPtr api_ptr = API.GetSciterGraphicsAPI();
-				_gapi = (SciterGraphics.ISciterGraphicsAPI)Marshal.PtrToStructure(api_ptr, typeof(SciterGraphics.ISciterGraphicsAPI));
+				_gapi = (SciterXGraphics.ISciterGraphicsAPI)Marshal.PtrToStructure(api_ptr, typeof(SciterXGraphics.ISciterGraphicsAPI));
 			}
 			return _gapi.Value;
 		}

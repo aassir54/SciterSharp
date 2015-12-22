@@ -37,7 +37,7 @@ namespace SciterSharp.Interop
 			HANDLE_SCROLL = 0x0008,         /** scroll events */
 			HANDLE_TIMER = 0x0010,          /** timer event */
 			HANDLE_SIZE = 0x0020,           /** size changed event */
-			//HANDLE_DRAW = 0x0040,           /** drawing request (event) */
+			HANDLE_DRAW = 0x0040,           /** drawing request (event) */
 			HANDLE_DATA_ARRIVED = 0x080,    /** requested data () has been delivered */
 			HANDLE_BEHAVIOR_EVENT        = 0x0100, /** logical, synthetic events:
 													BUTTON_CLICK, HYPERLINK_CLICK, etc.,
@@ -183,7 +183,7 @@ namespace SciterSharp.Interop
 		public struct FOCUS_PARAMS
 		{
 			public uint		cmd;
-			public IntPtr		target;// HELEMENT
+			public IntPtr	target;// HELEMENT
 			public bool		by_mouse_click;
 			public bool		cancel;
 		}
@@ -266,10 +266,11 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DRAW_PARAMS
 		{
-			public uint					cmd;
-			public IntPtr				gfx;// SCITER_GRAPHICS*
-			public PInvokeUtils.RECT	area;
-			public DRAW_EVENTS			draw_type;
+			public DRAW_EVENTS			cmd;	// DRAW_EVENTS
+			public IntPtr				gfx;	// HGFX - hdc to paint on
+			public PInvokeUtils.RECT	area;	// element area, to get invalid area to paint use GetClipBox,
+			public uint					reserved;	// for DRAW_BACKGROUND/DRAW_FOREGROUND - it is a border box
+													// for DRAW_CONTENT - it is a content box
 		}
 
 		public enum CONTENT_CHANGE_BITS : uint // for CONTENT_CHANGED reason

@@ -48,7 +48,7 @@ namespace SciterSharp.Interop
 		public enum Win32Msg : uint
 		{
 			WM_CREATE = 0x0001,
-			WM_NCCREATE = 0081,
+			WM_CLOSE = 0x0010,
 			WM_SETTEXT = 0x000C,
 			WM_GETTEXT = 0x000D,
 			WM_SETICON = 0x0080,
@@ -76,6 +76,11 @@ namespace SciterSharp.Interop
 		// PInvoke functions ===============================================================
 		[DllImport("user32.dll")]
 		public static extern IntPtr SendMessageW(IntPtr hwnd, Win32Msg Msg, IntPtr wParam, IntPtr lParam);
+
+		[return: MarshalAs(UnmanagedType.Bool)]
+		[DllImport("user32.dll")]
+		public static extern bool PostMessage(IntPtr hWnd, Win32Msg Msg, IntPtr wParam, IntPtr lParam);
+
 
 		[DllImport("user32.dll")]
 		public static extern bool ShowWindow(IntPtr hwnd, ShowWindowCommands nCmdShow);

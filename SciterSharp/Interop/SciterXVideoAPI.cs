@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 // http://www.cnetion.com/call-unmanaged-function-in-struct-from-vtable-qq-AUvBjo22ivICeoL1jypO.php
 namespace SciterSharp.Interop
 {
-    public class SciterXVideoAPI
+    public static class SciterXVideoAPI
     {
 		public enum COLOR_SPACE : int
 		{

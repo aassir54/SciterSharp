@@ -17,13 +17,13 @@ namespace TestMinimal
 		{
             PInvokeWindows.OleInitialize(IntPtr.Zero);
 
+			TestGraphics.Run();
+
 			// Create the window
 			var wnd = new HostWindow();
 			wnd.CreateMainWindowNative(1500, 800);
             wnd.EnableDwmClientArea();
-
-			var cv = new SciterValue(12);
-			cv.Call();
+			
 
             //wnd.CenterTopLevelWindow();
             //wnd.AfterWindowCreate();

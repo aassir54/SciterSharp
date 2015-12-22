@@ -54,6 +54,7 @@ namespace SciterSharp
 		protected virtual bool OnTimer(SciterElement se)										{ return false; }
 		protected virtual bool OnTimer(SciterElement se, IntPtr extTimerId)						{ return false; }
 		protected virtual bool OnSize(SciterElement se)											{ return false; }
+		protected virtual bool OnDraw(SciterElement se, SciterXBehaviors.DRAW_PARAMS prms)		{ return false; }
 
 		protected virtual bool OnMethodCall(SciterElement se, SciterXBehaviors.BEHAVIOR_METHOD_IDENTIFIERS methodID)	{ return false; }
 		protected virtual bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)	{ result = null; return false; }
@@ -122,6 +123,12 @@ namespace SciterSharp
 					{
 						SciterXBehaviors.FOCUS_PARAMS p = (SciterXBehaviors.FOCUS_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.FOCUS_PARAMS));
 						return OnFocus(se, p);
+					}
+
+				case SciterXBehaviors.EVENT_GROUPS.HANDLE_DRAW:
+					{
+						SciterXBehaviors.DRAW_PARAMS p = (SciterXBehaviors.DRAW_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.DRAW_PARAMS));
+						return OnDraw(se, p);
 					}
 
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_TIMER:

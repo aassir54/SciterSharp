@@ -40,6 +40,47 @@ namespace SciterSharp
 			_he = he;
 		}
 
+		#region Operators
+		public static bool operator ==(SciterElement a, SciterElement b)
+		{
+			return a._he == b._he;
+		}
+		public static bool operator !=(SciterElement a, SciterElement b)
+		{
+			return a._he != b._he;
+		}
+
+		public SciterElement this[uint idx]
+		{
+			get
+			{
+				return GetChild(idx);
+			}
+		}
+
+		public string this[string name]
+		{
+			get
+			{
+				return GetAttribute(name);
+			}
+			set
+			{
+				SetAttribute(name, value);
+			}
+		}
+
+		public override bool Equals(object o)
+		{
+			return Object.ReferenceEquals(this, o);
+		}
+
+		public override int GetHashCode()
+		{
+			return _he.ToInt32();
+		}
+		#endregion
+
 		public override string ToString()
 		{
 			string tag = GetTag();
@@ -64,7 +105,8 @@ namespace SciterSharp
 		public string GetTag()
 		{
 			IntPtr ptrtag;
-			_api.SciterGetElementType(_he, out ptrtag);
+			var r = _api.SciterGetElementType(_he, out ptrtag);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
 			return Marshal.PtrToStringAnsi(ptrtag);
 		}
 
@@ -75,16 +117,32 @@ namespace SciterSharp
 			{
 				strval = Marshal.PtrToStringUni(str, (int) str_length);
 			};
-			SciterXDom.SCDOM_RESULT r = _api.SciterGetAttributeByNameCB(_he, name, frcv, IntPtr.Zero);
+			var r = _api.SciterGetAttributeByNameCB(_he, name, frcv, IntPtr.Zero);
 			if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
 				Debug.Assert(strval == null);
 			return strval;
 		}
 
+		public void SetAttribute(string name, string value)
+		{
+			var r = _api.SciterSetAttributeByName(_he, name, value);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+		}
+
+		public SciterXDom.ELEMENT_STATE_BITS GetState()
+		{
+			uint bits;
+			var r = _api.SciterGetElementState(_he, out bits);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+			return (SciterXDom.ELEMENT_STATE_BITS) bits;
+		}
+
 		public void SetState(SciterXDom.ELEMENT_STATE_BITS bitsToSet, SciterXDom.ELEMENT_STATE_BITS bitsToClear = 0, bool update = true)
 		{
-			_api.SciterSetElementState(_he, (uint) bitsToSet, (uint) bitsToClear, update);
+			var r = _api.SciterSetElementState(_he, (uint) bitsToSet, (uint) bitsToClear, update);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
 		}
+
 
 		public IntPtr GetNativeHwnd(bool rootWindow = true)
 		{
@@ -122,6 +180,16 @@ namespace SciterSharp
 				return n;
 			}
 		}
+
+		public void Delete()
+		{
+			_api.SciterDeleteElement(_he);
+		}
+		public void Dettach()
+		{
+			_api.SciterDetachElement(_he);
+		}
+
 
 		#region DOM navigation
 		public SciterElement GetChild(uint idx)
@@ -199,6 +267,40 @@ namespace SciterSharp
 		}
 		#endregion
 
+		public bool Enabled // deeply enabled
+		{
+			get
+			{
+				bool b;
+				_api.SciterIsElementEnabled(_he, out b);
+				return b;
+			}
+		}
+
+		public bool Visible // deeply visible
+		{
+			get
+			{
+				bool b;
+				_api.SciterIsElementVisible(_he, out b);
+				return b;
+			}
+		}
+
+		public void Update(bool andForceRender = false)
+		{
+			_api.SciterUpdateElement(_he, andForceRender);
+		}
+
+		public void Refresh(PInvokeUtils.RECT rc)
+		{
+			_api.SciterRefreshElementArea(_he, rc);
+		}
+		public void Refresh()
+		{
+			_api.SciterRefreshElementArea(_he, GetLocation(SciterXDom.ELEMENT_AREAS.SELF_RELATIVE | SciterXDom.ELEMENT_AREAS.CONTENT_BOX));
+		}
+
 		#region Scripting
 		public SciterValue Value
 		{
@@ -253,7 +355,7 @@ namespace SciterSharp
 		}
 		#endregion
 
-
+		#region Helpers
 		public bool IsChildOf(SciterElement parent_test)
 		{
 			SciterElement el_it = this;
@@ -268,6 +370,7 @@ namespace SciterSharp
 			}
 			return false;
 		}
+		#endregion
 	}
 
 	public class SciterNode
