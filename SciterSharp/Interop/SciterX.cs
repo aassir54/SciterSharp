@@ -476,7 +476,7 @@ namespace SciterSharp.Interop
 			//SCDOM_RESULT function( HELEMENT he, UINT stateBitsToSet, UINT stateBitsToClear, BOOL updateView) SciterSetElementState;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetElementState(IntPtr he, uint stateBitsToSet, uint stateBitsToClear, bool updateView);
 			//SCDOM_RESULT function( LPCSTR tagname, LPCWSTR textOrNull, /*out*/ HELEMENT *phe ) SciterCreateElement;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateElement(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string textOrNull, out IntPtr phe);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateElement([MarshalAs(UnmanagedType.LPStr)]string tagname, [MarshalAs(UnmanagedType.LPWStr)]string textOrNull, out IntPtr phe);
 			//SCDOM_RESULT function( HELEMENT he, /*out*/ HELEMENT *phe ) SciterCloneElement;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCloneElement(IntPtr he, out IntPtr phe);
 			//SCDOM_RESULT function( HELEMENT he, HELEMENT hparent, UINT index ) SciterInsertElement;

@@ -18,6 +18,8 @@ namespace TestMinimal
             PInvokeWindows.OleInitialize(IntPtr.Zero);
 
 			TestGraphics.Run();
+			//TestSciterValue.Run();
+			TestSciterElement.Run();
 
 			// Create the window
 			var wnd = new HostWindow();

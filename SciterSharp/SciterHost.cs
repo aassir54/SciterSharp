@@ -86,7 +86,7 @@ namespace SciterSharp
 		}
 
 		/// <summary>
-		/// Post a message to the UI thread to invoke the given Action. This methods returns immediatly, does not wait for the message processing.
+		/// Posts a message to the UI thread to invoke the given Action. This methods returns immediatly, does not wait for the message processing.
 		/// </summary>
 		/// <param name="what">The delegate which will be invoked</param>
 		public void InvokePost(Action what)
@@ -96,6 +96,20 @@ namespace SciterSharp
 
 			GCHandle handle = GCHandle.Alloc(what);
 			PostNotification(new IntPtr(INVOKE_NOTIFICATION), GCHandle.ToIntPtr(handle));
+		}
+
+		/// <summary>
+		/// Sends a message to the UI thread to invoke the given Action. This methods waits for the message processing until timeout is exceeded.
+		/// </summary>
+		/// <param name="what">The delegate which will be invoked</param>
+		public void InvokeSend(Action what, uint timeout = 3000)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
+			Debug.Assert(what != null);
+			Debug.Assert(timeout > 0);
+
+			GCHandle handle = GCHandle.Alloc(what);
+			PostNotification(new IntPtr(INVOKE_NOTIFICATION), GCHandle.ToIntPtr(handle), timeout);
 		}
 
 		public void DebugInspect()

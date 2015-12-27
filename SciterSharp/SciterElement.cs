@@ -29,7 +29,7 @@ namespace SciterSharp
 	public class SciterElement
 	{
 		private static SciterX.ISciterAPI _api = SciterX.API;
-		private IntPtr _he;
+		public IntPtr _he { get; private set; }
 
 		public SciterElement(IntPtr he)
 		{
@@ -40,14 +40,25 @@ namespace SciterSharp
 			_he = he;
 		}
 
+		public static SciterElement Create(string tagname, string text = null)
+		{
+			IntPtr he;
+			_api.SciterCreateElement(tagname, text, out he);
+			if(he != IntPtr.Zero)
+				return new SciterElement(he);
+			return null;
+		}
+
 		#region Operators
 		public static bool operator ==(SciterElement a, SciterElement b)
 		{
+			if((object)a == null || (object)b == null)
+				return Object.Equals(a, b);
 			return a._he == b._he;
 		}
 		public static bool operator !=(SciterElement a, SciterElement b)
 		{
-			return a._he != b._he;
+			return !(a == b);
 		}
 
 		public SciterElement this[uint idx]
@@ -151,6 +162,7 @@ namespace SciterSharp
 			return hwnd;
 		}
 
+		#region Integers
 		public uint UID
 		{
 			get
@@ -180,6 +192,7 @@ namespace SciterSharp
 				return n;
 			}
 		}
+		#endregion
 
 		public void Delete()
 		{
@@ -190,6 +203,15 @@ namespace SciterSharp
 			_api.SciterDetachElement(_he);
 		}
 
+		/// <summary>
+		/// Test this element against CSS selector(s)
+		/// </summary>
+		public bool Test(string selector)
+		{
+			IntPtr heFound;
+			_api.SciterSelectParent(_he, selector, 1, out heFound);
+			return heFound != IntPtr.Zero;
+		}
 
 		#region DOM navigation
 		public SciterElement GetChild(uint idx)

@@ -235,7 +235,21 @@ namespace SciterSharp
 				return new SciterElement(he);
 			}
 		}
-		
+
+		/// <summary>
+		/// Find element at point x/y of the window, client area relative
+		/// </summary>
+		public SciterElement ElementAtPoint(int x, int y)
+		{
+			PInvokeUtils.POINT pt = new PInvokeUtils.POINT() { X = x, Y = y };
+			IntPtr outhe;
+			_api.SciterFindElement(_hwnd, pt, out outhe);
+
+			if(outhe == IntPtr.Zero)
+				return null;
+			return new SciterElement(outhe);
+		}
+
 		public uint GetMinWidth()
 		{
 			Debug.Assert(_hwnd != IntPtr.Zero);

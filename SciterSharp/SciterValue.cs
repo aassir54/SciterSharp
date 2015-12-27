@@ -60,9 +60,9 @@ namespace SciterSharp
 			return "SciterValue JSON: " + Regex.Replace(ToJSONString(), @"\t|\n|\r", "");
 		}
 
-		private SciterValue() { _api.ValueInit(out data); }
+		public SciterValue() { _api.ValueInit(out data); }
 		~SciterValue() { _api.ValueClear(out data); }
-
+		
 		public SciterValue(SciterValue vother)
 		{
 			_api.ValueInit(out data);
@@ -79,7 +79,13 @@ namespace SciterSharp
 		public SciterValue(double v)	{ _api.ValueInit(out data); _api.ValueFloatDataSet(ref data, v, (uint) SciterXValue.VALUE_TYPE.T_FLOAT, 0); }
 		public SciterValue(string str)	{ _api.ValueInit(out data); _api.ValueStringDataSet(ref data, str, (uint) str.Length, (uint)SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_STRING); }
 		public SciterValue(byte[] bs)	{ _api.ValueInit(out data); _api.ValueBinaryDataSet(ref data, bs, (uint) bs.Length, (uint) SciterXValue.VALUE_TYPE.T_BYTES, 0); }
-		public SciterValue(SciterValue[] arr) { _api.ValueInit(out data); for(int i = 0; i < arr.Length; i++) { SetItem(i, arr[i]); } }
+		public SciterValue(IEnumerable<SciterValue> col)
+		{
+			_api.ValueInit(out data);
+			int i = 0;
+			foreach(var item in col)
+				SetItem(i++, item);
+		}
 		private SciterValue(IConvertible ic)
 		{
 			_api.ValueInit(out data);
@@ -96,14 +102,14 @@ namespace SciterSharp
 				throw new InvalidOperationException();
 		}
 
-		public static SciterValue FromList<T>(IList<T> list) where T : struct, IConvertible
+		public static SciterValue FromList<T>(IList<T> list) where T : /*struct,*/ IConvertible
 		{
 			SciterValue sv = new SciterValue();
 			for(int i = 0; i < list.Count; i++)
 				sv.SetItem(i, new SciterValue(list[i]));
 			return sv;
 		}
-		public static SciterValue FromDictionary<T>(IDictionary<string, T> dic) where T : struct, IConvertible
+		public static SciterValue FromDictionary<T>(IDictionary<string, T> dic) where T : /*struct,*/ IConvertible
 		{
 			SciterValue sv = new SciterValue();
 			foreach(var item in dic)
