@@ -1,10 +1,10 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 3.3.1.0
+ACTUAL SCITER VERSION: 3.3.1.1
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.2-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.5-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.2-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.5-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
 
 ## Cross-platform Sciter bindings for .NET
@@ -20,7 +20,7 @@ License: GNU GENERAL PUBLIC LICENSE Version 3
 
 ### Sciter Bootstrap
 
-Quick start your desktop app by downloading a [Sciter Bootstrap package](http://misoftware.rs/Bootstrap/Download) for C#. The package contains a solution with 2 projects, one which you build for Windows with VS, and the other for MONO/GTK+3 with MonoDevelop. All projects comes with this library already configured and with Sciter native DLL already in the bin/ folder.
+Quick start your desktop app by downloading a [Sciter Bootstrap package](http://misoftware.rs/Bootstrap/Download) for MONO/GTK/C#. The package contains a solution with 2 projects, one which you build for Windows with VS, and the other for MONO/GTK+3 with MonoDevelop. All projects comes with this library already configured and with Sciter native DLL already in the bin/ folder.
 
 ### NuGet
 

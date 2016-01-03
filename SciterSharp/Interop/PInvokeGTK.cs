@@ -27,40 +27,40 @@ namespace SciterSharp.Interop
 {
 	public static class PInvokeGTK
 	{
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_init(IntPtr argc, IntPtr argv);
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_main();
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr gtk_widget_get_toplevel(IntPtr widget);
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_window_set_title(IntPtr window, [MarshalAs(UnmanagedType.LPStr)]string title);
 
-        [DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr gtk_window_get_title(IntPtr window);
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_window_present(IntPtr window);
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_widget_hide(IntPtr window);
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_window_close(IntPtr window);
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_window_get_size(IntPtr window, out int width, out int height);
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int gdk_screen_width();
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int gdk_screen_height();
 
-		[DllImport("libgtk-3", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int gtk_window_move(IntPtr window, int x, int y);
 	}
 }
