@@ -69,6 +69,12 @@ namespace SciterSharp
 			var r = _gapi.gPopClip(_hgfx);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 		}
+
+		public void Translate(float cx, float cy)
+		{
+			var r = _gapi.gTranslate(_hgfx, cx, cy);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
 	}
 
 	public struct RGBAColor

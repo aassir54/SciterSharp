@@ -1,6 +1,6 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 3.3.1.1
+ACTUAL SCITER VERSION: 3.3.1.2
 
 Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.5-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
@@ -88,6 +88,7 @@ Here is a summary of the classes from SciterSharp namespace and their mapping ov
 - **class SciterElement**: API over Sciter DOM manipulation (HELEMENT and HNODE) - status: **INCOMPLETE**
 - **abstract class SciterEventHandler**: Sciter event-handler native callback; extend this class for handling Sciter events
 - **abstract class SciterDebugOutputHandler**: API for handling Sciter debug messages; note that by default Sciter output messages to stdout only if SW_ENABLE_DEBUG is set when SciterCreateWindow() is called, so this class usage might be required if you need custom handling/suppress of the output
+- ** class SciterGraphics**: API over the Graphics native API - status: **INCOMPLETE**
 
 
 ## Todo's (help appreciated) 

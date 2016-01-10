@@ -33,9 +33,9 @@
 			// 
 			// sciterControl1
 			// 
-			this.sciterControl1.Location = new System.Drawing.Point(54, 38);
+			this.sciterControl1.Location = new System.Drawing.Point(24, 12);
 			this.sciterControl1.Name = "sciterControl1";
-			this.sciterControl1.Size = new System.Drawing.Size(278, 174);
+			this.sciterControl1.Size = new System.Drawing.Size(932, 444);
 			this.sciterControl1.TabIndex = 0;
 			this.sciterControl1.Text = "sciterControl1";
 			// 
@@ -43,7 +43,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(565, 402);
+			this.ClientSize = new System.Drawing.Size(979, 468);
 			this.Controls.Add(this.sciterControl1);
 			this.Name = "Form1";
 			this.Text = "Form1";

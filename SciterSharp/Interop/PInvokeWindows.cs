@@ -104,6 +104,10 @@ namespace SciterSharp.Interop
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool IsWindow(IntPtr hWnd);
 
+		[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError=true)]
+		public static extern bool DestroyWindow(IntPtr hwnd);
+
+
 
 		[DllImport("user32.dll")]
 		public static extern sbyte GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
@@ -113,6 +117,18 @@ namespace SciterSharp.Interop
 
 		[DllImport("user32.dll")]
 		public static extern IntPtr DispatchMessage([In] ref MSG lpmsg);
+		
+
+		#region CreateChildWindow workaround
+		[DllImport("user32.dll", SetLastError=true)]
+		public static extern IntPtr CreateWindowEx(int dwExStyle, string lpClassName, string lpWindowName, int dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
+
+		[DllImport("user32.dll")]
+		public static extern bool GetClientRect(IntPtr hWnd, out PInvokeUtils.RECT lpRect);
+
+
+		public const int WS_CHILD = 0x40000000;
+		#endregion
 	}
 }
 #endif

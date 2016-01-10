@@ -29,6 +29,12 @@
     <DefineConstants>TRACE;GTKMONO</DefineConstants>
     <DocumentationFile>bin\Release\SciterSharpGTK.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SciterSharp.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -53,6 +59,9 @@
     <Compile Include="Interop\SciterXValue.cs" />
     <Compile Include="Interop\SciterXVideoAPI.cs" />
     <Compile Include="Interop\TIScript.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SciterSharp.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

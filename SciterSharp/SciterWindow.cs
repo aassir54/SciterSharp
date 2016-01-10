@@ -95,17 +95,33 @@ namespace SciterSharp
 		{
 			if(PInvokeWindows.IsWindow(hwnd_parent) == false) throw new ArgumentException("Invalid parent window");
 
-			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
+			PInvokeUtils.RECT rc;
+			PInvokeWindows.GetClientRect(hwnd_parent, out rc);
+
+			string wndclass = Marshal.PtrToStringUni(_api.SciterClassName());
+			_hwnd = PInvokeWindows.CreateWindowEx(0, wndclass, null, PInvokeWindows.WS_CHILD, 0, 0, rc.right, rc.bottom, hwnd_parent, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+
+			/*PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
 			_hwnd = _api.SciterCreateWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CHILD, ref frame, _proc, IntPtr.Zero, hwnd_parent);
 			if(_hwnd == IntPtr.Zero)
-                throw new Exception("CreateChildWindow() failed");
+                throw new Exception("CreateChildWindow() failed");*/
 		}
 #endif
 
-        /// <summary>
-        /// Centers the window in the screen. You must call it after the window is created, but before it is shown to avoid flickering
-        /// </summary>
-        public void CenterTopLevelWindow()
+		public void Destroy()
+		{
+#if WINDOWS
+			PInvokeWindows.DestroyWindow(_hwnd);
+#endif
+#if GTKMONO
+			PInvokeGTK.gtk_widget_destroy(_gtkwindow);
+#endif
+		}
+
+		/// <summary>
+		/// Centers the window in the screen. You must call it after the window is created, but before it is shown to avoid flickering
+		/// </summary>
+		public void CenterTopLevelWindow()
         {
 #if WINDOWS
 			IntPtr hwndParent = PInvokeWindows.GetDesktopWindow();
