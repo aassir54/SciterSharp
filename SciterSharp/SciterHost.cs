@@ -226,6 +226,7 @@ namespace SciterSharp
 		}
 		protected virtual void OnEngineDestroyed() { }
 		protected virtual IntPtr OnPostedNotification(IntPtr wparam, IntPtr lparam) { return IntPtr.Zero; }
+		protected virtual void OnGraphicsCriticalFailure(IntPtr hwnd) { }
 
 		private uint HandleNotification(IntPtr ptrNotification, IntPtr callbackParam)
 		{
@@ -286,6 +287,11 @@ namespace SciterSharp
 
 					IntPtr OFFSET_LRESULT = Marshal.OffsetOf(typeof(SciterXDef.SCN_POSTED_NOTIFICATION), "lreturn");
 					Marshal.WriteIntPtr(ptrNotification, OFFSET_LRESULT.ToInt32(), lreturn);
+					return 0;
+
+				case SciterXDef.SC_GRAPHICS_CRITICAL_FAILURE:
+					SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE cgf = (SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE));
+					OnGraphicsCriticalFailure(cgf.hwnd);
 					return 0;
 
 				default:

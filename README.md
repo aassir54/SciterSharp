@@ -1,10 +1,10 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 3.3.1.2
+ACTUAL SCITER VERSION: 3.3.1.4
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.5-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.7-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.5-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.7-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
 
 ## Cross-platform Sciter bindings for .NET

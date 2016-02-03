@@ -57,11 +57,11 @@ namespace SciterSharp.Interop
 
 
 		// alias LPCBYTE_RECEIVER = void function(LPCBYTE bytes, UINT num_bytes, LPVOID param);
-		public delegate void FPTR_LPCBYTE_RECEIVER(IntPtr bytes, uint num_bytes);
+		public delegate void FPTR_LPCBYTE_RECEIVER(IntPtr bytes, uint num_bytes, IntPtr param);
 		// alias LPCWSTR_RECEIVER = void function(LPCWSTR str, UINT str_length, LPVOID param);
 		public delegate void FPTR_LPCWSTR_RECEIVER(IntPtr str, uint str_length, IntPtr param);
 		// alias LPCSTR_RECEIVER = void function(LPCSTR str, UINT str_length, LPVOID param);
-		public delegate void FPTR_LPCSTR_RECEIVER(IntPtr str, uint str_length);
+		public delegate void FPTR_LPCSTR_RECEIVER(IntPtr str, uint str_length, IntPtr param);
 
 
 		public enum ELEMENT_AREAS : uint

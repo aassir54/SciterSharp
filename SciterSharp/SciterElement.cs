@@ -49,7 +49,7 @@ namespace SciterSharp
 			return null;
 		}
 
-		#region Operators
+		#region Operators and overrides
 		public static bool operator ==(SciterElement a, SciterElement b)
 		{
 			if((object)a == null || (object)b == null)
@@ -90,11 +90,10 @@ namespace SciterSharp
 		{
 			return _he.ToInt32();
 		}
-		#endregion
 
 		public override string ToString()
 		{
-			string tag = GetTag();
+			string tag = Tag;
 			string id = GetAttribute("id");
 			string classes = GetAttribute("class");
 			uint childcount = this.ChildrenCount;
@@ -103,22 +102,117 @@ namespace SciterSharp
 			str.Append("<" + tag);
 			if(id != null)
 				str.Append(" #" + id);
-			if(classes!=null)
+			if(classes != null)
 				str.Append(" ." + String.Join(".", classes.Split(' ')));
-			if(childcount==0)
+			if(childcount == 0)
 				str.Append(" />");
 			else
 				str.Append(">...</" + tag + ">");
 
 			return str.ToString();
 		}
+		#endregion
 
-		public string GetTag()
+		#region Query HTML
+		public string Tag
 		{
-			IntPtr ptrtag;
-			var r = _api.SciterGetElementType(_he, out ptrtag);
-			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
-			return Marshal.PtrToStringAnsi(ptrtag);
+			get
+			{
+				IntPtr ptrtag;
+				var r = _api.SciterGetElementType(_he, out ptrtag);
+				Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+				return Marshal.PtrToStringAnsi(ptrtag);
+			}
+		}
+
+		public string HTML
+		{
+			get
+			{
+				string strval = null;
+				SciterXDom.FPTR_LPCBYTE_RECEIVER frcv = (IntPtr bytes, uint num_bytes, IntPtr param) =>
+				{
+					strval = Marshal.PtrToStringAnsi(bytes, (int)num_bytes);
+				};
+
+				var r = _api.SciterGetElementHtmlCB(_he, true, frcv, IntPtr.Zero);
+				if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
+					Debug.Assert(strval == null);
+				return strval;
+			}
+		}
+
+		public string InnerHTML
+		{
+			get
+			{
+				string strval = null;
+				SciterXDom.FPTR_LPCBYTE_RECEIVER frcv = (IntPtr bytes, uint num_bytes, IntPtr param) =>
+				{
+					strval = Marshal.PtrToStringAnsi(bytes, (int)num_bytes);
+				};
+
+				var r = _api.SciterGetElementHtmlCB(_he, false, frcv, IntPtr.Zero);
+				if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
+					Debug.Assert(strval == null);
+				return strval;
+			}
+		}
+
+		public string Text
+		{
+			get
+			{
+				string strval = null;
+				SciterXDom.FPTR_LPCWSTR_RECEIVER frcv = (IntPtr str, uint str_length, IntPtr param) =>
+				{
+					strval = Marshal.PtrToStringUni(str, (int)str_length);
+				};
+
+				var r = _api.SciterGetElementTextCB(_he, frcv, IntPtr.Zero);
+				if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
+					Debug.Assert(strval == null);
+				return strval;
+			}
+		}
+		#endregion
+
+		#region Attributes and Styles
+		public Dictionary<string, string> Attributes
+		{
+			get
+			{
+				Dictionary<string, string> attrs = new Dictionary<string, string>();
+				for(uint n = 0; n < AttributeCount; n++)
+				{
+					attrs[ GetAttributeName(n) ] = GetAttribute(n);
+				}
+				return attrs;
+			}
+		}
+
+		public uint AttributeCount
+		{
+			get
+			{
+				uint count;
+				_api.SciterGetAttributeCount(_he, out count);
+				return count;
+			}
+		}
+
+		public string GetAttribute(uint n)
+		{
+			string strval = null;
+			SciterXDom.FPTR_LPCWSTR_RECEIVER frcv = (IntPtr str, uint str_length, IntPtr param) =>
+			{
+				strval = Marshal.PtrToStringUni(str, (int)str_length);
+			};
+
+			var r = _api.SciterGetNthAttributeValueCB(_he, n, frcv, IntPtr.Zero);
+			if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
+				Debug.Assert(strval == null);
+			return strval;
 		}
 
 		public string GetAttribute(string name)
@@ -128,7 +222,22 @@ namespace SciterSharp
 			{
 				strval = Marshal.PtrToStringUni(str, (int) str_length);
 			};
+
 			var r = _api.SciterGetAttributeByNameCB(_he, name, frcv, IntPtr.Zero);
+			if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
+				Debug.Assert(strval == null);
+			return strval;
+		}
+
+		public string GetAttributeName(uint n)
+		{
+			string strval = null;
+			SciterXDom.FPTR_LPCSTR_RECEIVER frcv = (IntPtr str, uint str_length, IntPtr param) =>
+			{
+				strval = Marshal.PtrToStringAnsi(str, (int)str_length);
+			};
+
+			var r = _api.SciterGetNthAttributeNameCB(_he, n, frcv, IntPtr.Zero);
 			if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
 				Debug.Assert(strval == null);
 			return strval;
@@ -139,6 +248,31 @@ namespace SciterSharp
 			var r = _api.SciterSetAttributeByName(_he, name, value);
 			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
 		}
+
+		public void RemoveAttribute(string name)
+		{
+			_api.SciterSetAttributeByName(_he, name, null);
+		}
+
+
+		public string GetStyle(string name)
+		{
+			string strval = null;
+			SciterXDom.FPTR_LPCWSTR_RECEIVER frcv = (IntPtr str, uint str_length, IntPtr param) =>
+			{
+				strval = Marshal.PtrToStringUni(str, (int)str_length);
+			};
+
+			var r = _api.SciterGetStyleAttributeCB(_he, name, frcv, IntPtr.Zero);
+			if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
+				Debug.Assert(strval == null);
+			return strval;
+		}
+		public void SetStyle(string name, string value)
+		{
+			_api.SciterSetStyleAttribute(_he, name, value);
+		}
+		#endregion
 
 		public SciterXDom.ELEMENT_STATE_BITS GetState()
 		{
@@ -203,14 +337,11 @@ namespace SciterSharp
 			_api.SciterDetachElement(_he);
 		}
 
-		/// <summary>
-		/// Test this element against CSS selector(s)
-		/// </summary>
-		public bool Test(string selector)
+		public SciterElement Clone()
 		{
-			IntPtr heFound;
-			_api.SciterSelectParent(_he, selector, 1, out heFound);
-			return heFound != IntPtr.Zero;
+			IntPtr clone_he;
+			_api.SciterCloneElement(_he, out clone_he);
+			return new SciterElement(clone_he);
 		}
 
 		#region DOM navigation
@@ -280,6 +411,95 @@ namespace SciterSharp
 		}
 		#endregion
 
+		#region DOM query/select
+		public SciterElement SelectFirstById(string id)
+		{
+			return SelectFirst("[id='" + id + "']");
+		}
+
+		public SciterElement SelectFirst(string selector)
+		{
+			SciterElement se = null;
+			SciterXDom.FPTR_SciterElementCallback cbk = (IntPtr he, IntPtr param) =>
+			{
+				se = new SciterElement(he);
+				return false;
+			};
+			_api.SciterSelectElementsW(_he, selector, cbk, IntPtr.Zero);
+			return se;
+		}
+
+		public List<SciterElement> SelectAll(string selector)
+		{
+			List<SciterElement> list = new List<SciterElement>();
+			SciterXDom.FPTR_SciterElementCallback cbk = (IntPtr he, IntPtr param) =>
+			{
+				list.Add(new SciterElement(he));
+				return true;
+			};
+			_api.SciterSelectElementsW(_he, selector, cbk, IntPtr.Zero);
+			return list;
+		}
+
+		public SciterElement SelectNearestParent(string selector)
+		{
+			IntPtr heFound;
+			_api.SciterSelectParentW(_he, selector, 0, out heFound);
+			if(heFound.ToInt32() == 0)
+				return null;
+			return new SciterElement(heFound);
+		}
+		#endregion
+
+		#region DOM sub-tree manipulation
+		public void Insert(SciterElement se, uint index = 0)
+		{
+			_api.SciterInsertElement(se._he, _he, index);
+		}
+
+		public void Append(SciterElement se)
+		{
+			_api.SciterInsertElement(se._he, _he, int.MaxValue);
+		}
+
+		public void Swap(SciterElement sewith)
+		{
+			_api.SciterSwapElements(_he, sewith._he);
+		}
+
+		public void Clear()
+		{
+			_api.SciterSetElementText(_he, null, 0);
+		}
+
+		public void TransformHTML(string html, SciterXDom.SET_ELEMENT_HTML how = SciterXDom.SET_ELEMENT_HTML.SIH_REPLACE_CONTENT)
+		{
+			var bytes = Encoding.UTF8.GetBytes(html);
+			_api.SciterSetElementHtml(_he, bytes, (uint) bytes.Length, how);
+		}
+		#endregion
+
+		#region Events
+		public bool SendEvent(uint event_code, uint reason = 0, SciterElement heSource = null)
+		{
+			bool handled;
+			_api.SciterSendEvent(_he, event_code, heSource == null ? IntPtr.Zero : heSource._he, new IntPtr(reason), out handled);
+			return handled;
+		}
+
+		public void PostEvent(uint event_code, uint reason = 0, SciterElement heSource = null)
+		{
+			_api.SciterPostEvent(_he, event_code, heSource == null ? IntPtr.Zero : heSource._he, new IntPtr(reason));
+		}
+
+		public bool FireEvent(SciterXBehaviors.BEHAVIOR_EVENT_PARAMS evt, bool post = true)
+		{
+			bool handled;
+			_api.SciterFireEvent(ref evt, post, out handled);
+			return handled;
+		}
+		#endregion
+
 		#region Location and Size
 		public PInvokeUtils.RECT GetLocation(SciterXDom.ELEMENT_AREAS area = SciterXDom.ELEMENT_AREAS.ROOT_RELATIVE | SciterXDom.ELEMENT_AREAS.CONTENT_BOX)
 		{
@@ -288,6 +508,16 @@ namespace SciterSharp
 			return rc;
 		}
 		#endregion
+
+		/// <summary>
+		/// Test this element against CSS selector(s)
+		/// </summary>
+		public bool Test(string selector)
+		{
+			IntPtr heFound;
+			_api.SciterSelectParent(_he, selector, 1, out heFound);
+			return heFound != IntPtr.Zero;
+		}
 
 		public bool Enabled // deeply enabled
 		{
@@ -337,7 +567,7 @@ namespace SciterSharp
 		public SciterValue ExpandoValue
 		{
 			get
-            {
+			{
 				SciterXValue.VALUE val;
 				_api.SciterGetExpando(_he, out val, true);
 				return new SciterValue(val);
@@ -374,6 +604,26 @@ namespace SciterSharp
 			SciterXValue.VALUE vret;
 			_api.SciterCallScriptingFunction(_he, name, SciterValue.ToVALUEArray(args), (uint) args.Length, out vret);
 			return new SciterValue(vret);
+		}
+
+		public SciterValue Eval(string script)
+		{
+			SciterXValue.VALUE rv;
+			_api.SciterEvalElementScript(_he, script, (uint) script.Length, out rv);
+			return new SciterValue(rv);
+		}
+		#endregion
+
+		#region Highlight set/get
+		public bool Highlight
+		{
+			set
+			{
+				if(value)
+					_api.SciterSetHighlightedElement(GetNativeHwnd(), _he);
+				else
+					_api.SciterSetHighlightedElement(GetNativeHwnd(), IntPtr.Zero);
+			}
 		}
 		#endregion
 

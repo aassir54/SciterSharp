@@ -42,10 +42,10 @@ namespace SciterSharp
 			Null.data.t = (uint) SciterXValue.VALUE_TYPE.T_NULL;
 		}
 
-        public static SciterXValue.VALUE[] ToVALUEArray(SciterValue[] values)
-        {
-            return values.Select(sv => sv.data).ToArray();
-        }
+		public static SciterXValue.VALUE[] ToVALUEArray(SciterValue[] values)
+		{
+			return values.Select(sv => sv.data).ToArray();
+		}
 
 		public SciterXValue.VALUE ToVALUE()
 		{
@@ -124,10 +124,10 @@ namespace SciterSharp
 			return sv;
 		}
 
-        /// <summary>
-        /// Returns SciterValue representing error.
-	    /// If such value is used as a return value from native function the script runtime will throw an error in script rather than returning that value.
-        /// </summary>
+		/// <summary>
+		/// Returns SciterValue representing error.
+		/// If such value is used as a return value from native function the script runtime will throw an error in script rather than returning that value.
+		/// </summary>
 		public static SciterValue MakeError(string msg)
 		{
 			if(msg==null)
@@ -138,13 +138,13 @@ namespace SciterSharp
 			return sv;
 		}
 		public static SciterValue MakeSymbol(string sym)
-        {
-            if(sym==null)
+		{
+			if(sym==null)
 				return null;
-            SciterValue sv = new SciterValue();
+			SciterValue sv = new SciterValue();
 			_api.ValueStringDataSet(ref sv.data, sym, (uint) sym.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL);
 			return sv;
-        }
+		}
 
 		public bool IsUndefined() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_UNDEFINED; }
 		public bool IsBool() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_BOOL; }
@@ -240,11 +240,14 @@ namespace SciterSharp
 			_api.ValueClear(out data);
 		}
 
-		public int Length()
+		public int Length
 		{
-			int count;
-			_api.ValueElementsCount(ref data, out count);
-			return count;
+			get
+			{
+				int count;
+				_api.ValueElementsCount(ref data, out count);
+				return count;
+			}
 		}
 
 		public SciterValue GetItem(int n)
@@ -301,7 +304,7 @@ namespace SciterSharp
 
 		public void Append(SciterValue val)
 		{
-			_api.ValueNthElementValueSet(ref data, Length(), ref val.data);
+			_api.ValueNthElementValueSet(ref data, Length, ref val.data);
 		}
 
 		public SciterValue GetItem(SciterValue vkey)

@@ -49,12 +49,12 @@ namespace SciterSharp.Interop
 			#if WINDOWS
 				if(IntPtr.Size == 8)
 				{
-					Debug.Assert(api_struct_size == 1328);
+					Debug.Assert(api_struct_size == 1352);
 					api_ptr = SciterAPI64();
 				}
 				else
 				{
-					Debug.Assert(api_struct_size == 664);
+					Debug.Assert(api_struct_size == 676);
 					api_ptr = SciterAPI32();
 				}
 			#elif GTKMONO
@@ -305,6 +305,14 @@ namespace SciterSharp.Interop
 			public FPTR_SciterPostCallback SciterPostCallback;
 			public FPTR_GetSciterGraphicsAPI GetSciterGraphicsAPI;
 
+#if WINDOWS
+			public FPTR_SciterCreateOnDirectXWindow SciterCreateOnDirectXWindow;
+			public FPTR_SciterRenderOnDirectXWindow SciterRenderOnDirectXWindow;
+			public FPTR_SciterRenderOnDirectXTexture SciterRenderOnDirectXTexture;
+#endif
+
+
+
 			// JUST FOR NOTE, IF NECESSARY TO DECORATED THE CallingConvention OR CharSet OF THE FPTR's
 			//[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
 
@@ -416,7 +424,7 @@ namespace SciterSharp.Interop
 			//SCDOM_RESULT function(HELEMENT he, LPUINT p_count) SciterGetAttributeCount;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetAttributeCount(IntPtr he, out uint p_count);
 			//SCDOM_RESULT function(HELEMENT he, UINT n, LPCSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetNthAttributeNameCB;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetNthAttributeNameCB(IntPtr he, uint n, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetNthAttributeNameCB(IntPtr he, uint n, SciterXDom.FPTR_LPCSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, UINT n, LPCWSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetNthAttributeValueCB;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetNthAttributeValueCB(IntPtr he, uint n, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HELEMENT he, LPCSTR name, LPCWSTR_RECEIVER rcv, LPVOID rcv_param) SciterGetAttributeByNameCB;
@@ -460,7 +468,7 @@ namespace SciterSharp.Interop
 			//SCDOM_RESULT function(HELEMENT  he, LPCWSTR   selector, UINT      depth, HELEMENT* heFound) SciterSelectParentW;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSelectParentW(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string selector, uint depth, out IntPtr heFound);
 			//SCDOM_RESULT function(HELEMENT he, const BYTE* html, UINT htmlLength, UINT where) SciterSetElementHtml;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetElementHtml(IntPtr he, byte[] html, uint htmlLength, uint where);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSetElementHtml(IntPtr he, byte[] html, uint htmlLength, SciterXDom.SET_ELEMENT_HTML where);
 			//SCDOM_RESULT function(HELEMENT he, UINT* puid) SciterGetElementUID;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementUID(IntPtr he, out uint puid);
 			//SCDOM_RESULT function(HWINDOW hwnd, UINT uid, HELEMENT* phe) SciterGetElementByUID;
@@ -496,7 +504,7 @@ namespace SciterSharp.Interop
 			//SCDOM_RESULT function( HWINDOW hwndLayout, LPELEMENT_EVENT_PROC pep, LPVOID tag ) SciterWindowDetachEventHandler;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterWindowDetachEventHandler(IntPtr hwndLayout, SciterXBehaviors.FPTR_ElementEventProc pep, IntPtr tag);
 			//SCDOM_RESULT function( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT_PTR reason, /*out*/ BOOL* handled) SciterSendEvent;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSendEvent(IntPtr he, uint appEventCode, IntPtr heSource, IntPtr reason);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSendEvent(IntPtr he, uint appEventCode, IntPtr heSource, IntPtr reason, out bool handled);
 			//SCDOM_RESULT function( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT_PTR reason) SciterPostEvent;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterPostEvent(IntPtr he, uint appEventCode, IntPtr heSource, IntPtr reason);
 			//SCDOM_RESULT function(HELEMENT he, METHOD_PARAMS* params) SciterCallBehaviorMethod;
@@ -683,6 +691,15 @@ namespace SciterSharp.Interop
 
 			// LPSciterGraphicsAPI function() GetSciterGraphicsAPI;
 			public delegate IntPtr FPTR_GetSciterGraphicsAPI();
+
+#if WINDOWS
+			// BOOL SCFN(SciterCreateOnDirectXWindow ) (HWINDOW hwnd, IDXGISwapChain* pSwapChain);
+			public delegate bool FPTR_SciterCreateOnDirectXWindow(IntPtr hwnd, IntPtr pSwapChain);
+			// BOOL SCFN(SciterRenderOnDirectXWindow ) (HWINDOW hwnd, HELEMENT elementToRenderOrNull, BOOL frontLayer);
+			public delegate bool FPTR_SciterRenderOnDirectXWindow(IntPtr hwnd, IntPtr elementToRenderOrNull, bool frontLayer);
+			// BOOL SCFN(SciterRenderOnDirectXTexture ) (HWINDOW hwnd, HELEMENT elementToRenderOrNull, IDXGISurface* surface);
+			public delegate bool FPTR_SciterRenderOnDirectXTexture(IntPtr hwnd, IntPtr elementToRenderOrNull, IntPtr surface);
+#endif
 		}
 	}
 }

@@ -12,10 +12,10 @@ namespace TestMinimal
 {
 	class Program
 	{
-        [STAThread]
+		[STAThread]
 		static void Main(string[] args)
 		{
-            PInvokeWindows.OleInitialize(IntPtr.Zero);
+			PInvokeWindows.OleInitialize(IntPtr.Zero);
 
 			TestGraphics.Run();
 			//TestSciterValue.Run();
@@ -24,11 +24,11 @@ namespace TestMinimal
 			// Create the window
 			var wnd = new HostWindow();
 			wnd.CreateMainWindowNative(1500, 800);
-            wnd.EnableDwmClientArea();
+			wnd.EnableDwmClientArea();
 			
 
-            //wnd.CenterTopLevelWindow();
-            //wnd.AfterWindowCreate();
+			//wnd.CenterTopLevelWindow();
+			//wnd.AfterWindowCreate();
 			//wnd.Title = "Sciter Bootstrap";
 
 			// Prepares SciterHost and then load the page
@@ -37,18 +37,23 @@ namespace TestMinimal
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
 
-			var val = wnd.RootElement.ExpandoValue;
-			string str = val.ToString();
-			var e = val["prooop"];
+			// get the page <body>
+			var se_body = wnd.RootElement.SelectFirst("body");
 
-			
+			// append a <h1> header to it
+			se_body.TransformHTML("<h1>Wow, this header was created natively!</h1>", SciterXDom.SET_ELEMENT_HTML.SIH_INSERT_AT_START);
+
+			// set <h1> color to blue
+			se_body[0].SetStyle("color", "#00F");
+
+
 			// Show window and Run message loop
 			wnd.Show();
 			PInvokeUtils.RunMsgLoop();
 		}
 	}
 
-    class Host : BaseHost
+	class Host : BaseHost
 	{
 		// Things to do here:
 		// -override OnLoadData() to customize or track resource loading
@@ -96,7 +101,7 @@ namespace TestMinimal
 			string cwd = System.Environment.CurrentDirectory;
 			Debug.Assert(File.Exists(cwd + "\\res\\" + path));
 			string url = "file:///" + cwd + "\\res\\" + path;
-            url = url.Replace('\\', '/');
+			url = url.Replace('\\', '/');
 		#else
 			string url = "archive://app/" + path;
 		#endif
