@@ -35,9 +35,14 @@ namespace SciterSharp.Interop
 		{
 			get { return LoadGraphicsAPI(); }
 		}
+		public static SciterXRequest.ISciterRequestAPI RequestAPI
+		{
+			get { return LoadRequestAPI(); }
+		}
 
 		private static ISciterAPI? _api = null;
 		private static SciterXGraphics.ISciterGraphicsAPI? _gapi = null;
+		private static SciterXRequest.ISciterRequestAPI? _rapi = null;
 
 		private static ISciterAPI LoadAPI()
 		{
@@ -49,19 +54,19 @@ namespace SciterSharp.Interop
 			#if WINDOWS
 				if(IntPtr.Size == 8)
 				{
-					Debug.Assert(api_struct_size == 1352);
+					Debug.Assert(api_struct_size == 680 * 2);
 					api_ptr = SciterAPI64();
 				}
 				else
 				{
-					Debug.Assert(api_struct_size == 676);
+					Debug.Assert(api_struct_size == 680);
 					api_ptr = SciterAPI32();
 				}
 			#elif GTKMONO
 				if(IntPtr.Size != 8)
 					throw new Exception("SciterSharp GTK/Mono only supports 64bits builds");
 
-				Debug.Assert(api_struct_size == 1288);
+				Debug.Assert(api_struct_size == 1296);
 				api_ptr = SciterAPI();
 			#endif
 
@@ -84,10 +89,10 @@ namespace SciterSharp.Interop
 			uint minor = API.SciterVersion(0);
 			if(minor < 0x00010000)
 			{
-				throw new Exception("Graphics API needs at least Sciter 3.1.0.0");
+				throw new Exception("Graphics API needs at least Sciter 3.3.1.0");
 			}
 
-			if(_gapi==null)
+			if(_gapi == null)
 			{
 				int api_struct_size = Marshal.SizeOf(typeof(SciterXGraphics.ISciterGraphicsAPI));
 				if(IntPtr.Size == 8)
@@ -99,6 +104,28 @@ namespace SciterSharp.Interop
 				_gapi = (SciterXGraphics.ISciterGraphicsAPI)Marshal.PtrToStructure(api_ptr, typeof(SciterXGraphics.ISciterGraphicsAPI));
 			}
 			return _gapi.Value;
+		}
+
+		private static SciterXRequest.ISciterRequestAPI LoadRequestAPI()
+		{
+			uint minor = API.SciterVersion(0);
+			if(minor < 0x00010006)
+			{
+				throw new Exception("Request API needs at least Sciter 3.3.1.6");
+			}
+
+			if(_rapi == null)
+			{
+				int api_struct_size = Marshal.SizeOf(typeof(SciterXRequest.ISciterRequestAPI));
+				if(IntPtr.Size == 8)
+					Debug.Assert(api_struct_size == 208);
+				else
+					Debug.Assert(api_struct_size == 104);
+
+				IntPtr api_ptr = API.GetSciterRequestAPI();
+				_rapi = (SciterXRequest.ISciterRequestAPI)Marshal.PtrToStructure(api_ptr, typeof(SciterXRequest.ISciterRequestAPI));
+			}
+			return _rapi.Value;
 		}
 
 #if WINDOWS
@@ -304,6 +331,7 @@ namespace SciterSharp.Interop
 			public FPTR_SciterGetCallbackParam SciterGetCallbackParam;
 			public FPTR_SciterPostCallback SciterPostCallback;
 			public FPTR_GetSciterGraphicsAPI GetSciterGraphicsAPI;
+			public FPTR_GetSciterRequestAPI GetSciterRequestAPI;
 
 #if WINDOWS
 			public FPTR_SciterCreateOnDirectXWindow SciterCreateOnDirectXWindow;
@@ -691,6 +719,9 @@ namespace SciterSharp.Interop
 
 			// LPSciterGraphicsAPI function() GetSciterGraphicsAPI;
 			public delegate IntPtr FPTR_GetSciterGraphicsAPI();
+
+			// LPSciterRequestAPI SCFN(GetSciterRequestAPI )();
+			public delegate IntPtr FPTR_GetSciterRequestAPI();
 
 #if WINDOWS
 			// BOOL SCFN(SciterCreateOnDirectXWindow ) (HWINDOW hwnd, IDXGISwapChain* pSwapChain);

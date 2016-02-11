@@ -24,12 +24,12 @@ using System.Runtime.InteropServices;
 
 namespace SciterSharp.Interop
 {
-    public static class TIScript
-    {
+	public static class TIScript
+	{
 		[StructLayout(LayoutKind.Sequential)]
-        public struct tiscript_value
-        {
-            ulong value;
-        }
-    }
+		public struct tiscript_value
+		{
+			ulong value;
+		}
+	}
 }

@@ -18,7 +18,7 @@ namespace TestMinimal
 			PInvokeWindows.OleInitialize(IntPtr.Zero);
 
 			TestGraphics.Run();
-			//TestSciterValue.Run();
+			TestSciterValue.Run();
 			TestSciterElement.Run();
 
 			// Create the window
@@ -112,6 +112,11 @@ namespace TestMinimal
 
 		protected override SciterXDef.LoadResult OnLoadData(SciterXDef.SCN_LOAD_DATA sld)
 		{
+			SciterRequest rq = new SciterRequest(sld.requestId);
+			string r1 = rq.Url;
+			string r2 = rq.ContentUrl;
+			var r3 = rq.RequestedType;
+
 			if(sld.uri.StartsWith("archive://app/"))
 			{
 				// load resource from SciterArchive

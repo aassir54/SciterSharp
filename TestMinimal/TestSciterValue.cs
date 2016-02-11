@@ -19,7 +19,8 @@ namespace TestMinimal
 			res.Append(new SciterValue(1));
 			res.Append(new SciterValue(1));
 			string r = res.ToString();
-			string r2 = res.ToJSONString();
+			string r2 = res.ToString();
+			string r3 = res.ToJSONString(SciterSharp.Interop.SciterXValue.VALUE_STRING_CVT_TYPE.CVT_JSON_LITERAL);
 		}
 	}
 }

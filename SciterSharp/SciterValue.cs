@@ -230,9 +230,9 @@ namespace SciterSharp
 			if(how==SciterXValue.VALUE_STRING_CVT_TYPE.CVT_SIMPLE && IsString())
 				return Get("");
 
-			SciterXValue.VALUE outdata = this.data;
-			_api.ValueToString(ref outdata, how);
-			return new SciterValue(outdata).Get("");
+			SciterValue outdata = new SciterValue(this);
+			_api.ValueToString(ref outdata.data, how);
+			return outdata.Get("");
 		}
 
 		public void Clear()

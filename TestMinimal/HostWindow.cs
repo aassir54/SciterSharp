@@ -236,8 +236,8 @@ namespace TestMinimal
 	}
 
 
-    class HostWindow : SciterWindow
-    {
+	class HostWindow : SciterWindow
+	{
 		[DllImport("user32.dll", SetLastError=true)]
 		public static extern IntPtr CreateWindowExW(
 			uint dwExStyle,
@@ -296,81 +296,81 @@ namespace TestMinimal
 
 
 		private delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-        private WndProc _proc_native;
+		private WndProc _proc_native;
 
 
 
 		public void CreateMainWindowNative(int width, int height)
-        {
-            const int CS_VREDRAW = 0x0001;
-            const int CS_HREDRAW = 0x0002;
+		{
+			const int CS_VREDRAW = 0x0001;
+			const int CS_HREDRAW = 0x0002;
 
 
 			// Register class
 			_proc_native = InternalProcessNativeWindowMessage;
 
 			WNDCLASSEX wcx = WNDCLASSEX.Build();
-            wcx.style = CS_VREDRAW | CS_HREDRAW;
-            wcx.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_proc_native);
-            wcx.hInstance = GetModuleHandle(null);
-            wcx.lpszClassName = "OMG MEOW";
-            short a = RegisterClassExW(ref wcx);
+			wcx.style = CS_VREDRAW | CS_HREDRAW;
+			wcx.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_proc_native);
+			wcx.hInstance = GetModuleHandle(null);
+			wcx.lpszClassName = "OMG MEOW";
+			short a = RegisterClassExW(ref wcx);
 
 
 			uint styleEx = 0;
 			uint style = (uint) WindowStyles.WS_OVERLAPPEDWINDOW;
 
 			_hwnd = CreateWindowExW(styleEx, "OMG MEOW", null, style, -1, 0, width, height, IntPtr.Zero, IntPtr.Zero, wcx.hInstance, IntPtr.Zero);
-            Debug.Assert(_hwnd != IntPtr.Zero);
-        }
+			Debug.Assert(_hwnd != IntPtr.Zero);
+		}
 		
 
-        private IntPtr InternalProcessNativeWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam)
+		private IntPtr InternalProcessNativeWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam)
 		{
 			IntPtr lResult = IntPtr.Zero;
-            if(Utils.DwmDefWindowProc(hwnd, msg, wParam, lParam, out lResult)!=0)
+			if(Utils.DwmDefWindowProc(hwnd, msg, wParam, lParam, out lResult)!=0)
 			{
-                return lResult;
+				return lResult;
 			}
 
-            bool handled = ProcessWindowMessage(hwnd, msg, wParam, lParam, ref lResult);
+			bool handled = ProcessWindowMessage(hwnd, msg, wParam, lParam, ref lResult);
 			if(handled)
 				return lResult;
 			return _api.SciterProc(hwnd, msg, wParam, lParam);
 		}
 
-        protected override bool ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, ref IntPtr lResult)
-        {
+		protected override bool ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, ref IntPtr lResult)
+		{
 			IntPtr result = IntPtr.Zero;
 			
 			if(msg == Utils.WM_NCCALCSIZE)
-            {
-                bool bCalcValidRects = wParam.ToInt32()!=0;
-                if(bCalcValidRects)
-                {
-                    //result = Utils.DefWindowProc(hwnd, msg, wParam, lParam);
+			{
+				bool bCalcValidRects = wParam.ToInt32()!=0;
+				if(bCalcValidRects)
+				{
+					//result = Utils.DefWindowProc(hwnd, msg, wParam, lParam);
 
-                    //Utils.NCCALCSIZE_PARAMS nc = (Utils.NCCALCSIZE_PARAMS) Marshal.PtrToStructure(lParam, typeof(Utils.NCCALCSIZE_PARAMS));
-                    //nc.rect0.top -= 200;// PInvokeUtils.GetSystemMetrics(PInvokeUtils.SystemMetric.SM_CYCAPTION);
+					//Utils.NCCALCSIZE_PARAMS nc = (Utils.NCCALCSIZE_PARAMS) Marshal.PtrToStructure(lParam, typeof(Utils.NCCALCSIZE_PARAMS));
+					//nc.rect0.top -= 200;// PInvokeUtils.GetSystemMetrics(PInvokeUtils.SystemMetric.SM_CYCAPTION);
 
-                    //Marshal.StructureToPtr(nc, lParam, false);
+					//Marshal.StructureToPtr(nc, lParam, false);
 
-                    lResult = IntPtr.Zero;
+					lResult = IntPtr.Zero;
 
 					Debug.WriteLine("WM_NCCALCSIZE");
-                    return true;
-                }
-            }
-            else if(msg == Utils.WM_NCHITTEST)
-            {
-            }
-            return false;
-        }
+					return true;
+				}
+			}
+			else if(msg == Utils.WM_NCHITTEST)
+			{
+			}
+			return false;
+		}
 
 		public void AfterWindowCreate()
-        {
-            //SetWindowPos(_hwnd, IntPtr.Zero, 0, 0, 0, 0, SetWindowPosFlags.SWP_NOMOVE | SetWindowPosFlags.SWP_NOSIZE | SetWindowPosFlags.SWP_NOACTIVATE | SetWindowPosFlags.SWP_FRAMECHANGED);
-        }
+		{
+			//SetWindowPos(_hwnd, IntPtr.Zero, 0, 0, 0, 0, SetWindowPosFlags.SWP_NOMOVE | SetWindowPosFlags.SWP_NOSIZE | SetWindowPosFlags.SWP_NOACTIVATE | SetWindowPosFlags.SWP_FRAMECHANGED);
+		}
 
 		public void EnableDwmClientArea()
 		{
@@ -380,32 +380,32 @@ namespace TestMinimal
 			{
 				Utils.MARGINS margins = new Utils.MARGINS();
 				margins.leftWidth = -1;
-                Utils.DwmExtendFrameIntoClientArea(_hwnd, ref margins);
+				Utils.DwmExtendFrameIntoClientArea(_hwnd, ref margins);
 
 				SciterX.API.SciterSetOption(_hwnd, SciterXDef.SCITER_RT_OPTIONS.SCITER_TRANSPARENT_WINDOW, new IntPtr(1));
 			}
 		}
 
-        [DllImport("user32.dll")]
-        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
+		[DllImport("user32.dll")]
+		static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
 
-        enum SetWindowPosFlags
-        {
-            SWP_ASYNCWINDOWPOS = 0x4000,
-            SWP_DEFERERASE = 0x2000,
-            SWP_DRAWFRAME = 0x0020,
-            SWP_FRAMECHANGED = 0x0020,
-            SWP_HIDEWINDOW = 0x0080,
-            SWP_NOACTIVATE = 0x0010,
-            SWP_NOCOPYBITS = 0x0100,
-            SWP_NOMOVE = 0x0002,
-            SWP_NOOWNERZORDER = 0x0200,
-            SWP_NOREDRAW = 0x0008,
-            SWP_NOREPOSITION = 0x0200,
-            SWP_NOSENDCHANGING = 0x0400,
-            SWP_NOSIZE = 0x0001,
-            SWP_NOZORDER = 0x0004,
-            SWP_SHOWWINDOW = 0x0040,
-        }
-    }
+		enum SetWindowPosFlags
+		{
+			SWP_ASYNCWINDOWPOS = 0x4000,
+			SWP_DEFERERASE = 0x2000,
+			SWP_DRAWFRAME = 0x0020,
+			SWP_FRAMECHANGED = 0x0020,
+			SWP_HIDEWINDOW = 0x0080,
+			SWP_NOACTIVATE = 0x0010,
+			SWP_NOCOPYBITS = 0x0100,
+			SWP_NOMOVE = 0x0002,
+			SWP_NOOWNERZORDER = 0x0200,
+			SWP_NOREDRAW = 0x0008,
+			SWP_NOREPOSITION = 0x0200,
+			SWP_NOSENDCHANGING = 0x0400,
+			SWP_NOSIZE = 0x0001,
+			SWP_NOZORDER = 0x0004,
+			SWP_SHOWWINDOW = 0x0040,
+		}
+	}
 }

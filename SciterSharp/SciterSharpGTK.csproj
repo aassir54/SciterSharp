@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interop\SciterXGraphics.cs" />
+    <Compile Include="Interop\SciterXRequest.cs" />
     <Compile Include="Properties\AssemblyInfoGTK.cs" />
     <Compile Include="SciterArchive.cs" />
     <Compile Include="SciterDebugOutputHandler.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="SciterEventHandler.cs" />
     <Compile Include="SciterGraphics.cs" />
     <Compile Include="SciterHost.cs" />
+    <Compile Include="SciterRequest.cs" />
     <Compile Include="SciterValue.cs" />
     <Compile Include="SciterWindow.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />

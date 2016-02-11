@@ -96,6 +96,7 @@ namespace SciterSharp.Interop
 			string                localeName;
 		}
 
+		[StructLayout(LayoutKind.Sequential)]
 		public struct ISciterGraphicsAPI
 		{
 			public FPTR_imageCreate				imageCreate;

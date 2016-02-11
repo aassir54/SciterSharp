@@ -28,22 +28,14 @@ namespace SciterSharp.Interop
 {
 	public static class SciterXDef
 	{
-		public enum SciterResourceType : uint
-		{
-			RT_DATA_HTML = 0,
-			RT_DATA_IMAGE = 1,
-			RT_DATA_STYLE = 2,
-			RT_DATA_CURSOR = 3,
-			RT_DATA_SCRIPT = 4,
-			RT_DATA_RAW = 5,
-		}
-
 		public enum LoadResult : uint
 		{
 			LOAD_OK = 0,	  // do default loading if data not set
 			LOAD_DISCARD = 1, // discard request completely
 			LOAD_DELAYED = 2, // data will be delivered later by the host
 							  // Host application must call SciterDataReadyAsync(,,, requestId) on each LOAD_DELAYED request to avoid memory leaks.
+			LOAD_MYSELF = 3,  // you return LOAD_MYSELF result to indicate that your (the host) application took or will take care about HREQUEST in your code completely.
+							  // Use sciter-x-request.h[pp] API functions with SCN_LOAD_DATA::requestId handle .
 		}
 
 		public const uint SC_LOAD_DATA = 0x01;
@@ -75,7 +67,7 @@ namespace SciterSharp.Interop
 			public uint outDataSize;		// UINT - [in,out] loaded data size to return.
 			public uint dataType;			// UINT - [in] SciterResourceType
 
-			public IntPtr requestId;		// LPVOID - [in] request id that needs to be passed as is to the SciterDataReadyAsync call
+			public IntPtr requestId;        // HREQUEST - [in] request handle that can be used with sciter-x-request API
 
 			public IntPtr principal;		// HELEMENT
 			public IntPtr initiator;		// HELEMENT
