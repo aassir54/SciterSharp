@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using SciterSharp.Interop;
+using System.Collections;
 
 namespace SciterSharp
 {
@@ -647,7 +648,8 @@ namespace SciterSharp
 
 	public class SciterNode
 	{
-		private IntPtr _hn;
+		private static SciterX.ISciterAPI _api = SciterX.API;
+		public IntPtr _hn { get; private set; }
 
 		public SciterNode(IntPtr hn)
 		{
@@ -656,6 +658,24 @@ namespace SciterSharp
 				throw new ArgumentException("IntPtr.Zero received at SciterNode constructor");
 
 			_hn = hn;
+		}
+
+		public static SciterNode MakeTextNode(string text)
+		{
+			IntPtr hn;
+			_api.SciterCreateTextNode(text, (uint)text.Length, out hn);
+			if(hn != IntPtr.Zero)
+				return new SciterNode(hn);
+			return null;
+		}
+
+		public static SciterNode MakeCommentNode(string text)
+		{
+			IntPtr hn;
+			_api.SciterCreateCommentNode(text, (uint)text.Length, out hn);
+			if(hn != IntPtr.Zero)
+				return new SciterNode(hn);
+			return null;
 		}
 	}
 }

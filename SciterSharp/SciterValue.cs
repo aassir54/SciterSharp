@@ -148,7 +148,7 @@ namespace SciterSharp
 
 		public bool IsUndefined() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_UNDEFINED; }
 		public bool IsBool() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_BOOL; }
-		public bool IsFlat() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_FLOAT; }
+		public bool IsFloat() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_FLOAT; }
 		public bool IsString() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING; }
 		public bool IsSymbol() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL; }
 		public bool IsErrorString() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_ERROR; }
@@ -250,13 +250,6 @@ namespace SciterSharp
 			}
 		}
 
-		public SciterValue GetItem(int n)
-		{
-			SciterValue val = new SciterValue();
-			_api.ValueNthElementValue(ref data, n, out val.data);
-			return val;
-		}
-
 
 		public SciterValue this[int key]
 		{
@@ -307,6 +300,13 @@ namespace SciterSharp
 			_api.ValueNthElementValueSet(ref data, Length, ref val.data);
 		}
 
+		public SciterValue GetItem(int n)
+		{
+			SciterValue val = new SciterValue();
+			_api.ValueNthElementValue(ref data, n, out val.data);
+			return val;
+		}
+
 		public SciterValue GetItem(SciterValue vkey)
 		{
 			SciterValue vret = new SciterValue();
@@ -319,6 +319,13 @@ namespace SciterSharp
 			SciterValue vret = new SciterValue();
 			SciterValue vkey = SciterValue.MakeSymbol(strkey);
 			_api.ValueGetValueOfKey(ref data, ref vkey.data, out vret.data);
+			return vret;
+		}
+
+		public SciterValue GetKey(int n)
+		{
+			SciterValue vret = new SciterValue();
+			_api.ValueNthElementKey(ref data, n, out vret.data);
 			return vret;
 		}
 
@@ -365,6 +372,31 @@ namespace SciterSharp
 		public void Isolate()
 		{
 			_api.ValueIsolate(ref data);
+		}
+
+
+		public IEnumerable<SciterValue> AsEnumerable()
+		{
+			if(!IsArray())
+				throw new ArgumentException("This SciterValue is not an array");
+			for(int i = 0; i < Length; i++)
+			{
+				yield return this[i];
+			}
+		}
+
+		public IDictionary<SciterValue, SciterValue> AsDictionary()
+		{
+			if(!IsObject())
+				throw new ArgumentException("This SciterValue is not an object");
+
+			Dictionary<SciterValue, SciterValue> dic = new Dictionary<SciterValue, SciterValue>();
+			for(int i = 0; i < Length; i++)
+			{
+				dic[GetKey(i)] = GetItem(i);
+			}
+
+			return dic;
 		}
 	}
 }

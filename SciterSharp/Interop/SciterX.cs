@@ -627,9 +627,9 @@ namespace SciterSharp.Interop
 			//SCDOM_RESULT function(HNODE hnode, BOOL finalize) SciterNodeRemove;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeRemove(IntPtr hn, bool finalize);
 			//SCDOM_RESULT function(LPCWSTR text, UINT textLength, HNODE* phnode) SciterCreateTextNode;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateTextNode(IntPtr hn, uint textLength, out IntPtr phnode);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateTextNode([MarshalAs(UnmanagedType.LPWStr)]string text, uint textLength, out IntPtr phnode);
 			//SCDOM_RESULT function(LPCWSTR text, UINT textLength, HNODE* phnode) SciterCreateCommentNode;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateCommentNode(IntPtr hn, uint textLength, out IntPtr phnode);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCreateCommentNode([MarshalAs(UnmanagedType.LPWStr)]string text, uint textLength, out IntPtr phnode);
 
 			//|
 			//| Value API

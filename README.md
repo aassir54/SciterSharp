@@ -15,6 +15,9 @@ The source is made portable to work in Windows and Linux/GTK+3/Mono.
 
 License: GNU GENERAL PUBLIC LICENSE Version 3
 
+## Documentation
+
+Check an extensive walk-through article for writing apps with SciterSharp [here](http://www.codeproject.com/Articles/1057199/Sciter-HTML-Csharp-based-desktop-apps-walkthrough).
 
 ## Quick Start
 
@@ -52,7 +55,7 @@ In Visual Studio, make sure to **enable native debugging** so you will see Scite
  
 ### Linux/Mono/GTK+3
 
-You need to add sciter-gtk-64.so shared library to your path. The easiest way is to use the download the script from [here](https://raw.githubusercontent.com/midiway/SciterBootstrap-CSharp/TemplateMultiPlatform/install-libsciter.sh) and run it in a terminal with: ```sudo bash install-libsciter.sh```
+You need to add libsciter-gtk-64.so shared library to your path. The easiest way is to use the download the script from [here](https://raw.githubusercontent.com/midiway/SciterBootstrap-CSharp/TemplateMultiPlatform/install-libsciter.sh) and run it in a terminal with: ```sudo bash install-libsciter.sh```
 
 The Sciter native library requires the following packages:
 - GTK+3: ```sudo apt-get install libgtk-3-0```
