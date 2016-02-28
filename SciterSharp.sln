@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMinimal", "TestMinimal\TestMinimal.csproj", "{BAD1F9FD-2FA7-44A7-85F3-BD2ACA077044}"
 EndProject
@@ -15,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterSharpWindows", "SciterSharp\SciterSharpWindows.csproj", "{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterSharpGTK", "SciterSharp\SciterSharpGTK.csproj", "{D60ACAE0-C246-4936-B92B-B756841DB545}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWPF", "TestWPF\TestWPF.csproj", "{00EAE4CA-18D6-4647-B6CD-355E90BEBA15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{D60ACAE0-C246-4936-B92B-B756841DB545}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D60ACAE0-C246-4936-B92B-B756841DB545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D60ACAE0-C246-4936-B92B-B756841DB545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00EAE4CA-18D6-4647-B6CD-355E90BEBA15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00EAE4CA-18D6-4647-B6CD-355E90BEBA15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00EAE4CA-18D6-4647-B6CD-355E90BEBA15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00EAE4CA-18D6-4647-B6CD-355E90BEBA15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

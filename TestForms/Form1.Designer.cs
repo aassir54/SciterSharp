@@ -33,9 +33,9 @@
 			// 
 			// sciterControl1
 			// 
-			this.sciterControl1.Location = new System.Drawing.Point(24, 12);
+			this.sciterControl1.Location = new System.Drawing.Point(217, 59);
 			this.sciterControl1.Name = "sciterControl1";
-			this.sciterControl1.Size = new System.Drawing.Size(932, 444);
+			this.sciterControl1.Size = new System.Drawing.Size(509, 338);
 			this.sciterControl1.TabIndex = 0;
 			this.sciterControl1.Text = "sciterControl1";
 			// 
@@ -47,6 +47,7 @@
 			this.Controls.Add(this.sciterControl1);
 			this.Name = "Form1";
 			this.Text = "Form1";
+			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResumeLayout(false);
 
 		}

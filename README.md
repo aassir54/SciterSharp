@@ -1,6 +1,6 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 3.3.1.6
+ACTUAL SCITER VERSION: 3.3.1.8
 
 Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.8-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
@@ -17,7 +17,8 @@ License: GNU GENERAL PUBLIC LICENSE Version 3
 
 ## Documentation
 
-Check an extensive walk-through article for writing apps with SciterSharp [here](http://www.codeproject.com/Articles/1057199/Sciter-HTML-Csharp-based-desktop-apps-walkthrough).
+[Introductory walk-through for writing apps with SciterSharp](http://www.codeproject.com/Articles/1057199/Sciter-HTML-Csharp-based-desktop-apps-walkthrough).
+
 
 ## Quick Start
 
@@ -49,7 +50,7 @@ Clone the repository and compile the project for your platform: SciterSharpWindo
 ### Windows
 - requires at least .NET 4.5
 
-Sciter native DLL must be added manually to your project, so go and grab a copy from [Sciter SDK](http://sciter.com/sdk/sciter-sdk-3.zip), I don't distribute it in any form. So, for running you desktop app, you need to **make sure that your program can find sciter32/64.dll**. The best way is to put a copy of each DLL in the *bin/Debug/* and *bin/Release/* folders.
+For running you desktop app, you need to **make sure that your program can find sciter32/64.dll**, so go and grab a copy from [Sciter SDK](http://sciter.com/sdk/sciter-sdk-3.zip), I don't distribute it in any form. The best way is to put a copy of each DLL in the *bin/Debug/* and *bin/Release/* folders or simply add it to Windows PATH, as your prefer.
 
 In Visual Studio, make sure to **enable native debugging** so you will see Sciter error messages in the Output window: ```Project Properties / Debug / Check 'Enable native code debugging'```
  
@@ -94,9 +95,12 @@ Here is a summary of the classes from SciterSharp namespace and their mapping ov
 - **class SciterGraphics**: API over the Graphics native API - status: **50% COMPLETE**
 - **class SciterRequest**: API over the Request native API
 
+## WinForms and WPF
+
+With SciterSharp, you can easily create a Sciter child window for you WinForms or WPF application.
+
+There is not yet documentation on how to achieve it, but you can look at the two samples project included in this repo: TestWPF and TestForms.
 
 ## Todo's (help appreciated) 
 
-- Windows Forms control
-- WPF control
 - add as C# documentation all the helpful API comments found in the official Sciter SDK C headers

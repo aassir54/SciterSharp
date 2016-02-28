@@ -16,5 +16,10 @@ namespace TestForms
 		{
 			InitializeComponent();
 		}
+
+		private void Form1_Load(object sender, EventArgs e)
+		{
+			sciterControl1.SciterWnd.LoadHtml("<h1>Awesome</h1>");
+		}
 	}
 }
