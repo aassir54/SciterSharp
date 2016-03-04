@@ -45,6 +45,7 @@ namespace TestOSX
 			host.SetupWindow(wnd);
 			host.AttachEvh(new HostEvh());
 			host.SetupPage ("index.html");
+			host.DebugInspect ();
 
 			wnd.Show ();
 		}

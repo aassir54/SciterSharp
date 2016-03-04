@@ -69,8 +69,11 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\SciterSharp\SciterSharpOSX.csproj">
-      <Project>{4A78315D-ABFF-4D8F-B746-C759449729CB}</Project>
+      <Project>{0FED940F-A40A-4800-8FE4-963C523D32E2}</Project>
       <Name>SciterSharpOSX</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sciter-osx-32.dylib" />
   </ItemGroup>
 </Project>

@@ -118,6 +118,8 @@ namespace SciterSharp
 			DebugInspect("inspector");
 #elif GTKMONO
 			DebugInspect("inspector64");
+#elif OSX
+			DebugInspect("inspector.app/Contents/MacOS/inspector");
 #else
 			throw new Exception("Not supported");
 #endif
@@ -137,6 +139,9 @@ namespace SciterSharp
 #if WINDOWS
 			if(!File.Exists(inspector_exe_path) && !File.Exists(inspector_exe_path + ".exe"))
 				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + inspector_exe_path;
+#elif OSX
+			if(!File.Exists(inspector_exe_path))
+				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + "../../../" +  inspector_exe_path;
 #else
 			if(!File.Exists(inspector_exe_path))
 				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + inspector_exe_path;

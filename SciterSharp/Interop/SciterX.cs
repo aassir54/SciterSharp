@@ -45,17 +45,17 @@ namespace SciterSharp.Interop
 		private static SciterXRequest.ISciterRequestAPI? _rapi = null;
 
 		#if WINDOWS
-		[DllImport("sciter-osx", EntryPoint = "SciterAPI")]
+		[DllImport("sciter32", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI32();
-		[DllImport("sciter-osx", EntryPoint = "SciterAPI")]
+		[DllImport("sciter64", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI64();
 		#elif GTKMONO
 		[DllImport("sciter-gtk-64.so")]
 		private static extern IntPtr SciterAPI();
 		#elif OSX
-		[DllImport("sciter-osx", EntryPoint = "SciterAPI")]
+		[DllImport("sciter-osx-32", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI32();
-		[DllImport("sciter-osx", EntryPoint = "SciterAPI")]
+		[DllImport("sciter-osx-32", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI64();
 		#endif
 
