@@ -1,38 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}</ProjectGuid>
+    <ProjectGuid>{0FED940F-A40A-4800-8FE4-963C523D32E2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SciterSharp</RootNamespace>
-    <AssemblyName>SciterSharpWindows</AssemblyName>
+    <RootNamespace>SciterSharpOSX</RootNamespace>
+    <AssemblyName>SciterSharpOSX</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <UseMSBuildEngine>False</UseMSBuildEngine>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;WINDOWS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;OSX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Debug\SciterSharpWindows.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <DefineConstants>TRACE;OSX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Release\SciterSharpWindows.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -42,36 +38,32 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="MonoMac" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Compile Include="Interop\PInvokeWindows.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
-    <Compile Include="Interop\SciterXRequest.cs" />
+    <Compile Include="Interop\PInvokeUtils.cs" />
+    <Compile Include="Interop\SciterX.cs" />
+    <Compile Include="Interop\SciterXBehaviors.cs" />
+    <Compile Include="Interop\SciterXDef.cs" />
+    <Compile Include="Interop\SciterXDom.cs" />
     <Compile Include="Interop\SciterXGraphics.cs" />
+    <Compile Include="Interop\SciterXRequest.cs" />
+    <Compile Include="Interop\SciterXValue.cs" />
+    <Compile Include="Interop\SciterXVideoAPI.cs" />
+    <Compile Include="Interop\TIScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SciterArchive.cs" />
     <Compile Include="SciterDebugOutputHandler.cs" />
     <Compile Include="SciterElement.cs" />
     <Compile Include="SciterEventHandler.cs" />
-    <Compile Include="SciterRequest.cs" />
     <Compile Include="SciterGraphics.cs" />
     <Compile Include="SciterHost.cs" />
+    <Compile Include="SciterRequest.cs" />
     <Compile Include="SciterValue.cs" />
     <Compile Include="SciterWindow.cs" />
-    <Compile Include="Interop\SciterXBehaviors.cs" />
-    <Compile Include="Interop\SciterXValue.cs" />
-    <Compile Include="Interop\SciterXDom.cs" />
-    <Compile Include="Interop\SciterXDef.cs" />
-    <Compile Include="Interop\PInvokeUtils.cs" />
-    <Compile Include="Interop\SciterX.cs" />
-    <Compile Include="Interop\SciterXVideoAPI.cs" />
-    <Compile Include="Interop\TIScript.cs" />
-    <Compile Include="WinForms\SciterControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SciterSharp.pfx" />

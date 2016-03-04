@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="Interop\SciterXGraphics.cs" />
     <Compile Include="Interop\SciterXRequest.cs" />
-    <Compile Include="Properties\AssemblyInfoGTK.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SciterArchive.cs" />
     <Compile Include="SciterDebugOutputHandler.cs" />
     <Compile Include="SciterElement.cs" />

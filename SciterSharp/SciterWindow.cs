@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Ramon F. Mendes
+﻿// Copyright 2016 Ramon F. Mendes
 //
 // This file is part of SciterSharp.
 // 
@@ -24,6 +24,11 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SciterSharp.Interop;
+#if OSX
+using MonoMac.Foundation;
+using MonoMac.AppKit;
+using MonoMac.ObjCRuntime;
+#endif
 
 namespace SciterSharp
 {
@@ -33,7 +38,9 @@ namespace SciterSharp
         public IntPtr _hwnd { get; set; }
         private SciterXDef.FPTR_SciterWindowDelegate _proc;
 #if GTKMONO
-		public IntPtr _gtkwindow;
+		public IntPtr _gtkwindow { get; private set; }
+#elif OSX
+		public NSView _nsview { get; private set; }
 #endif
 
 		public SciterWindow()
@@ -87,6 +94,8 @@ namespace SciterSharp
 #if GTKMONO
 			_gtkwindow = PInvokeGTK.gtk_widget_get_toplevel(_hwnd);
 			Debug.Assert(_gtkwindow != IntPtr.Zero);
+#elif OSX
+			_nsview = new NSView(_hwnd);
 #endif
 		}
 
@@ -156,6 +165,8 @@ namespace SciterSharp
 			int nY = (screen_height - window_height) / 2;
 
 			PInvokeGTK.gtk_window_move(_gtkwindow, nX, nY);
+#elif OSX
+			_nsview.Window.Center();
 #endif
 		}
 
@@ -188,6 +199,15 @@ namespace SciterSharp
 				PInvokeGTK.gtk_window_present(_gtkwindow);
 			else
 				PInvokeGTK.gtk_widget_hide(_hwnd);
+#elif OSX
+			if(show)
+			{
+				_nsview.Window.MakeMainWindow();
+				_nsview.Window.MakeKeyWindow();
+				_nsview.Window.MakeKeyAndOrderFront(null);
+			} else {
+				_nsview.Window.Miniaturize(_nsview.Window);// PerformMiniaturize?
+			}
 #endif
 		}
 
@@ -197,6 +217,8 @@ namespace SciterSharp
 			PInvokeWindows.PostMessage(_hwnd, PInvokeWindows.Win32Msg.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
 #elif GTKMONO
 			PInvokeGTK.gtk_window_close(_gtkwindow);
+#elif OSX
+			_nsview.Window.Close();
 #endif
 		}
 
@@ -222,6 +244,8 @@ namespace SciterSharp
 				Marshal.FreeHGlobal(strPtr);
 #elif GTKMONO
 				PInvokeGTK.gtk_window_set_title(_gtkwindow, value);
+#elif OSX
+				_nsview.Window.Title = value;
 #endif
 			}
 
@@ -237,6 +261,8 @@ namespace SciterSharp
 #elif GTKMONO
                 IntPtr str_ptr = PInvokeGTK.gtk_window_get_title(_gtkwindow);
                 return Marshal.PtrToStringAnsi(str_ptr);
+#elif OSX
+				return _nsview.Window.Title;
 #endif
             }
 		}

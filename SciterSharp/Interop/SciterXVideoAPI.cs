@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Ramon F. Mendes
+﻿// Copyright 2016 Ramon F. Mendes
 //
 // This file is part of SciterSharp.
 // 

@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Ramon F. Mendes
+﻿// Copyright 2016 Ramon F. Mendes
 //
 // This file is part of SciterSharp.
 // 
@@ -44,6 +44,21 @@ namespace SciterSharp.Interop
 		private static SciterXGraphics.ISciterGraphicsAPI? _gapi = null;
 		private static SciterXRequest.ISciterRequestAPI? _rapi = null;
 
+		#if WINDOWS
+		[DllImport("sciter-osx", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI32();
+		[DllImport("sciter-osx", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI64();
+		#elif GTKMONO
+		[DllImport("sciter-gtk-64.so")]
+		private static extern IntPtr SciterAPI();
+		#elif OSX
+		[DllImport("sciter-osx", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI32();
+		[DllImport("sciter-osx", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI64();
+		#endif
+
 		private static ISciterAPI LoadAPI()
 		{
 			if(_api==null)
@@ -68,6 +83,17 @@ namespace SciterSharp.Interop
 
 				Debug.Assert(api_struct_size == 1296);
 				api_ptr = SciterAPI();
+			#elif OSX
+				if(IntPtr.Size == 8)
+				{
+					Debug.Assert(api_struct_size == 648 * 2);
+					api_ptr = SciterAPI64();
+				}
+				else
+				{
+					Debug.Assert(api_struct_size == 648);
+					api_ptr = SciterAPI32();
+				}
 			#endif
 
 				_api = (ISciterAPI)Marshal.PtrToStructure(api_ptr, typeof(ISciterAPI));
@@ -127,16 +153,6 @@ namespace SciterSharp.Interop
 			}
 			return _rapi.Value;
 		}
-
-#if WINDOWS
-		[DllImport("sciter32", EntryPoint = "SciterAPI")]
-		private static extern IntPtr SciterAPI32();
-		[DllImport("sciter64", EntryPoint = "SciterAPI")]
-		private static extern IntPtr SciterAPI64();
-#elif GTKMONO
-		[DllImport("sciter-gtk-64.so")]
-		private static extern IntPtr SciterAPI();
-#endif
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct ISciterAPI

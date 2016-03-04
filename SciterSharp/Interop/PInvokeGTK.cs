@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Ramon F. Mendes
+﻿// Copyright 2016 Ramon F. Mendes
 //
 // This file is part of SciterSharp.
 // 
@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SciterSharp.  If not, see <http://www.gnu.org/licenses/>.
 
+#if GTKMONO
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-#if GTKMONO
 namespace SciterSharp.Interop
 {
 	public static class PInvokeGTK

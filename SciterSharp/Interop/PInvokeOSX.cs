@@ -1,4 +1,4 @@
-﻿// Copyright 2016 Ramon F. Mendes
+﻿// Copyright 2015 Ramon F. Mendes
 //
 // This file is part of SciterSharp.
 // 
@@ -15,21 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with SciterSharp.  If not, see <http://www.gnu.org/licenses/>.
 
+#if OSX
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 
 namespace SciterSharp.Interop
 {
-	public static class TIScript
+	public static class PInvokeOSX
 	{
-		[StructLayout(LayoutKind.Sequential)]
-		public struct tiscript_value
-		{
-			ulong value;
-		}
+		//[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
+		//public static extern void gtk_widget_destroy(IntPtr widget);
 	}
 }
+#endif

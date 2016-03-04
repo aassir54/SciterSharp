@@ -5,11 +5,20 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SciterSharpWindows")]
+#if WINDOWS
+	[assembly: AssemblyTitle("SciterSharpWindows")]
+	[assembly: AssemblyProduct("SciterSharpWindows")]
+#elif GTKMONO
+	[assembly: AssemblyTitle("SciterSharpGTK")]
+	[assembly: AssemblyProduct("SciterSharpGTK")]
+#elif OSX
+	[assembly: AssemblyTitle("SciterSharpWindows")]
+	[assembly: AssemblyProduct("SciterSharpWindows")]
+#endif
+
 [assembly: AssemblyDescription("C# bindings for the Sciter engine")]
 [assembly: AssemblyConfiguration("Retail RELEASE build")]
 [assembly: AssemblyCompany("MI Software")]
-[assembly: AssemblyProduct("SciterSharpWindows")]
 [assembly: AssemblyCopyright("Copyright © MI Software 2015 - GPLv3")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
