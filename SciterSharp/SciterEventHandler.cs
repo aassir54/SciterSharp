@@ -170,10 +170,15 @@ namespace SciterSharp
 				case SciterXBehaviors.EVENT_GROUPS.HANDLE_SCRIPTING_METHOD_CALL:
 					{
 						IntPtr RESULT_OFFSET = Marshal.OffsetOf(typeof(SciterXBehaviors.SCRIPTING_METHOD_PARAMS), "result");
+#if OSX
 						if(IntPtr.Size==4)
-							Debug.Assert(RESULT_OFFSET.ToInt32()==16);
-						else if(IntPtr.Size==8)
-							Debug.Assert(RESULT_OFFSET.ToInt32()==24);
+							Debug.Assert(RESULT_OFFSET.ToInt32()==12);
+#else
+						if(IntPtr.Size == 4)
+							Debug.Assert(RESULT_OFFSET.ToInt32() == 16);// yep 16, strange but is what VS C++ compiler says
+#endif
+						else if(IntPtr.Size == 8)
+							Debug.Assert(RESULT_OFFSET.ToInt32() == 24);
 
 						SciterXBehaviors.SCRIPTING_METHOD_PARAMS p = (SciterXBehaviors.SCRIPTING_METHOD_PARAMS) Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.SCRIPTING_METHOD_PARAMS));
 						SciterXBehaviors.SCRIPTING_METHOD_PARAMS_Wraper pw = new SciterXBehaviors.SCRIPTING_METHOD_PARAMS_Wraper(p);

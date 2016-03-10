@@ -12,14 +12,14 @@ using System.Runtime.InteropServices;
 	[assembly: AssemblyTitle("SciterSharpGTK")]
 	[assembly: AssemblyProduct("SciterSharpGTK")]
 #elif OSX
-	[assembly: AssemblyTitle("SciterSharpWindows")]
-	[assembly: AssemblyProduct("SciterSharpWindows")]
+	[assembly: AssemblyTitle("SciterSharpOSX")]
+	[assembly: AssemblyProduct("SciterSharpOSX")]
 #endif
 
 [assembly: AssemblyDescription("C# bindings for the Sciter engine")]
 [assembly: AssemblyConfiguration("Retail RELEASE build")]
 [assembly: AssemblyCompany("MI Software")]
-[assembly: AssemblyCopyright("Copyright © MI Software 2015 - GPLv3")]
+[assembly: AssemblyCopyright("Copyright © MI Software 2016 - GPLv3")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -41,5 +41,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.8")]// use three version numbers only to match Nuget system
-[assembly: AssemblyFileVersion("1.0.8")]
+[assembly: AssemblyVersion("1.0.9")]// use three version numbers only to match Nuget system
+[assembly: AssemblyFileVersion("1.0.9")]

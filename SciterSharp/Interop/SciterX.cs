@@ -385,11 +385,11 @@ namespace SciterSharp.Interop
 			// BOOL	function(LPCBYTE utf8, UINT numBytes) SciterAppendMasterCSS;
 			public delegate bool FPTR_SciterAppendMasterCSS(byte[] utf8, uint numBytes);
 			// BOOL	function(HWINDOW hWndSciter, LPCBYTE utf8, UINT numBytes, LPCWSTR baseUrl, LPCWSTR mediaType) SciterSetCSS;
-			public delegate bool FPTR_SciterSetCSS(IntPtr hwnd, byte[] utf8, uint numBytes, string baseUrl, string mediaType);
+			public delegate bool FPTR_SciterSetCSS(IntPtr hwnd, byte[] utf8, uint numBytes, [MarshalAs(UnmanagedType.LPWStr)]string baseUrl, [MarshalAs(UnmanagedType.LPWStr)]string mediaType);
 			// BOOL	function(HWINDOW hWndSciter, LPCWSTR mediaType) SciterSetMediaType;
-			public delegate bool FPTR_SciterSetMediaType(IntPtr hwnd, string mediaType);
+			public delegate bool FPTR_SciterSetMediaType(IntPtr hwnd, [MarshalAs(UnmanagedType.LPWStr)]string mediaType);
 			// BOOL	function(HWINDOW hWndSciter, const SCITER_VALUE *mediaVars) SciterSetMediaVars;
-			public delegate bool FPTR_SciterSetMediaVars(IntPtr hwnd, IntPtr mediaVars);// TODO
+			public delegate bool FPTR_SciterSetMediaVars(IntPtr hwnd, ref SciterXValue.VALUE mediaVars);
 			// UINT	function(HWINDOW hWndSciter) SciterGetMinWidth;
 			public delegate uint FPTR_SciterGetMinWidth(IntPtr hwnd);
 			// UINT	function(HWINDOW hWndSciter, UINT width) SciterGetMinHeight;

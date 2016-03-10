@@ -312,8 +312,31 @@ namespace SciterSharp
 			_api.SciterUpdateWindow(_hwnd);
 		}
 
+		/// <summary>
+		/// For example media type can be "handheld", "projection", "screen", "screen-hires", etc.
+		/// By default sciter window has "screen" media type.
+		/// Media type name is used while loading and parsing style sheets in the engine so
+		/// you should call this function* before* loading document in it.
+		/// </summary>
+		public bool SetMediaType(string mediaType)
+		{
+			return _api.SciterSetMediaType(_hwnd, mediaType);
+		}
+
+		/// <summary>
+		/// For example media type can be "handheld:true", "projection:true", "screen:true", etc.
+		/// By default sciter window has "screen:true" and "desktop:true"/"handheld:true" media variables.
+		/// Media variables can be changed in runtime. This will cause styles of the document to be reset.
+		/// </summary>
+		/// <param name="mediaVars">Map that contains name/value pairs - media variables to be set</param>
+		public bool SciterSetMediaVars(SciterValue mediaVars)
+		{
+			SciterXValue.VALUE v = mediaVars.ToVALUE();
+			return _api.SciterSetMediaVars(_hwnd, ref v);
+		}
+
 #if WINDOWS
-        private IntPtr InternalProcessSciterWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled)
+		private IntPtr InternalProcessSciterWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled)
         {
             Debug.Assert(pParam.ToInt32()==0);
             Debug.Assert(_hwnd.ToInt32()==0 || hwnd==_hwnd);

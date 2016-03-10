@@ -1,17 +1,19 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 3.3.1.8
+ACTUAL SCITER VERSION: 3.3.1.9
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.8-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.8-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.9-blue.svg)](https://www.nuget.org/
+packages/SciterSharpGTK/)
 
+OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 ## Cross-platform Sciter bindings for .NET
 
 This library provides bindings of Sciter C/C++ headers to the C# language. [Sciter](http://sciter.com/download/) is a multi-platform HTML engine. With this library you can create C#.NET desktop application using not just HTML, but all the features of Sciter: CSS3, SVG, scripintg, AJAX,... Sciter is free for commercial use.
 
-The source is made portable to work in Windows and Linux/GTK+3/Mono.
+The source is made portable to work in Windows, Linux/GTK+3/Mono and OSX/Mono.
 
 License: GNU GENERAL PUBLIC LICENSE Version 3
 
@@ -30,15 +32,15 @@ Quick start your desktop app by downloading a [Sciter Bootstrap package](http://
 
 SciterSharp is available on NuGet.
 
-There is a Windows package:
 ```
+Windows package:
 PM> Install-Package SciterSharpWindows
-```
 
-And a MONO/GTK+3 package: 
-
-```
+Linux/GTK+3/Mono package:
 PM> Install-Package SciterSharpGTK
+
+OSX/Mono package:
+PM> Install-Package SciterSharpOSX
 ```
 
 ### From Source
@@ -62,6 +64,9 @@ The Sciter native library requires the following packages:
 - GTK+3: ```sudo apt-get install libgtk-3-0```
 - libcurl: probably already installed in your distro
 
+### OSX/Mono
+
+TBD
 
 ## Know Issues
 

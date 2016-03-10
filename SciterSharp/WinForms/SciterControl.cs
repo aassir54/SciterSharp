@@ -11,9 +11,9 @@ using SciterSharp.Interop;
 
 namespace SciterSharp.WinForms
 {
-	public partial class SciterControl : Control
+	public class SciterControl : Control
 	{
-		public SciterWindow SciterWnd { get; }
+		public SciterWindow SciterWnd { get; private set; }
 
 		public SciterControl()
 		{
