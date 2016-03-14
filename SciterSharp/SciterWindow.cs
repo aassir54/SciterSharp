@@ -329,7 +329,7 @@ namespace SciterSharp
 		/// Media variables can be changed in runtime. This will cause styles of the document to be reset.
 		/// </summary>
 		/// <param name="mediaVars">Map that contains name/value pairs - media variables to be set</param>
-		public bool SciterSetMediaVars(SciterValue mediaVars)
+		public bool SetMediaVars(SciterValue mediaVars)
 		{
 			SciterXValue.VALUE v = mediaVars.ToVALUE();
 			return _api.SciterSetMediaVars(_hwnd, ref v);

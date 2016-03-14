@@ -1,15 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SciterSharp;
+using SciterSharp.Interop;
 
-namespace TestMinimal
+namespace UnitTests
 {
-	static class TestSciterValue
+	[TestClass]
+	public class UnitTests
 	{
-		public static void Run()
+		[TestMethod]
+		public void TestSciterElement()
+		{
+			SciterElement el = SciterElement.Create("div");
+			SciterElement el2 = new SciterElement(el._he);
+			Assert.IsTrue(el == el2);
+		}
+
+		[TestMethod]
+		public void TestSciterValue()
 		{
 			//string[] arr = new string[] { "A", "B", "C" };
 			int[] arr = new int[] { 1, 2, 3 };
@@ -31,6 +39,24 @@ namespace TestMinimal
 				SciterValue sv2 = SciterValue.FromJSONString("{one: 1, two: 2, three: 3}");
 				sv2["one"] = SciterValue.Undefined;
 			}
+		}
+
+		[TestMethod]
+		public void TestGraphics()
+		{
+			var gapi = SciterX.GraphicsAPI;
+
+			IntPtr himg;
+			var a = gapi.imageCreate(out himg, 400, 400, true);
+
+			IntPtr hgfx;
+			gapi.gCreate(himg, out hgfx);
+
+			IntPtr hpath;
+			gapi.pathCreate(out hpath);
+
+			var b = gapi.gPushClipPath(hgfx, hpath, 0.5f);
+			var c = gapi.gPopClip(hgfx);
 		}
 	}
 }

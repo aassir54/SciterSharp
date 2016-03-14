@@ -1,13 +1,12 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 3.3.1.9
+ACTUAL SCITER VERSION: 3.3.1.11
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.16-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.9-blue.svg)](https://www.nuget.org/
-packages/SciterSharpGTK/)
+Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.16-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
-OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
+OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.16-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 ## Cross-platform Sciter bindings for .NET
 
@@ -26,7 +25,7 @@ License: GNU GENERAL PUBLIC LICENSE Version 3
 
 ### Sciter Bootstrap
 
-Quick start your desktop app by downloading a [Sciter Bootstrap package](http://misoftware.rs/Bootstrap/Download) for Linux/MONO/GTK/C#. The package contains a solution with 2 projects, one which you build for Windows with VS, and the other for Linux/MONO/GTK+3 with MonoDevelop. All projects comes with this library already configured and with Sciter native DLL already in the bin/ folder.
+Quick start your desktop app by downloading a [Sciter Bootstrap Multi-platform template](http://misoftware.rs/Bootstrap/Download). The package contains a solution with 3 projects,  which you build for Windows with VS, and for Linux and OSX with MonoDevelop. All projects comes with this library already configured and necessary boilterplate code to create a Sciter window and load an initial HTML page.
 
 ### NuGet
 
@@ -45,7 +44,7 @@ PM> Install-Package SciterSharpOSX
 
 ### From Source
 
-Clone the repository and compile the project for your platform: SciterSharpWindows or SciterSharpGTK. In your project, add the resulting SciterSharpWindows.dll or SciterSharpGTK.dll as a reference.
+Clone the repository and compile the project for your platform. In your project, add the resulting SciterSharpWindows.dll, SciterSharpGTK.dll or SciterSharpOSX.dll as a reference.
 
 ## Requirements
 

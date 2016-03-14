@@ -62,9 +62,6 @@
     <Compile Include="Behaviors\BehaviorDrawing.cs" />
     <Compile Include="DebugHandler.cs" />
     <Compile Include="HostWindow.cs" />
-    <Compile Include="TestGraphics.cs" />
-    <Compile Include="TestSciterElement.cs" />
-    <Compile Include="TestSciterValue.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
