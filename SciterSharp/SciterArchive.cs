@@ -30,11 +30,14 @@ namespace SciterSharp
 	{
 		private static SciterX.ISciterAPI _api = SciterX.API;
 		private IntPtr _har;
+		private GCHandle _pinnedArray;
 
 		public void Open(byte[] res_array)
 		{
 			Debug.Assert(_har == IntPtr.Zero);
-			_har = _api.SciterOpenArchive(res_array, (uint) res_array.Length);
+
+			_pinnedArray = GCHandle.Alloc(res_array, GCHandleType.Pinned);
+			_har = _api.SciterOpenArchive(_pinnedArray.AddrOfPinnedObject(), (uint) res_array.Length);
 			Debug.Assert(_har != IntPtr.Zero);
 		}
 
@@ -43,6 +46,7 @@ namespace SciterSharp
 			Debug.Assert(_har != IntPtr.Zero);
 			_api.SciterCloseArchive(_har);
 			_har = IntPtr.Zero;
+			_pinnedArray.Free();
 		}
 
 		public byte[] Get(string path)

@@ -719,7 +719,7 @@ namespace SciterSharp.Interop
 			public delegate bool FPTR_Sciter_V2v(IntPtr vm, ref SciterXValue.VALUE value, ref TIScript.tiscript_value script_value);
 
 			// HSARCHIVE function(LPCBYTE archiveData, UINT archiveDataLength) SciterOpenArchive;
-			public delegate IntPtr FPTR_SciterOpenArchive(byte[] archiveData, uint archiveDataLength);
+			public delegate IntPtr FPTR_SciterOpenArchive(IntPtr archiveData, uint archiveDataLength);// archiveData must point to a pinned byte[] array!
 			// BOOL function(HSARCHIVE harc, LPCWSTR path, LPCBYTE* pdata, UINT* pdataLength) SciterGetArchiveItem;
 			public delegate bool FPTR_SciterGetArchiveItem(IntPtr harc, [MarshalAs(UnmanagedType.LPWStr)]string path, out IntPtr pdata, out uint pdataLength);
 			// BOOL function(HSARCHIVE harc) SciterCloseArchive;
