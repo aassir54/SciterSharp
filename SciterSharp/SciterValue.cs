@@ -377,8 +377,8 @@ namespace SciterSharp
 
 		public IEnumerable<SciterValue> AsEnumerable()
 		{
-			if(!IsArray())
-				throw new ArgumentException("This SciterValue is not an array");
+			if(!IsArray() && !IsObject())
+				throw new ArgumentException("This SciterValue is not an array or object");
 			for(int i = 0; i < Length; i++)
 			{
 				yield return this[i];
