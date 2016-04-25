@@ -1,16 +1,16 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 3.3.2.0
+ACTUAL SCITER VERSION: 3.3.2.2
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.19-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.20-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.19-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.20-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
-OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.19-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
+OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.20-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 ## Cross-platform Sciter bindings for .NET
 
-This library provides bindings of Sciter C/C++ headers to the C# language. [Sciter](http://sciter.com/download/) is a multi-platform HTML engine. With this library you can create C#.NET desktop application using not just HTML, but all the features of Sciter: CSS3, SVG, scripintg, AJAX,... Sciter is free for commercial use.
+This library provides bindings of Sciter C/C++ headers to the C# language. [Sciter](http://sciter.com/download/) is a multi-platform HTML engine. With this library you can create C#.NET desktop application using not just HTML, but all the features of Sciter: CSS3, SVG, scripting, AJAX,... Sciter is free for commercial use.
 
 The source is made portable to work in Windows, Linux/GTK+3/Mono and OSX/Mono.
 
@@ -51,7 +51,7 @@ Clone the repository and compile the project for your platform. In your project,
 ### Windows
 - requires at least .NET 4.5
 
-For running you desktop app, you need to **make sure that your program can find sciter32/64.dll**, so go and grab a copy from [Sciter SDK](http://sciter.com/sdk/sciter-sdk-3.zip), I don't distribute it in any form. The best way is to put a copy of each DLL in the *bin/Debug/* and *bin/Release/* folders or simply add it to Windows PATH, as your prefer.
+For running you desktop app, you need to **make sure that your program can find sciter32/64.dll**, so go and grab a copy from [Sciter SDK](http://sciter.com/sdk/sciter-sdk-3.zip), I don't redistribute it in any form. The best way is to put a copy of each DLL in the bin/Debug/ and bin/Release/ folders or simply add it to Windows PATH, as your prefer.
 
 In Visual Studio, make sure to **enable native debugging** so you will see Sciter error messages in the Output window: ```Project Properties / Debug / Check 'Enable native code debugging'```
  
@@ -108,3 +108,4 @@ There is not yet documentation on how to achieve it, but you can look at the two
 ## Todo's (help appreciated) 
 
 - add as C# documentation all the helpful API comments found in the official Sciter SDK C headers
+- provide an on-line version of the docs from the C# source-code (anyone knows a good tool for automating it?)

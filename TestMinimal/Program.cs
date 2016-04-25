@@ -15,13 +15,18 @@ namespace TestMinimal
 		[STAThread]
 		static void Main(string[] args)
 		{
+			// TODO: think Andrew corrected child window creation
+
 			PInvokeWindows.OleInitialize(IntPtr.Zero);
-			
+
 			// Create the window
-			var wnd = new HostWindow();
-			wnd.CreateMainWindowNative(1500, 800);
-			wnd.EnableDwmClientArea();
-			
+			var wnd = new SciterWindow();
+			//wnd.CreateMainWindowNative(1500, 800);
+			wnd.CreateMainWindow(1500, 800);
+			//wnd.EnableDwmClientArea();
+
+			SciterWindow wnd_popup = new SciterWindow();
+			wnd_popup.CreatePopupAlphaWindow(400, 400, wnd._hwnd);
 
 			//wnd.CenterTopLevelWindow();
 			//wnd.AfterWindowCreate();
@@ -45,6 +50,8 @@ namespace TestMinimal
 
 			// Show window and Run message loop
 			wnd.Show();
+			wnd_popup.LoadHtml("<html><body><style>html { background: red; }</style></body></html>");
+			wnd_popup.Show();
 			PInvokeUtils.RunMsgLoop();
 		}
 	}

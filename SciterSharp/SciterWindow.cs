@@ -35,8 +35,8 @@ namespace SciterSharp
 	public class SciterWindow
 	{
 		protected static SciterX.ISciterAPI _api = SciterX.API;
-        public IntPtr _hwnd { get; set; }
-        private SciterXDef.FPTR_SciterWindowDelegate _proc;
+		public IntPtr _hwnd { get; set; }
+		private SciterXDef.FPTR_SciterWindowDelegate _proc;
 #if GTKMONO
 		public IntPtr _gtkwindow { get; private set; }
 #elif OSX
@@ -46,7 +46,7 @@ namespace SciterSharp
 		public SciterWindow()
 		{
 #if WINDOWS
-            _proc = InternalProcessSciterWindowMessage;
+			_proc = InternalProcessSciterWindowMessage;
 #else
 			_proc = null;
 #endif
@@ -59,37 +59,24 @@ namespace SciterSharp
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CONTROLS |
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_ENABLE_DEBUG;
 
-		public void CreateMainWindow(int width, int height, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
-		{
-			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
-            frame.right = width;
-            frame.bottom = height;
-			CreateMainWindow(frame, creationFlags);
-		}
-
-		public void CreateMainWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
-		{
-			CreateMainWindow(new PInvokeUtils.RECT(), creationFlags);
-		}
-
-        /// <summary>
-        /// Creates the Sciter window and returns the native handle
-        /// </summary>
-        /// <param name="frame">Rectangle of the window</param>
-        /// <param name="creationFlags">Flags for the window creation, defaults to SW_MAIN | SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_ENABLE_DEBUG</param>
-		public void CreateMainWindow(PInvokeUtils.RECT frame, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
+		/// <summary>
+		/// Creates the Sciter window and returns the native handle
+		/// </summary>
+		/// <param name="frame">Rectangle of the window</param>
+		/// <param name="creationFlags">Flags for the window creation, defaults to SW_MAIN | SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_ENABLE_DEBUG</param>
+		public void CreateWindow(PInvokeUtils.RECT frame = new PInvokeUtils.RECT(), SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags, IntPtr parent = new IntPtr())
 		{
 			_hwnd = _api.SciterCreateWindow(
 				creationFlags,
-				ref frame, 
+				ref frame,
 				_proc,
 				IntPtr.Zero,
-				IntPtr.Zero
+				parent
 			);
 			Debug.Assert(_hwnd != IntPtr.Zero);
 
-            if(_hwnd == IntPtr.Zero)
-                throw new Exception("CreateMainWindow() failed");
+			if(_hwnd == IntPtr.Zero)
+				throw new Exception("CreateWindow() failed");
 
 #if GTKMONO
 			_gtkwindow = PInvokeGTK.gtk_widget_get_toplevel(_hwnd);
@@ -97,6 +84,23 @@ namespace SciterSharp
 #elif OSX
 			_nsview = new NSView(_hwnd);
 #endif
+		}
+
+		public void CreateMainWindow(int width, int height, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
+		{
+			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
+			frame.right = width;
+			frame.bottom = height;
+			CreateWindow(frame, creationFlags);
+		}
+
+		public void CreatePopupAlphaWindow(int width, int height, IntPtr owner_hwnd)
+		{
+			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
+			frame.right = width;
+			frame.bottom = height;
+			CreateWindow(frame, SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_ALPHA | SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_TOOL, owner_hwnd);
+			// Sciter BUG: window comes with WM_EX_APPWINDOW style
 		}
 
 #if WINDOWS
@@ -113,7 +117,7 @@ namespace SciterSharp
 			/*PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
 			_hwnd = _api.SciterCreateWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CHILD, ref frame, _proc, IntPtr.Zero, hwnd_parent);
 			if(_hwnd == IntPtr.Zero)
-                throw new Exception("CreateChildWindow() failed");*/
+				throw new Exception("CreateChildWindow() failed");*/
 		}
 #endif
 
@@ -131,29 +135,29 @@ namespace SciterSharp
 		/// Centers the window in the screen. You must call it after the window is created, but before it is shown to avoid flickering
 		/// </summary>
 		public void CenterTopLevelWindow()
-        {
+		{
 #if WINDOWS
 			IntPtr hwndParent = PInvokeWindows.GetDesktopWindow();
-            PInvokeUtils.RECT rectWindow, rectParent;
+			PInvokeUtils.RECT rectWindow, rectParent;
 
-            PInvokeWindows.GetWindowRect(_hwnd, out rectWindow);
-            PInvokeWindows.GetWindowRect(hwndParent, out rectParent);
+			PInvokeWindows.GetWindowRect(_hwnd, out rectWindow);
+			PInvokeWindows.GetWindowRect(hwndParent, out rectParent);
 
-            int nWidth = rectWindow.right - rectWindow.left;
-            int nHeight = rectWindow.bottom - rectWindow.top;
+			int nWidth = rectWindow.right - rectWindow.left;
+			int nHeight = rectWindow.bottom - rectWindow.top;
 
-            int nX = ((rectParent.right - rectParent.left) - nWidth) / 2 + rectParent.left;
-            int nY = ((rectParent.bottom - rectParent.top) - nHeight) / 2 + rectParent.top;
+			int nX = ((rectParent.right - rectParent.left) - nWidth) / 2 + rectParent.left;
+			int nY = ((rectParent.bottom - rectParent.top) - nHeight) / 2 + rectParent.top;
 
-            int nScreenWidth = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CXSCREEN);
-            int nScreenHeight = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CYSCREEN);
+			int nScreenWidth = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CXSCREEN);
+			int nScreenHeight = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CYSCREEN);
 
-            if (nX < 0) nX = 0;
-            if (nY < 0) nY = 0;
-            if (nX + nWidth > nScreenWidth) nX = nScreenWidth - nWidth;
-            if (nY + nHeight > nScreenHeight) nY = nScreenHeight - nHeight;
+			if (nX < 0) nX = 0;
+			if (nY < 0) nY = 0;
+			if (nX + nWidth > nScreenWidth) nX = nScreenWidth - nWidth;
+			if (nY + nHeight > nScreenHeight) nY = nScreenHeight - nHeight;
 
-            PInvokeWindows.MoveWindow(_hwnd, nX, nY, nWidth, nHeight, false);
+			PInvokeWindows.MoveWindow(_hwnd, nX, nY, nWidth, nHeight, false);
 #elif GTKMONO
 			int screen_width = PInvokeGTK.gdk_screen_width();
 			int screen_height = PInvokeGTK.gdk_screen_height();
@@ -171,12 +175,31 @@ namespace SciterSharp
 		}
 
 		/// <summary>
+		/// Cross-platform handy method to get the size of the screen
+		/// </summary>
+		/// <returns>SIZE measures of the screen of primary monitor</returns>
+		public static PInvokeUtils.SIZE GetPrimaryMonitorScreenSize()
+		{
+#if WINDOWS
+			int nScreenWidth = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CXSCREEN);
+			int nScreenHeight = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CYSCREEN);
+			return new PInvokeUtils.SIZE() { cx = nScreenWidth, cy = nScreenHeight };
+#elif GTKMONO
+			int screen_width = PInvokeGTK.gdk_screen_width();
+			int screen_height = PInvokeGTK.gdk_screen_height();
+			return new PInvokeUtils.SIZE() { cx = screen_width, cy = screen_height };
+#elif OSX
+			return new PInvokeUtils.SIZE();// TODO
+#endif
+		}
+
+		/// <summary>
 		/// Loads the page resource from the given URL or file path
 		/// </summary>
 		/// <param name="url_or_filepath">URL or file path of the page</param>
-        public bool LoadPage(string url_or_filepath)
+		public bool LoadPage(string url_or_filepath)
 		{
-            return _api.SciterLoadFile(_hwnd, url_or_filepath);
+			return _api.SciterLoadFile(_hwnd, url_or_filepath);
 		}
 
 		/// <summary>
@@ -224,14 +247,14 @@ namespace SciterSharp
 
 
 		public Icon Icon
-        {
-            set
-            {
+		{
+			set
+			{
 #if WINDOWS
-                PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, IntPtr.Zero, value.Handle);
+				PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, IntPtr.Zero, value.Handle);
 #endif
-            }
-        }
+			}
+		}
 
 		public string Title
 		{
@@ -249,22 +272,22 @@ namespace SciterSharp
 #endif
 			}
 
-            get
-            {
+			get
+			{
 				Debug.Assert(_hwnd!=IntPtr.Zero);
 #if WINDOWS
-                IntPtr unmanagedPointer = Marshal.AllocHGlobal(2048);
+				IntPtr unmanagedPointer = Marshal.AllocHGlobal(2048);
 				IntPtr chars_copied = PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_GETTEXT, new IntPtr(2048), unmanagedPointer);
-                string title = Marshal.PtrToStringUni(unmanagedPointer, chars_copied.ToInt32());
-                Marshal.FreeHGlobal(unmanagedPointer);
-                return title;
+				string title = Marshal.PtrToStringUni(unmanagedPointer, chars_copied.ToInt32());
+				Marshal.FreeHGlobal(unmanagedPointer);
+				return title;
 #elif GTKMONO
-                IntPtr str_ptr = PInvokeGTK.gtk_window_get_title(_gtkwindow);
-                return Marshal.PtrToStringAnsi(str_ptr);
+				IntPtr str_ptr = PInvokeGTK.gtk_window_get_title(_gtkwindow);
+				return Marshal.PtrToStringAnsi(str_ptr);
 #elif OSX
 				return _nsview.Window.Title;
 #endif
-            }
+			}
 		}
 		
 		public SciterElement RootElement
@@ -337,19 +360,19 @@ namespace SciterSharp
 
 #if WINDOWS
 		private IntPtr InternalProcessSciterWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled)
-        {
-            Debug.Assert(pParam.ToInt32()==0);
-            Debug.Assert(_hwnd.ToInt32()==0 || hwnd==_hwnd);
-            
-            IntPtr lResult = IntPtr.Zero;
-            handled = ProcessWindowMessage(hwnd, msg, wParam, lParam, ref lResult);
-            return lResult;
-        }
+		{
+			Debug.Assert(pParam.ToInt32()==0);
+			Debug.Assert(_hwnd.ToInt32()==0 || hwnd==_hwnd);
+			
+			IntPtr lResult = IntPtr.Zero;
+			handled = ProcessWindowMessage(hwnd, msg, wParam, lParam, ref lResult);
+			return lResult;
+		}
 
-        protected virtual bool ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, ref IntPtr lResult)// overrisable
-        {
-            return false;
-        }
+		protected virtual bool ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, ref IntPtr lResult)// overrisable
+		{
+			return false;
+		}
 #endif
 	}
 }
