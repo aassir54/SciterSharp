@@ -10,16 +10,19 @@ OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.20-blue.svg)](
 
 ## Cross-platform Sciter bindings for .NET
 
-This library provides bindings of Sciter C/C++ headers to the C# language. [Sciter](http://sciter.com/download/) is a multi-platform HTML engine. With this library you can create C#.NET desktop application using not just HTML, but all the features of Sciter: CSS3, SVG, scripting, AJAX,... Sciter is free for commercial use.
+This library provides bindings of Sciter C/C++ headers to the C# language. [Sciter](http://sciter.com/download/) is a multi-platform HTML engine. With this library you can create C#/.NET desktop applications using not just HTML, but all the features of Sciter: CSS3, SVG, scripting, AJAX, &lt;video&gt;, ... Sciter is free for commercial use.
 
 The source is made portable to work in Windows, Linux/GTK+3/Mono and OSX/Mono.
 
 License: GNU GENERAL PUBLIC LICENSE Version 3
 
-## Documentation
+## Documentation / Support
 
 [Introductory walk-through for writing apps with SciterSharp](http://www.codeproject.com/Articles/1057199/Sciter-HTML-Csharp-based-desktop-apps-walkthrough).
 
+[Desktop cross-platform demo app + source-code](https://github.com/midiway/OctoDeskdex)
+
+[Get help at Sciter Forum](http://sciter.com/forums/)
 
 ## Quick Start
 
@@ -48,8 +51,9 @@ Clone the repository and compile the project for your platform. In your project,
 
 ## Requirements
 
-### Windows
-- requires at least .NET 4.5
+**Windows**
+
+- &gt;= .NET 4.5
 
 For running you desktop app, you need to **make sure that your program can find sciter32/64.dll**, so go and grab a copy from [Sciter SDK](http://sciter.com/sdk/sciter-sdk-3.zip), I don't redistribute it in any form. The best way is to put a copy of each DLL in the bin/Debug/ and bin/Release/ folders or simply add it to Windows PATH, as your prefer.
 
@@ -57,15 +61,20 @@ In Visual Studio, make sure to **enable native debugging** so you will see Scite
  
 ### Linux/Mono/GTK+3
 
+- 64bit distro
+- [Mono installation](http://www.mono-project.com/docs/getting-started/install/linux/)
+- Install Sciter lib through the *install-libsciter.sh* script inside the download package
+
 You need to add libsciter-gtk-64.so shared library to your path. The easiest way is to use the download the script from [here](https://raw.githubusercontent.com/midiway/SciterBootstrap-CSharp/TemplateMultiPlatform/install-libsciter.sh) and run it in a terminal with: ```sudo bash install-libsciter.sh```
 
 The Sciter native library requires the following packages:
+
 - GTK+3: ```sudo apt-get install libgtk-3-0```
 - libcurl: probably already installed in your distro
 
 ### OSX/Mono
 
-TBD
+- [Mono installation](http://www.mono-project.com/docs/getting-started/install/mac/)
 
 ## Know Issues
 

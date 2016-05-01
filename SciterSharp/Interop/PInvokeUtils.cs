@@ -45,7 +45,10 @@ namespace SciterSharp.Interop
         public struct RECT
         {
             public int left, top, right, bottom;
-        }
+
+			public int Width { get { return right - left; } }
+			public int Height { get { return bottom - top; } }
+		}
 
         [StructLayout(LayoutKind.Sequential)]
         public struct POINT
