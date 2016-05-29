@@ -30,12 +30,27 @@ namespace SciterSharp.Interop
 	{
 		public enum LoadResult : uint
 		{
-			LOAD_OK = 0,	  // do default loading if data not set
-			LOAD_DISCARD = 1, // discard request completely
-			LOAD_DELAYED = 2, // data will be delivered later by the host
-							  // Host application must call SciterDataReadyAsync(,,, requestId) on each LOAD_DELAYED request to avoid memory leaks.
-			LOAD_MYSELF = 3,  // you return LOAD_MYSELF result to indicate that your (the host) application took or will take care about HREQUEST in your code completely.
-							  // Use sciter-x-request.h[pp] API functions with SCN_LOAD_DATA::requestId handle .
+			/// <summary>
+			/// do default loading if data not set
+			/// </summary>
+			LOAD_OK = 0,
+
+			/// <summary>
+			/// discard request completely
+			/// </summary>
+			LOAD_DISCARD = 1,
+
+			/// <summary>
+			/// data will be delivered later by the host
+			/// Host application must call SciterDataReadyAsync(,,, requestId) on each LOAD_DELAYED request to avoid memory leaks.
+			/// </summary>
+			LOAD_DELAYED = 2,
+
+			/// <summary>
+			/// you return LOAD_MYSELF result to indicate that your (the host) application took or will take care about HREQUEST in your code completely.
+			/// Use sciter-x-request.h[pp] API functions with SCN_LOAD_DATA::requestId handle.
+			/// </summary>
+			LOAD_MYSELF = 3,
 		}
 
 		public const uint SC_LOAD_DATA = 0x01;
