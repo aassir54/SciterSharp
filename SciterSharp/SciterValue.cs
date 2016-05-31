@@ -77,8 +77,9 @@ namespace SciterSharp
 		public SciterValue(bool v)		{ _api.ValueInit(out data); _api.ValueIntDataSet(ref data, v ? 1 : 0, (uint) SciterXValue.VALUE_TYPE.T_BOOL, 0); }
 		public SciterValue(int v)		{ _api.ValueInit(out data); _api.ValueIntDataSet(ref data, v, (uint) SciterXValue.VALUE_TYPE.T_INT, 0); }
 		public SciterValue(double v)	{ _api.ValueInit(out data); _api.ValueFloatDataSet(ref data, v, (uint) SciterXValue.VALUE_TYPE.T_FLOAT, 0); }
-		public SciterValue(string str)	{ _api.ValueInit(out data); _api.ValueStringDataSet(ref data, str, (uint) str.Length, (uint)SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_STRING); }
+		public SciterValue(string str)	{ _api.ValueInit(out data); _api.ValueStringDataSet(ref data, str, (uint) str.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_STRING); }
 		public SciterValue(byte[] bs)	{ _api.ValueInit(out data); _api.ValueBinaryDataSet(ref data, bs, (uint) bs.Length, (uint) SciterXValue.VALUE_TYPE.T_BYTES, 0); }
+		public SciterValue(DateTime dt) { _api.ValueInit(out data); _api.ValueInt64DataSet(ref data, dt.ToFileTime(), (uint)SciterXValue.VALUE_TYPE.T_DATE, 0); }
 		public SciterValue(IEnumerable<SciterValue> col)
 		{
 			_api.ValueInit(out data);

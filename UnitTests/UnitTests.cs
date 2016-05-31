@@ -42,66 +42,11 @@ namespace UnitTests
 				SciterValue sv2 = SciterValue.FromJSONString("{one: 1, two: 2, three: 3}");
 				sv2["one"] = SciterValue.Undefined;
 			}
-		}
 
-		[TestMethod]
-		public void TestGraphics()
-		{
-			var gapi = SciterX.GraphicsAPI;
-
-			IntPtr himg;
-			var a = gapi.imageCreate(out himg, 400, 400, true);
-
-			IntPtr hgfx;
-			gapi.gCreate(himg, out hgfx);
-
-			IntPtr hpath;
-			gapi.pathCreate(out hpath);
-
-			var b = gapi.gPushClipPath(hgfx, hpath, 0.5f);
-			var c = gapi.gPopClip(hgfx);
-		}
-
-
-		private class TestableDOH : SciterDebugOutputHandler
-		{
-			public List<Tuple<SciterXDef.OUTPUT_SUBSYTEM, SciterXDef.OUTPUT_SEVERITY, string>> msgs = new List<Tuple<SciterXDef.OUTPUT_SUBSYTEM, SciterXDef.OUTPUT_SEVERITY, string>>();
-
-			protected override void OnOutput(SciterXDef.OUTPUT_SUBSYTEM subsystem, SciterXDef.OUTPUT_SEVERITY severity, string text)
+			// Datetime
 			{
-				msgs.Add(Tuple.Create(subsystem, severity, text));
+				SciterValue sv = new SciterValue(DateTime.Now);
 			}
-		}
-
-		[TestMethod]
-		public void TestODH()
-		{
-			TestableDOH odh = new TestableDOH();
-
-			SciterWindow wnd = new SciterWindow();
-			wnd.CreateMainWindow(1500, 800);
-			wnd.Title = "Wtf";
-			bool res = wnd.LoadHtml(@"
-<html>
-<style>
-	body { wtf: 123; }
-</style>
-
-<script type='text/tiscript'>
-</script>
-</html>
-");
-			Assert.IsTrue(res);
-
-			PInvokeWindows.MSG msg;
-			while(PInvokeWindows.GetMessage(out msg, IntPtr.Zero, 0, 0) != 0)
-			{
-				wnd.Show();
-				PInvokeWindows.TranslateMessage(ref msg);
-				PInvokeWindows.DispatchMessage(ref msg);
-			}
-
-			Assert.IsTrue(odh.msgs.Count == 1);
 		}
 	}
 }
