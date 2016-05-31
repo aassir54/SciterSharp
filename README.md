@@ -2,11 +2,11 @@
 
 ACTUAL SCITER VERSION: 3.3.2.5
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.20-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.21-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.20-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.21-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
-OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.20-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
+OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.21-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 ## Cross-platform Sciter bindings for .NET
 
