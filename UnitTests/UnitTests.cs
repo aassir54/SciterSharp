@@ -48,5 +48,11 @@ namespace UnitTests
 				SciterValue sv = new SciterValue(DateTime.Now);
 			}
 		}
+
+			// Datetime
+			{
+				SciterValue sv = new SciterValue(DateTime.Now);
+			}
+		}
 	}
 }
