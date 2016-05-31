@@ -42,6 +42,11 @@ namespace UnitTests
 				SciterValue sv2 = SciterValue.FromJSONString("{one: 1, two: 2, three: 3}");
 				sv2["one"] = SciterValue.Undefined;
 			}
+
+			// Datetime
+			{
+				SciterValue sv = new SciterValue(DateTime.Now);
+			}
 		}
 
 		[TestMethod]

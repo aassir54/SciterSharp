@@ -1,6 +1,6 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 3.3.2.2
+ACTUAL SCITER VERSION: 3.3.2.5
 
 Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.20-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
@@ -14,7 +14,7 @@ This library provides bindings of Sciter C/C++ headers to the C# language. [Scit
 
 The source is made portable to work in Windows, Linux/GTK+3/Mono and OSX/Mono.
 
-License: GNU GENERAL PUBLIC LICENSE Version 3
+License: **GNU GENERAL PUBLIC LICENSE Version 3**
 
 ## Documentation / Support
 

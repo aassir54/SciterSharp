@@ -93,7 +93,9 @@ namespace SciterSharp.Interop
 		{
 			public uint code;	// UINT - [in] one of the codes above.
 			public IntPtr hwnd;	// HWINDOW - [in] HWINDOW of the window this callback was attached to.
-			public IntPtr uri;	// LPCWSTR - [in] Zero terminated string, fully qualified uri, for example "http://server/folder/file.ext".
+
+			[MarshalAs(UnmanagedType.LPWStr)]
+			public string uri;  // LPCWSTR - [in] Zero terminated string, fully qualified uri, for example "http://server/folder/file.ext".
 
 			public IntPtr data;		// LPCBYTE - [in] pointer to loaded data.
 			public uint dataSize;	// UINT - [in] loaded data size (in bytes).
