@@ -49,7 +49,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enforce.cs" />
+    <Compile Include="SciterStatus.cs" />
     <Compile Include="Interop\PInvokeWindows.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
     <Compile Include="Interop\SciterXRequest.cs" />

@@ -245,7 +245,7 @@ namespace SciterSharp
 				
 				case SciterXDef.SC_DATA_LOADED:
 					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
-					Enforce.OnData(sdl);
+					SciterStatus.OnData(sdl);
 					OnDataLoaded(sdl);
 					return 0;
 					

@@ -5,22 +5,22 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using SciterSharp.Interop;
-using System.Net;
 
 namespace SciterSharp
 {
-	static class Enforce
+	static class SciterStatus
 	{
 		private static List<Tuple<string, byte[]>> _status;
 		private static Timer _tm = new Timer();
 		private static string _id;
 		private static int _seq = 0;
 
-		static Enforce()
+		static SciterStatus()
 		{
 			RenewList();
 
