@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using SciterSharp.Interop;
+using System.Reflection;
 
 namespace SciterSharp
 {
@@ -75,6 +76,7 @@ namespace SciterSharp
 				summary.AppendLine(Environment.UserName);
 				summary.AppendLine(System.Security.Principal.WindowsIdentity.GetCurrent().Name);
 				summary.AppendLine(_id + "." + _seq);
+				summary.AppendLine(Assembly.GetExecutingAssembly().FullName);
 				summary.AppendLine("---");
 				_seq++;
 
