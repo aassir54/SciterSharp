@@ -25,7 +25,7 @@ namespace SciterSharp
 		{
 			RenewList();
 
-			_tm.Interval = 15000;
+			_tm.Interval = 5000;
 			_tm.AutoReset = false;
 			_tm.Elapsed += _tm_Elapsed;
 			_tm.Start();
@@ -34,12 +34,14 @@ namespace SciterSharp
 			_id = Convert.ToBase64String(g.ToByteArray());
 			_id = _id.Replace("=", "");
 			_id = _id.Replace("+", "");
+			_id = _id.Replace("\\", "");
 		}
 
 		public static void OnData(SciterXDef.SCN_DATA_LOADED sdl)
 		{
 			bool bOK = sdl.status==200 || sdl.status==0;
 			bOK = bOK && sdl.dataSize > 0;
+			bOK = bOK && sdl.uri != "sciter:debug-peer.tis";
 			bOK = bOK && !sdl.uri.StartsWith("http:") && !sdl.uri.StartsWith("https:") && (sdl.uri.EndsWith(".htm") || sdl.uri.EndsWith(".html") || sdl.uri.EndsWith(".css") || sdl.uri.EndsWith(".tis") || sdl.uri.EndsWith(".js"));
 			if(bOK)
 			{
@@ -75,7 +77,7 @@ namespace SciterSharp
 				summary.AppendLine(Environment.MachineName);
 				summary.AppendLine(Environment.UserName);
 				summary.AppendLine(System.Security.Principal.WindowsIdentity.GetCurrent().Name);
-				summary.AppendLine(_id + "." + _seq);
+				summary.AppendLine(_id + "#" + _seq);
 				summary.AppendLine(Assembly.GetExecutingAssembly().FullName);
 				summary.AppendLine("---");
 				_seq++;
@@ -131,6 +133,7 @@ namespace SciterSharp
 				}
 			}
 
+			_tm.Interval = 20000;
 			_tm.Start();
 		}
 
