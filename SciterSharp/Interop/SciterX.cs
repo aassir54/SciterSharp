@@ -39,6 +39,17 @@ namespace SciterSharp.Interop
 		{
 			get { return LoadRequestAPI(); }
 		}
+		public static string Version
+		{
+			get
+			{
+				var api = API;
+				uint major = api.SciterVersion(1);
+				uint minor = api.SciterVersion(0);
+
+				return string.Format("{0}.{1}.{2}.{3}", (major>>16) & 0xffff, major & 0xffff, (minor >> 16) & 0xffff, minor & 0xffff);
+			}
+		}
 
 		private static ISciterAPI? _api = null;
 		private static SciterXGraphics.ISciterGraphicsAPI? _gapi = null;
