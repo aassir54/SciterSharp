@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="Enforce.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
     <Compile Include="Interop\PInvokeUtils.cs" />
     <Compile Include="Interop\SciterX.cs" />
@@ -64,6 +63,7 @@
     <Compile Include="SciterGraphics.cs" />
     <Compile Include="SciterHost.cs" />
     <Compile Include="SciterRequest.cs" />
+    <Compile Include="SciterStatus.cs" />
     <Compile Include="SciterValue.cs" />
     <Compile Include="SciterWindow.cs" />
   </ItemGroup>

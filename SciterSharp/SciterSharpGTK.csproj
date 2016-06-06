@@ -42,7 +42,6 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enforce.cs" />
     <Compile Include="Interop\SciterXGraphics.cs" />
     <Compile Include="Interop\SciterXRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,6 +52,7 @@
     <Compile Include="SciterGraphics.cs" />
     <Compile Include="SciterHost.cs" />
     <Compile Include="SciterRequest.cs" />
+    <Compile Include="SciterStatus.cs" />
     <Compile Include="SciterValue.cs" />
     <Compile Include="SciterWindow.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
