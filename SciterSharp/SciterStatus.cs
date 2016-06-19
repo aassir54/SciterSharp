@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
 using SciterSharp.Interop;
@@ -32,9 +33,7 @@ namespace SciterSharp
 
 			Guid g = Guid.NewGuid();
 			_id = Convert.ToBase64String(g.ToByteArray());
-			_id = _id.Replace("=", "");
-			_id = _id.Replace("+", "");
-			_id = _id.Replace("\\", "");
+			_id = Regex.Replace(_id, @"[^A-Za-z0-9]+", "");
 		}
 
 		public static void OnData(SciterXDef.SCN_DATA_LOADED sdl)
