@@ -722,7 +722,7 @@ namespace SciterSharp.Interop
 			// tiscript_native_interface* function() TIScriptAPI;
 			public delegate IntPtr FPTR_TIScriptAPI();
 			// HVM function(HWINDOW hwnd) SciterGetVM;
-			public delegate IntPtr FPTR_SciterGetVM();
+			public delegate IntPtr FPTR_SciterGetVM(IntPtr hwnd);
 
 			// BOOL function(HVM vm, tiscript_value script_value, VALUE* value, BOOL isolate) Sciter_v2V;
 			public delegate bool FPTR_Sciter_v2V(IntPtr vm, TIScript.tiscript_value script_value, ref SciterXValue.VALUE value, bool isolate);
