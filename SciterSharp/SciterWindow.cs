@@ -343,6 +343,26 @@ namespace SciterSharp
 			_api.SciterUpdateWindow(_hwnd);
 		}
 
+		public SciterValue CallFunction(string name, params SciterValue[] args)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero, "Create the window first");
+			Debug.Assert(name != null);
+
+			SciterXValue.VALUE vret = new SciterXValue.VALUE();
+			_api.SciterCall(_hwnd, name, (uint)args.Length, SciterValue.ToVALUEArray(args), out vret);
+			return new SciterValue(vret);
+		}
+
+		public SciterValue EvalScript(string script)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero, "Create the window first");
+			Debug.Assert(script != null);
+
+			SciterXValue.VALUE vret = new SciterXValue.VALUE();
+			_api.SciterEval(_hwnd, script, (uint)script.Length, out vret);
+			return new SciterValue(vret);
+		}
+
 		/// <summary>
 		/// For example media type can be "handheld", "projection", "screen", "screen-hires", etc.
 		/// By default sciter window has "screen" media type.

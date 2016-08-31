@@ -126,3 +126,4 @@ There is not yet documentation on how to achieve it, but you can look at the two
 
 - add as C# documentation all the helpful API comments found in the official Sciter SDK C headers
 - provide an on-line version of the docs from the C# source-code (anyone knows a good tool for automating it?)
+- maybe a Xamarin port: http://jonathanpeppers.com/Blog/xamarin-ios-under-the-hood-calling-objective-c-from-csharp

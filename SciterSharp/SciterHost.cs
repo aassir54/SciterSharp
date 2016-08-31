@@ -23,8 +23,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using SciterSharp.Interop;
 using System.Threading;
+using System.Reflection;
+using SciterSharp.Interop;
 
 namespace SciterSharp
 {
@@ -112,6 +113,11 @@ namespace SciterSharp
 			PostNotification(new IntPtr(INVOKE_NOTIFICATION), GCHandle.ToIntPtr(handle), timeout);
 		}
 
+		/// <summary>
+		/// Runs the inspector process, waits 1 second, and calls view.connectToInspector() to inspect your page.
+		/// Assumes that the 'inspector(.exe)' executable is in the same directory of OmniCode.dll assembly (so just it to its dir)
+		/// (Before everything it kills any previous instance of the inspector process)
+		/// </summary>
 		public void DebugInspect()
 		{
 #if WINDOWS
@@ -138,13 +144,13 @@ namespace SciterSharp
 
 #if WINDOWS
 			if(!File.Exists(inspector_exe_path) && !File.Exists(inspector_exe_path + ".exe"))
-				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + inspector_exe_path;
+				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + inspector_exe_path;
 #elif OSX
 			if(!File.Exists(inspector_exe_path))
-				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + "../../../" +  inspector_exe_path;
+				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + "../../../" +  inspector_exe_path;
 #else
 			if(!File.Exists(inspector_exe_path))
-				inspector_exe_path = AppDomain.CurrentDomain.BaseDirectory + inspector_exe_path;
+				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + inspector_exe_path;
 #endif
 
 			var po = Process.Start(inspector_exe_path);
