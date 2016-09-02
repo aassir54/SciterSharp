@@ -105,6 +105,8 @@ namespace SciterSharp
 
 		public static SciterValue FromList<T>(IList<T> list) where T : /*struct,*/ IConvertible
 		{
+            Debug.Assert(list != null);
+
 			SciterValue sv = new SciterValue();
 			for(int i = 0; i < list.Count; i++)
 				sv.SetItem(i, new SciterValue(list[i]));
@@ -112,6 +114,8 @@ namespace SciterSharp
 		}
 		public static SciterValue FromDictionary<T>(IDictionary<string, T> dic) where T : /*struct,*/ IConvertible
 		{
+            Debug.Assert(dic != null);
+
 			SciterValue sv = new SciterValue();
 			foreach(var item in dic)
 				sv.SetItem(new SciterValue(item.Key), new SciterValue(item.Value));
@@ -119,8 +123,10 @@ namespace SciterSharp
 		}
 		public static SciterValue FromDictionary(IDictionary<string, SciterValue> dic)
 		{
+            Debug.Assert(dic != null);
+
 			SciterValue sv = new SciterValue();
-			foreach(var item in dic)
+            foreach(var item in dic)
 				sv.SetItem(new SciterValue(item.Key), new SciterValue(item.Value));
 			return sv;
 		}
