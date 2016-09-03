@@ -39,7 +39,7 @@ namespace SciterSharp
 		private Dictionary<string, Type> _behaviorMap = new Dictionary<string, Type>();
 		private SciterXDef.FPTR_SciterHostCallback _cbk;
 		private SciterEventHandler _window_evh;
-		
+
 		public void SetupCallback(IntPtr hwnd)
 		{
 			Debug.Assert(hwnd != IntPtr.Zero);
@@ -63,16 +63,16 @@ namespace SciterSharp
 			Debug.Assert(_window_evh == null, "You can attach only a single SciterEventHandler per SciterHost/window");
 
 			_window_evh = evh;
-			_api.SciterWindowAttachEventHandler(_hwnd, evh._proc, IntPtr.Zero, (uint) SciterXBehaviors.EVENT_GROUPS.HANDLE_ALL);
+			_api.SciterWindowAttachEventHandler(_hwnd, evh._proc, IntPtr.Zero, (uint)SciterXBehaviors.EVENT_GROUPS.HANDLE_ALL);
 		}
-		
+
 		public SciterValue CallFunction(string name, params SciterValue[] args)
 		{
 			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
 			Debug.Assert(name != null);
 
 			SciterXValue.VALUE vret = new SciterXValue.VALUE();
-			_api.SciterCall(_hwnd, name, (uint) args.Length, SciterValue.ToVALUEArray(args), out vret);
+			_api.SciterCall(_hwnd, name, (uint)args.Length, SciterValue.ToVALUEArray(args), out vret);
 			return new SciterValue(vret);
 		}
 
@@ -82,7 +82,7 @@ namespace SciterSharp
 			Debug.Assert(script != null);
 
 			SciterXValue.VALUE vret = new SciterXValue.VALUE();
-			_api.SciterEval(_hwnd, script, (uint) script.Length, out vret);
+			_api.SciterEval(_hwnd, script, (uint)script.Length, out vret);
 			return new SciterValue(vret);
 		}
 
@@ -156,7 +156,7 @@ namespace SciterSharp
 			var po = Process.Start(inspector_exe_path);
 			if(po.HasExited)
 				throw new Exception("Could not run inspector. Make sure Sciter DLL is also present in the inspector tool directory.");
-			
+
 			Task.Run(() =>
 			{
 				Thread.Sleep(1000);
@@ -166,7 +166,7 @@ namespace SciterSharp
 				});
 			});
 		}
-		
+
 		/// <summary>
 		/// Sciter cross-platform alternative for posting a message in the message queue.
 		/// It will be received as a SC_POSTED_NOTIFICATION notification by this SciterHost instance.
@@ -196,12 +196,12 @@ namespace SciterSharp
 		{
 			get
 			{
-				if(_root==null)
+				if(_root == null)
 				{
 					Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
 					IntPtr heRoot;
 					_api.SciterGetRootElement(_hwnd, out heRoot);
-					Debug.Assert(heRoot!=IntPtr.Zero);
+					Debug.Assert(heRoot != IntPtr.Zero);
 					_root = new SciterElement(heRoot);
 				}
 
@@ -215,7 +215,7 @@ namespace SciterSharp
 			{
 				IntPtr heFocus;
 				_api.SciterGetRootElement(_hwnd, out heFocus);
-				Debug.Assert(heFocus!=IntPtr.Zero);
+				Debug.Assert(heFocus != IntPtr.Zero);
 				return new SciterElement(heFocus);
 			}
 		}
@@ -229,7 +229,7 @@ namespace SciterSharp
 			// returns a new SciterEventHandler if the behaviorName was registered by a previous RegisterBehaviorHandler() call
 			if(_behaviorMap.ContainsKey(behaviorName))
 			{
-				elementEvh = (SciterEventHandler) Activator.CreateInstance(_behaviorMap[behaviorName]);
+				elementEvh = (SciterEventHandler)Activator.CreateInstance(_behaviorMap[behaviorName]);
 				return true;
 			}
 			elementEvh = null;
@@ -241,21 +241,21 @@ namespace SciterSharp
 
 		private uint HandleNotification(IntPtr ptrNotification, IntPtr callbackParam)
 		{
-			SciterXDef.SCITER_CALLBACK_NOTIFICATION scn = (SciterXDef.SCITER_CALLBACK_NOTIFICATION) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCITER_CALLBACK_NOTIFICATION));
+			SciterXDef.SCITER_CALLBACK_NOTIFICATION scn = (SciterXDef.SCITER_CALLBACK_NOTIFICATION)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCITER_CALLBACK_NOTIFICATION));
 
 			switch(scn.code)
 			{
 				case SciterXDef.SC_LOAD_DATA:
-					SciterXDef.SCN_LOAD_DATA sld = (SciterXDef.SCN_LOAD_DATA) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_LOAD_DATA));
-					return (uint) OnLoadData(sld);
-				
+					SciterXDef.SCN_LOAD_DATA sld = (SciterXDef.SCN_LOAD_DATA)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_LOAD_DATA));
+					return (uint)OnLoadData(sld);
+
 				case SciterXDef.SC_DATA_LOADED:
-					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
+					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
 					OnDataLoaded(sdl);
 					return 0;
-				
+
 				case SciterXDef.SC_ATTACH_BEHAVIOR:
-					SciterXDef.SCN_ATTACH_BEHAVIOR sab = (SciterXDef.SCN_ATTACH_BEHAVIOR) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_ATTACH_BEHAVIOR));
+					SciterXDef.SCN_ATTACH_BEHAVIOR sab = (SciterXDef.SCN_ATTACH_BEHAVIOR)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_ATTACH_BEHAVIOR));
 					SciterEventHandler elementEvh;
 					bool res = OnAttachBehavior(new SciterElement(sab.elem), Marshal.PtrToStringAnsi(sab.behaviorName), out elementEvh);
 					if(res)
@@ -270,9 +270,9 @@ namespace SciterSharp
 						return 1;
 					}
 					return 0;
-				
+
 				case SciterXDef.SC_ENGINE_DESTROYED:
-					if(_window_evh!=null)
+					if(_window_evh != null)
 					{
 						_api.SciterWindowDetachEventHandler(_hwnd, _window_evh._proc, IntPtr.Zero);
 						_window_evh = null;
@@ -280,14 +280,14 @@ namespace SciterSharp
 
 					OnEngineDestroyed();
 					return 0;
-				
+
 				case SciterXDef.SC_POSTED_NOTIFICATION:
-					SciterXDef.SCN_POSTED_NOTIFICATION spn = (SciterXDef.SCN_POSTED_NOTIFICATION) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_POSTED_NOTIFICATION));
+					SciterXDef.SCN_POSTED_NOTIFICATION spn = (SciterXDef.SCN_POSTED_NOTIFICATION)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_POSTED_NOTIFICATION));
 					IntPtr lreturn = IntPtr.Zero;
-					if(spn.wparam.ToInt32()==INVOKE_NOTIFICATION)
+					if(spn.wparam.ToInt32() == INVOKE_NOTIFICATION)
 					{
 						GCHandle handle = GCHandle.FromIntPtr(spn.lparam);
-						Action cbk = (Action) handle.Target;
+						Action cbk = (Action)handle.Target;
 						cbk();
 						handle.Free();
 					}
@@ -301,7 +301,7 @@ namespace SciterSharp
 					return 0;
 
 				case SciterXDef.SC_GRAPHICS_CRITICAL_FAILURE:
-					SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE cgf = (SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE));
+					SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE cgf = (SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_GRAPHICS_CRITICAL_FAILURE));
 					OnGraphicsCriticalFailure(cgf.hwnd);
 					return 0;
 
