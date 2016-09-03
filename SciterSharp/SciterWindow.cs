@@ -43,6 +43,12 @@ namespace SciterSharp
 		public NSView _nsview { get; private set; }
 #endif
 
+		public bool SetSciterOption(SciterXDef.SCITER_RT_OPTIONS option, IntPtr value)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero);
+			return _api.SciterSetOption(_hwnd, option, value);
+		}
+
 		public SciterWindow()
 		{
 #if WINDOWS
@@ -125,8 +131,7 @@ namespace SciterSharp
 		{
 #if WINDOWS
 			PInvokeWindows.DestroyWindow(_hwnd);
-#endif
-#if GTKMONO
+#elif GTKMONO
 			PInvokeGTK.gtk_widget_destroy(_gtkwindow);
 #endif
 		}
