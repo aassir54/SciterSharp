@@ -157,10 +157,10 @@ namespace SciterSharp
 			int nScreenWidth = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CXSCREEN);
 			int nScreenHeight = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CYSCREEN);
 
-			if (nX < 0) nX = 0;
-			if (nY < 0) nY = 0;
-			if (nX + nWidth > nScreenWidth) nX = nScreenWidth - nWidth;
-			if (nY + nHeight > nScreenHeight) nY = nScreenHeight - nHeight;
+			if(nX < 0) nX = 0;
+			if(nY < 0) nY = 0;
+			if(nX + nWidth > nScreenWidth) nX = nScreenWidth - nWidth;
+			if(nY + nHeight > nScreenHeight) nY = nScreenHeight - nHeight;
 
 			PInvokeWindows.MoveWindow(_hwnd, nX, nY, nWidth, nHeight, false);
 #elif GTKMONO
@@ -215,7 +215,7 @@ namespace SciterSharp
 		public bool LoadHtml(string html, string baseUrl = null)
 		{
 			var bytes = Encoding.UTF8.GetBytes(html);
-			return _api.SciterLoadHtml(_hwnd, bytes, (uint) bytes.Length, baseUrl);
+			return _api.SciterLoadHtml(_hwnd, bytes, (uint)bytes.Length, baseUrl);
 		}
 
 		public void Show(bool show = true)
@@ -273,7 +273,7 @@ namespace SciterSharp
 		{
 			set
 			{
-				Debug.Assert(_hwnd!=IntPtr.Zero);
+				Debug.Assert(_hwnd != IntPtr.Zero);
 #if WINDOWS
 				IntPtr strPtr = Marshal.StringToHGlobalUni(value);
 				PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETTEXT, IntPtr.Zero, strPtr);
@@ -287,7 +287,7 @@ namespace SciterSharp
 
 			get
 			{
-				Debug.Assert(_hwnd!=IntPtr.Zero);
+				Debug.Assert(_hwnd != IntPtr.Zero);
 #if WINDOWS
 				IntPtr unmanagedPointer = Marshal.AllocHGlobal(2048);
 				IntPtr chars_copied = PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_GETTEXT, new IntPtr(2048), unmanagedPointer);
@@ -302,7 +302,7 @@ namespace SciterSharp
 #endif
 			}
 		}
-		
+
 		public SciterElement RootElement
 		{
 			get
@@ -394,9 +394,9 @@ namespace SciterSharp
 #if WINDOWS
 		private IntPtr InternalProcessSciterWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr pParam, ref bool handled)
 		{
-			Debug.Assert(pParam.ToInt32()==0);
-			Debug.Assert(_hwnd.ToInt32()==0 || hwnd==_hwnd);
-			
+			Debug.Assert(pParam.ToInt32() == 0);
+			Debug.Assert(_hwnd.ToInt32() == 0 || hwnd == _hwnd);
+
 			IntPtr lResult = IntPtr.Zero;
 			handled = ProcessWindowMessage(hwnd, msg, wParam, lParam, ref lResult);
 			return lResult;
