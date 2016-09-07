@@ -62,14 +62,23 @@ namespace SciterSharp
 			var method = this.GetType().GetMethod(name);
 			if(method != null)
 			{
-				// this base class tries to handle it by searching for a method with the same 'name'
-				object[] parameters = new object[] { se, args, null };
+				// This base class tries to handle it by searching for a method with the same 'name'
+				object[] call_parameters = new object[] { se, args, null };
+				Debug.Assert(call_parameters.Length == 3);
 
-				bool res = (bool)method.Invoke(this, parameters);
-				Debug.Assert(parameters.Length == 3);
-				Debug.Assert(parameters[2] == null || parameters[2].GetType().IsAssignableFrom(typeof(SciterValue)));
+				// Signature of that method should be 'bool MethodName(SciterElement el, SciterValue[] args, out SciterValue result)'
+				// Verify it:
+				Debug.Assert(method.ReturnType == typeof(Boolean));
+				Debug.Assert(method.GetParameters().Length == 3);
+				Debug.Assert(method.GetParameters()[0].ParameterType.Name == "SciterElement");
+				Debug.Assert(method.GetParameters()[1].ParameterType.Name == "SciterValue[]");
+				Debug.Assert(method.GetParameters()[2].ParameterType.Name == "SciterValue&");
 
-				result = parameters[2] as SciterValue;
+				// invoke method and verify return
+				bool res = (bool)method.Invoke(this, call_parameters);
+				Debug.Assert(call_parameters[2] == null || call_parameters[2].GetType().IsAssignableFrom(typeof(SciterValue)));
+
+				result = call_parameters[2] as SciterValue;
 				return res;
 			}
 
