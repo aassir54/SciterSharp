@@ -61,7 +61,8 @@
     <Compile Include="ArchiveResources.cs" />
     <Compile Include="Behaviors\BehaviorDrawing.cs" />
     <Compile Include="DebugHandler.cs" />
-    <Compile Include="HostWindow.cs" />
+    <Compile Include="AppWindow.cs" />
+    <Compile Include="Host.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
