@@ -8,6 +8,8 @@ Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.28-blue.
 
 OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.28-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
+Browse the C# source-code: http://sourcebrowser.io/Browse/MISoftware/SciterSharp
+
 ## Cross-platform Sciter bindings for .NET
 
 This library provides bindings of Sciter C/C++ headers to the C# language. [Sciter](http://sciter.com/download/) is a multi-platform HTML engine. With this library you can create C#/.NET desktop applications using not just HTML, but all the features of Sciter: CSS3, SVG, scripting, AJAX, &lt;video&gt;, ... Sciter is free for commercial use.
