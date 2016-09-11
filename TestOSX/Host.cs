@@ -38,9 +38,9 @@ namespace TestOSX
 
 		public BaseHost()
 		{
-			#if !DEBUG
-			_archive.Open(SciterSharpAppResource.ArchiveResource.resources);
-			#endif
+#if !DEBUG
+			_archive.Open(SciterAppResource.ArchiveResource.resources);
+#endif
 		}
 
 		public void SetupWindow(SciterWindow wnd)
@@ -49,17 +49,24 @@ namespace TestOSX
 			SetupCallback(wnd._hwnd);
 		}
 
-		public void SetupPage(string path)
+		public void SetupPage(string page_from_res_folder)
 		{
-			string cwd = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-			System.Environment.CurrentDirectory = cwd;
+#if DEBUG
+			string cwd = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace('\\', '/');
 
-		#if DEBUG
-			Debug.Assert(File.Exists(cwd + "/res/" + path));
-			string url = "file:///" + cwd + "/res/" + path;
-		#else
-			string url = "archive://app/" + path;
-		#endif
+#if OSX
+			Environment.CurrentDirectory = cwd + "/../../../../..";
+#else
+			Environment.CurrentDirectory = cwd + "/../..";
+#endif
+
+			string path = Environment.CurrentDirectory + "/res/" + page_from_res_folder;
+			Debug.Assert(File.Exists(path));
+
+			string url = "file://" + path;
+#else
+			string url = "archive://app/" + page_from_res_folder;
+#endif
 
 			bool res = _wnd.LoadPage(url);
 			Debug.Assert(res);
@@ -67,18 +74,13 @@ namespace TestOSX
 
 		protected override SciterXDef.LoadResult OnLoadData(SciterXDef.SCN_LOAD_DATA sld)
 		{
-			SciterRequest rq = new SciterRequest(sld.requestId);
-			string r1 = rq.Url;
-			string r2 = rq.ContentUrl;
-			var r3 = rq.RequestedType;
-
-			if(sld.uri.StartsWith("archive://app/"))
+			if (sld.uri.StartsWith("archive://app/"))
 			{
 				// load resource from SciterArchive
 				string path = sld.uri.Substring(14);
 				byte[] data = _archive.Get(path);
-				if(data!=null)
-					_api.SciterDataReady(_wnd._hwnd, sld.uri, data, (uint) data.Length);
+				if (data != null)
+					_api.SciterDataReady(_wnd._hwnd, sld.uri, data, (uint)data.Length);
 			}
 			return SciterXDef.LoadResult.LOAD_OK;
 		}

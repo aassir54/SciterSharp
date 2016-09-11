@@ -1,47 +1,69 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0FED940F-A40A-4800-8FE4-963C523D32E2}</ProjectGuid>
+    <ProjectGuid>{42BB6EC1-E806-4B5B-A242-1662AAE7BF25}</ProjectGuid>
+    <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SciterSharpOSX</RootNamespace>
     <AssemblyName>SciterSharpOSX</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <UseMSBuildEngine>False</UseMSBuildEngine>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
+    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;OSX</DefineConstants>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>__UNIFIED__;DEBUG;OSX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\SciterSharpOSX.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>false</UseSGen>
+    <HttpClientHandler></HttpClientHandler>
+    <TlsProvider></TlsProvider>
+    <LinkMode></LinkMode>
+    <XamMacArch></XamMacArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;OSX</DefineConstants>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>__UNIFIED__;OSX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\SciterSharpOSX.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SciterSharp.pfx</AssemblyOriginatorKeyFile>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>false</UseSGen>
+    <HttpClientHandler></HttpClientHandler>
+    <TlsProvider></TlsProvider>
+    <LinkMode></LinkMode>
+    <XamMacArch></XamMacArch>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="MonoMac" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.Mac" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SciterArchive.cs" />
+    <Compile Include="SciterDebugOutputHandler.cs" />
+    <Compile Include="SciterElement.cs" />
+    <Compile Include="SciterEventHandler.cs" />
+    <Compile Include="SciterGraphics.cs" />
+    <Compile Include="SciterHost.cs" />
+    <Compile Include="SciterRequest.cs" />
+    <Compile Include="SciterValue.cs" />
+    <Compile Include="SciterWindow.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
     <Compile Include="Interop\PInvokeUtils.cs" />
     <Compile Include="Interop\SciterX.cs" />
@@ -53,27 +75,12 @@
     <Compile Include="Interop\SciterXValue.cs" />
     <Compile Include="Interop\SciterXVideoAPI.cs" />
     <Compile Include="Interop\TIScript.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SciterArchive.cs" />
-    <Compile Include="SciterDebugOutputHandler.cs" />
-    <Compile Include="SciterElement.cs" />
-    <Compile Include="SciterEventHandler.cs" />
-    <Compile Include="SciterGraphics.cs" />
-    <Compile Include="SciterHost.cs" />
-    <Compile Include="SciterRequest.cs" />
-    <Compile Include="SciterValue.cs" />
-    <Compile Include="SciterWindow.cs" />
+    <Compile Include="Interop\PInvokeWindows.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SciterSharp.pfx" />
-    <None Include="SciterSharpOSX.dll.config" />
+    <None Include="SciterSharpOSX.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
