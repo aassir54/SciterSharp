@@ -1,9 +1,5 @@
 ﻿<Properties StartupItem="TestOSX/TestOSX.csproj">
-  <MonoDevelop.Ide.Workbench ActiveDocument=".gitignore">
-    <Files>
-      <File FileName=".gitignore" Line="14" Column="1" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.ItemProperties.TestDLLImport PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
