@@ -11,6 +11,3 @@ obj/
 *.sdf
 .DS_Store
 
-
-#Exclude
-!Release/SciterSharpOSX.dll

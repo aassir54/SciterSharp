@@ -1,11 +1,11 @@
 ﻿<Properties StartupItem="TestOSX/TestOSX.csproj">
-  <MonoDevelop.Ide.Workbench ActiveDocument="TestOSX/Host.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument=".gitignore">
     <Files>
-      <File FileName="TestOSX/Host.cs" Line="54" Column="9" />
+      <File FileName=".gitignore" Line="14" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.TestDLLImport PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -14,6 +14,7 @@
     <String>SciterSharp/SciterSharpGTK.csproj</String>
     <String>SciterSharp/SciterSharpWindows.csproj</String>
     <String>TestForms/TestForms.csproj</String>
+    <String>TestMinimal/TestMinimal.csproj</String>
   </DisabledProjects>
   <MonoDevelop.Ide.ItemProperties.TestOSX PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
