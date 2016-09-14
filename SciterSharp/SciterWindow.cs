@@ -31,6 +31,7 @@ using Foundation;
 
 namespace SciterSharp
 {
+#if OSX
 	public class OSXView : NSView
 	{
 		public OSXView(IntPtr handle)
@@ -38,6 +39,7 @@ namespace SciterSharp
 		{
 		}
 	}
+#endif
 
 	public class SciterWindow
 	{
