@@ -1,18 +1,13 @@
 ﻿<Properties StartupItem="TestOSX/TestOSX.csproj">
   <MonoDevelop.Ide.Workbench ActiveDocument="TestOSX/Host.cs">
     <Files>
-      <File FileName="TestOSX/Host.cs" Line="87" Column="3" />
-      <File FileName="TestOSX/Main.cs" Line="13" Column="4" />
-      <File FileName="TestOSX/Mono.cs" Line="25" Column="1" />
-      <File FileName="../SciterBootstrap/SciterBootstrap/Src/Host.cs" Line="105" Column="3" />
+      <File FileName="TestOSX/Host.cs" Line="54" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.TestDLLImport PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/diazfabiana/Desktop/Ramon/SciterSharp/TestOSX/Host.cs" line="55" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>

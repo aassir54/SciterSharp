@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
-    <InterfaceDefinition Include="MainWindow.xib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SciterSharp\SciterSharpOSX.csproj">
