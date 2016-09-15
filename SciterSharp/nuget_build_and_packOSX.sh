@@ -1,1 +1,0 @@
-nuget pack SciterSharpOSX.csproj -Prop Configuration=Release
