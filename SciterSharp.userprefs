@@ -1,7 +1,17 @@
-﻿<Properties StartupItem="TestOSX/TestOSX.csproj">
-  <MonoDevelop.Ide.Workbench />
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="SciterSharp" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>
     <String>SciterSharp/SciterSharpGTK.csproj</String>
@@ -9,5 +19,4 @@
     <String>TestForms/TestForms.csproj</String>
     <String>TestMinimal/TestMinimal.csproj</String>
   </DisabledProjects>
-  <MonoDevelop.Ide.ItemProperties.TestOSX PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
