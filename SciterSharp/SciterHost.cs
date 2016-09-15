@@ -162,7 +162,7 @@ namespace SciterSharp
 				Thread.Sleep(1000);
 				InvokePost(() =>
 				{
-					SciterValue connect_api = EvalScript("view.connectToInspector()");
+					EvalScript("view.connectToInspector()");;
 				});
 			});
 		}

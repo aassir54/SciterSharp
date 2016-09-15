@@ -27,8 +27,6 @@ namespace TestMinimal
 
 		protected override bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)
 		{
-			base.OnScriptCall(se, name, args, out result);
-
 			switch(name)
 			{
 				case "Host_HelloWorld":
@@ -36,8 +34,7 @@ namespace TestMinimal
 					return true;
 			}
 
-			result = null;
-			return false;
+			return base.OnScriptCall(se, name, args, out result);
 		}
 	}
 

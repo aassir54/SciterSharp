@@ -1,58 +1,26 @@
-﻿using System;
-using System.Drawing;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
-using SciterSharp;
+﻿using AppKit;
+using Foundation;
 
-namespace TestOSX
+namespace SciterOSX
 {
-	class MainClass
+	static class MainClass
 	{
-		static void Main (string[] args)
+		static void Main(string[] args)
 		{
-			NSApplication.Init ();
-			//NSApplication.Main (args);
+			NSApplication.Init();
+			//NSApplication.Main(args);
+			SciterBootstrap.Mono.Setup();
 
-			using (var p = new NSAutoreleasePool ()) {
-				NSApplication.SharedApplication.Delegate = new AppDelegate ();
+			using(var p = new NSAutoreleasePool())
+			{
+				NSApplication.SharedApplication.Delegate = new AppDelegate();
 
 				// Set our Application Icon
 				//NSImage appIcon = NSImage.ImageNamed ("monogameicon.png");
 				//NSApplication.SharedApplication.ApplicationIconImage = appIcon;
 
-				NSApplication.SharedApplication.Run ();
+				NSApplication.SharedApplication.Run();
 			}
-
-			//NSApplication.CheckForIllegalCrossThreadCalls = false;
-			//NSApplication.SharedApplication.InvokeOnMainThread()
-		}
-	}
-
-	class AppDelegate : NSApplicationDelegate
-	{
-		SciterWindow wnd;
-		Host host;
-
-		public override void FinishedLaunching (MonoMac.Foundation.NSObject notification)
-		{
-			wnd = new SciterWindow ();
-			wnd.CreateMainWindow (500, 500);
-			wnd.CenterTopLevelWindow ();
-			wnd.Title = "SciterSharp from OSX";
-
-			host = new Host ();
-			host.SetupWindow(wnd);
-			host.AttachEvh(new HostEvh());
-			host.SetupPage ("index.html");
-			host.DebugInspect ();
-
-			wnd.Show ();
-		}
-
-		public override bool ApplicationShouldTerminateAfterLastWindowClosed (NSApplication sender)
-		{
-			return false;
 		}
 	}
 }

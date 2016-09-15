@@ -1,23 +1,39 @@
-﻿using System;
-using System.Drawing;
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
+﻿using AppKit;
+using Foundation;
+using SciterSharp;
 
-namespace TestOSX
+namespace SciterOSX
 {
-	public partial class AppDelegate : NSApplicationDelegate
+	[Register("AppDelegate")]
+	public class AppDelegate : NSApplicationDelegate
 	{
-		MainWindowController mainWindowController;
+		SciterWindow wnd;
+		Host host;
 
-		public AppDelegate ()
+		public AppDelegate()
 		{
 		}
 
-		public override void FinishedLaunching (NSObject notification)
+		public override void DidFinishLaunching(NSNotification notification)
 		{
-			mainWindowController = new MainWindowController ();
-			mainWindowController.Window.MakeKeyAndOrderFront (this);
+			wnd = new SciterWindow();
+			wnd.CreateMainWindow(800, 500);
+			wnd.CenterTopLevelWindow();
+			wnd.Title = "SciterSharp from OSX";
+
+			host = new Host();
+			host.SetupWindow(wnd);
+			host.AttachEvh(new HostEvh());
+			host.SetupPage("index.html");
+			//host.DebugInspect();
+
+			wnd.Show();
+		}
+
+		public override void WillTerminate(NSNotification notification)
+		{
+			// Insert code here to tear down your application
 		}
 	}
 }
+

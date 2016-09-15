@@ -1,5 +1,4 @@
-*.nupkg
-MonoMac.dll
+#*.nupkg
 
 
 #IDE Garbage
@@ -10,3 +9,5 @@ bin/
 obj/
 .vs
 *.sdf
+.DS_Store
+

@@ -66,7 +66,7 @@ namespace SciterSharp.Interop
 		#elif OSX
 		[DllImport("sciter-osx-32", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI32();
-		[DllImport("sciter-osx-32", EntryPoint = "SciterAPI")]
+		[DllImport("sciter-osx-64", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI64();
 		#endif
 

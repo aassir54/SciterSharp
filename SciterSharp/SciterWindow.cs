@@ -25,13 +25,22 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SciterSharp.Interop;
 #if OSX
-using MonoMac.Foundation;
-using MonoMac.AppKit;
-using MonoMac.ObjCRuntime;
+using AppKit;
+using Foundation;
 #endif
 
 namespace SciterSharp
 {
+#if OSX
+	public class OSXView : NSView
+	{
+		public OSXView(IntPtr handle)
+			: base(handle)
+		{
+		}
+	}
+#endif
+
 	public class SciterWindow
 	{
 		protected static SciterX.ISciterAPI _api = SciterX.API;
@@ -88,7 +97,7 @@ namespace SciterSharp
 			_gtkwindow = PInvokeGTK.gtk_widget_get_toplevel(_hwnd);
 			Debug.Assert(_gtkwindow != IntPtr.Zero);
 #elif OSX
-			_nsview = new NSView(_hwnd);
+			_nsview = new OSXView(_hwnd);
 #endif
 		}
 
@@ -256,18 +265,18 @@ namespace SciterSharp
 			get { return _api.SciterGetVM(_hwnd); }
 		}
 
+#if WINDOWS
 		public Icon Icon
 		{
 			set
 			{
-#if WINDOWS
 				// small icon
 				PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, IntPtr.Zero, new Icon(value, 16, 16).Handle);
 				// larger icon
 				PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, new IntPtr(1), value.Handle);
-#endif
 			}
 		}
+#endif
 
 		public string Title
 		{
