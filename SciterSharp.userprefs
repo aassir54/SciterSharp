@@ -1,23 +1,15 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument=".gitignore">
-    <Files>
-      <File FileName=".gitignore" Line="14" Column="1" />
-    </Files>
+﻿<Properties StartupItem="TestOSX/TestOSX.csproj">
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="SciterSharp" expanded="True">
-            <Node name="Solution Items" expanded="True" />
-            <Node name="SciterSharpOSX" selected="True" />
-          </Node>
+          <Node name="SciterSharp" expanded="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>
     <String>SciterSharp/SciterSharpGTK.csproj</String>
