@@ -275,6 +275,7 @@ namespace SciterSharp
 		}
 		#endregion
 
+		#region State
 		public SciterXDom.ELEMENT_STATE_BITS GetState()
 		{
 			uint bits;
@@ -288,13 +289,19 @@ namespace SciterSharp
 			var r = _api.SciterSetElementState(_he, (uint) bitsToSet, (uint) bitsToClear, update);
 			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
 		}
-
+		#endregion
 
 		public IntPtr GetNativeHwnd(bool rootWindow = true)
 		{
 			IntPtr hwnd;
 			_api.SciterGetElementHwnd(_he, out hwnd, rootWindow);
 			return hwnd;
+		}
+
+		public string CombineURL(string url = "")
+		{
+			_api.SciterCombineURL(_he, url, (uint) url.Length);
+			return url;
 		}
 
 		#region Integers
