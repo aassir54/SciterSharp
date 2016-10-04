@@ -66,8 +66,10 @@ namespace SciterSharp
 				object[] call_parameters = new object[] { se, args, null };
 				Debug.Assert(call_parameters.Length == 3);
 
-				// Signature of that method should be 'bool MethodName(SciterElement el, SciterValue[] args, out SciterValue result)'
-				// Verify it:
+				// Signature of that method should be:
+				// bool MethodName(SciterElement el, SciterValue[] args, out SciterValue result)
+				//
+				// Verify correct signature:
 				Debug.Assert(method.ReturnType == typeof(Boolean));
 				Debug.Assert(method.GetParameters().Length == 3);
 				Debug.Assert(method.GetParameters()[0].ParameterType.Name == "SciterElement");

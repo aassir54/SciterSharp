@@ -40,8 +40,32 @@ namespace SciterSharp.Interop
 #endif
 		}
 
-        // PInvoke structs ===============================================================
-        [StructLayout(LayoutKind.Sequential)]
+		// PInvoke marshaling utils ===============================================================
+		public static IntPtr NativeUtf16FromString(string managedString, int minlen)
+		{
+			// Marshal.StringToHGlobalUni() -- does not gives the buffer size
+			byte[] strbuffer = Encoding.Unicode.GetBytes(managedString);
+
+			minlen = Math.Max(strbuffer.Length, minlen);
+			byte[] zerobuffer = new byte[minlen];
+			Buffer.BlockCopy(strbuffer, 0, zerobuffer, 0, strbuffer.Length);
+
+			IntPtr nativeUtf16 = Marshal.AllocHGlobal(minlen);
+			Marshal.Copy(zerobuffer, 0, nativeUtf16, minlen);
+			return nativeUtf16;
+		}
+		public static void NativeUtf16FromString_FreeBuffer(IntPtr buffer)
+		{
+			Marshal.FreeHGlobal(buffer);
+		}
+
+		public static string StringFromNativeUtf16(IntPtr nativeUtf16)
+		{
+			return Marshal.PtrToStringUni(nativeUtf16);
+		}
+
+		// PInvoke structs ===============================================================
+		[StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
             public int left, top, right, bottom;

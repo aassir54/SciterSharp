@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="res\index.html" />
+    <Content Include="res\index2.html" />
     <Content Include="res\unittest.html" />
   </ItemGroup>
   <ItemGroup>

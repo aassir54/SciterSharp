@@ -250,10 +250,10 @@ namespace SciterSharp
 					return (uint)OnLoadData(sld);
 
 				case SciterXDef.SC_DATA_LOADED:
-					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
+					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
 					OnDataLoaded(sdl);
 					return 0;
-
+					
 				case SciterXDef.SC_ATTACH_BEHAVIOR:
 					SciterXDef.SCN_ATTACH_BEHAVIOR sab = (SciterXDef.SCN_ATTACH_BEHAVIOR)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_ATTACH_BEHAVIOR));
 					SciterEventHandler elementEvh;
