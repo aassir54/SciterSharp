@@ -300,8 +300,11 @@ namespace SciterSharp
 
 		public string CombineURL(string url = "")
 		{
-			_api.SciterCombineURL(_he, url, (uint) url.Length);
-			return url;
+			IntPtr buffer = PInvokeUtils.NativeUtf16FromString(url, 2048);
+			var res = _api.SciterCombineURL(_he, buffer, 2048);
+			string s = PInvokeUtils.StringFromNativeUtf16(buffer);
+			PInvokeUtils.NativeUtf16FromString_FreeBuffer(buffer);
+			return s;
 		}
 
 		#region Integers

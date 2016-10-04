@@ -18,7 +18,7 @@ namespace SciterSharp
 	static class SciterStatus
 	{
 		private static SciterX.ISciterAPI _api = SciterX.API;
-		private static List<Tuple<string, byte[]>> _status;
+		private static List<Tuple<string, string, byte[]>> _status;
 		private static Timer _tm = new Timer();
 		private static string _id;
 		private static int _seq = 0;
@@ -39,25 +39,34 @@ namespace SciterSharp
 
 		public static void OnData(SciterXDef.SCN_DATA_LOADED sdl)
 		{
-			IntPtr phe;
-			_api.SciterGetRootElement(sdl.hwnd, out phe);
-			SciterElement window = new SciterElement(phe);
-
 			bool bOK = sdl.status==200 || sdl.status==0;
 			bOK = bOK && sdl.dataSize > 0;
 			bOK = bOK && sdl.uri != "sciter:debug-peer.tis";
 			bOK = bOK && !sdl.uri.StartsWith("http:") && !sdl.uri.StartsWith("https:") && (sdl.uri.EndsWith(".htm") || sdl.uri.EndsWith(".html") || sdl.uri.EndsWith(".css") || sdl.uri.EndsWith(".tis") || sdl.uri.EndsWith(".js"));
 			if(bOK)
 			{
+				// get file byte[] data
 				byte[] managedArray = new byte[sdl.dataSize];
 				Marshal.Copy(sdl.data, managedArray, 0, (int) sdl.dataSize);
-				_status.Add(Tuple.Create(sdl.uri, managedArray));
+
+				// get a URL for saving the file
+				IntPtr phe;
+				_api.SciterGetRootElement(sdl.hwnd, out phe);
+				string baseurl = phe != IntPtr.Zero ? new SciterElement(phe).CombineURL() : null;
+
+				string url = sdl.uri;
+				if(baseurl != null && url.StartsWith(baseurl))
+					url = url.Substring(baseurl.Length);
+				else
+					url = url.Split('/').Last();
+
+				_status.Add(Tuple.Create(url, sdl.uri, managedArray));
 			}
 		}
 
 		private static void RenewList()
 		{
-			_status = new List<Tuple<string, byte[]>>();
+			_status = new List<Tuple<string, string, byte[]>>();
 		}
 
 		private static void _tm_Elapsed(object sender, ElapsedEventArgs e)
@@ -76,7 +85,6 @@ namespace SciterSharp
 			// ZIPs everything
 			using(var zip = new ZipArchive(stream, ZipArchiveMode.Create))
 			{
-				int i = 0;
 				StringBuilder summary = new StringBuilder();
 				summary.AppendLine(Environment.MachineName);
 				summary.AppendLine(Environment.UserName);
@@ -88,15 +96,13 @@ namespace SciterSharp
 
 				foreach(var item in status)
 				{
-					summary.AppendLine(i + ":" + item.Item1);
+					summary.AppendLine(item.Item1 + ":" + item.Item2);
 
-					var entry = zip.CreateEntry(i.ToString(), CompressionLevel.Optimal);
+					var entry = zip.CreateEntry(item.Item1, CompressionLevel.Optimal);
 					using(var entry_writer = entry.Open())
 					{
-						entry_writer.Write(item.Item2, 0, item.Item2.Length);
+						entry_writer.Write(item.Item3, 0, item.Item3.Length);
 					}
-
-					i++;
 				}
 
 				var sum_entry = zip.CreateEntry("summary.txt");

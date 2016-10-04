@@ -38,7 +38,7 @@ namespace TestMinimal
 			host.SetupWindow(wnd);
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
-			host.DebugInspect();
+			//host.DebugInspect();
 
 			// get the page <body>
 			var se_body = wnd.RootElement.SelectFirst("body");
