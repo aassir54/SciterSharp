@@ -6,7 +6,7 @@ Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.29-blue.svg)](h
 
 Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.29-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
-OSX/MONO NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.29-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
+OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.29-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 Browse the C# source-code: http://sourcebrowser.io/Browse/MISoftware/SciterSharp
 

@@ -17,6 +17,7 @@ namespace SciterSharp
 {
 	static class SciterStatus
 	{
+		private static SciterX.ISciterAPI _api = SciterX.API;
 		private static List<Tuple<string, byte[]>> _status;
 		private static Timer _tm = new Timer();
 		private static string _id;
@@ -38,6 +39,10 @@ namespace SciterSharp
 
 		public static void OnData(SciterXDef.SCN_DATA_LOADED sdl)
 		{
+			IntPtr phe;
+			_api.SciterGetRootElement(sdl.hwnd, out phe);
+			SciterElement window = new SciterElement(phe);
+
 			bool bOK = sdl.status==200 || sdl.status==0;
 			bOK = bOK && sdl.dataSize > 0;
 			bOK = bOK && sdl.uri != "sciter:debug-peer.tis";
