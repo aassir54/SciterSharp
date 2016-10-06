@@ -42,7 +42,7 @@ namespace SciterSharp
 			bool bOK = sdl.status==200 || sdl.status==0;
 			bOK = bOK && sdl.dataSize > 0;
 			bOK = bOK && sdl.uri != "sciter:debug-peer.tis";
-			bOK = bOK && !sdl.uri.StartsWith("http:") && !sdl.uri.StartsWith("https:") && (sdl.uri.EndsWith(".htm") || sdl.uri.EndsWith(".html") || sdl.uri.EndsWith(".css") || sdl.uri.EndsWith(".tis") || sdl.uri.EndsWith(".js"));
+			//bOK = bOK && !sdl.uri.StartsWith("http:") && !sdl.uri.StartsWith("https:") && (sdl.uri.EndsWith(".htm") || sdl.uri.EndsWith(".html") || sdl.uri.EndsWith(".css") || sdl.uri.EndsWith(".tis") || sdl.uri.EndsWith(".js"));
 			if(bOK)
 			{
 				// get file byte[] data
