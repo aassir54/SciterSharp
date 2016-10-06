@@ -513,7 +513,7 @@ namespace SciterSharp.Interop
 			//SCDOM_RESULT function(HELEMENT he, HWINDOW* p_hwnd, BOOL rootWindow) SciterGetElementHwnd;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterGetElementHwnd(IntPtr he, out IntPtr p_hwnd, bool rootWindow);
 			//SCDOM_RESULT function(HELEMENT he, LPWSTR szUrlBuffer, UINT UrlBufferSize) SciterCombineURL;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCombineURL(IntPtr he, [MarshalAs(UnmanagedType.LPWStr)]string szUrlBuffer, uint UrlBufferSize);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterCombineURL(IntPtr he, /*[MarshalAs(UnmanagedType.LPWStr)]*/IntPtr szUrlBuffer, uint UrlBufferSize);
 			//SCDOM_RESULT function(HELEMENT  he, LPCSTR    CSS_selectors, SciterElementCallback callback, LPVOID param) SciterSelectElements;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterSelectElements(IntPtr he, [MarshalAs(UnmanagedType.LPStr)]string CSS_selectors, SciterXDom.FPTR_SciterElementCallback callback, IntPtr param);
 			//SCDOM_RESULT function(HELEMENT  he, LPCWSTR   CSS_selectors, SciterElementCallback callback, LPVOID param) SciterSelectElementsW;

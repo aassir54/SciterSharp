@@ -45,9 +45,12 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SciterStatus.cs" />
     <Compile Include="Interop\PInvokeWindows.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
     <Compile Include="Interop\SciterXRequest.cs" />
