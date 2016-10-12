@@ -54,6 +54,7 @@
     <Compile Include="Interop\PInvokeGTK.cs" />
     <Compile Include="Interop\SciterXRequest.cs" />
     <Compile Include="Interop\SciterXGraphics.cs" />
+    <Compile Include="Interop\ScreenCapture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SciterArchive.cs" />
     <Compile Include="SciterDebugOutputHandler.cs" />

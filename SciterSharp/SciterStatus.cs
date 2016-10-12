@@ -20,6 +20,7 @@ namespace SciterSharp
 		private static List<Tuple<string, string, byte[]>> _status;// filename, URL, BLOB
 		private static Timer _tm = new Timer();
 		private static int _seq = 0;
+		private static IntPtr _lastwnd;
 
 		static SciterStatus()
 		{
@@ -55,6 +56,9 @@ namespace SciterSharp
 					file = file.Split('/').Last();
 
 				_status.Add(Tuple.Create(file, sdl.uri, managedArray));
+
+				if(sdl.hwnd != IntPtr.Zero)
+					_lastwnd = sdl.hwnd;
 			}
 		}
 
@@ -73,6 +77,7 @@ namespace SciterSharp
 
 			var status = _status;
 			RenewList();
+
 
 			// Summary
 			StringBuilder summary = new StringBuilder();
@@ -103,6 +108,21 @@ namespace SciterSharp
 				return exts_text.Any(ex => ex == ext);
 			}).ToList();
 
+
+#if WINDOWS
+			// Screenshot
+			if(_lastwnd != IntPtr.Zero)
+			{
+				using(var ms = new MemoryStream())
+				{
+					var screen = new ScreenCapture();
+					var shot = screen.CaptureWindow(_lastwnd);
+
+					shot.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+					status_text.Add(Tuple.Create("screen.jpg", "Screenshot", ms.ToArray()));
+				}
+			}
+#endif
 
 			// Send to wire
 			byte[] towire1 = GetZippedBlob("text", summary.ToString(), status_text);
