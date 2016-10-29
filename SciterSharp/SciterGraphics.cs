@@ -23,10 +23,25 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SciterSharp.Interop;
+#if WINDOWS
+using System.Drawing;
+using System.Drawing.Imaging;
+#endif
 
 namespace SciterSharp
 {
-	public class SciterGraphics
+	public struct RGBAColor
+	{
+		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
+		public uint c;
+
+		public RGBAColor(uint r, uint g, uint b, uint alpha)
+		{
+			c = _gapi.RGBA(r, g, b, alpha);
+		}
+	}
+
+	public class SciterGraphics : IDisposable
 	{
 		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
 		public readonly IntPtr _hgfx;
@@ -75,19 +90,12 @@ namespace SciterSharp
 			var r = _gapi.gTranslate(_hgfx, cx, cy);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 		}
-	}
 
-	public struct RGBAColor
-	{
-		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
-		public uint c;
-
-		public RGBAColor(uint r, uint g, uint b, uint alpha)
+		public void Dispose()
 		{
-			c = _gapi.RGBA(r, g, b, alpha);
+			_gapi.gRelease(_hgfx);
 		}
 	}
-
 
 	public class SciterImage : IDisposable
 	{
@@ -121,6 +129,17 @@ namespace SciterSharp
 			var r = _gapi.imageCreateFromPixmap(out _himg, width, height, withAlpha, data);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 		}
+
+#if WINDOWS
+		public SciterImage(Bitmap bmp)
+		{
+			var data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+			Debug.Assert(bmp.Width*4 == data.Stride);
+			var r = _gapi.imageCreateFromPixmap(out _himg, (uint) bmp.Width, (uint) bmp.Height, true, data.Scan0);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			bmp.UnlockBits(data);
+		}
+#endif
 
 		/// <summary>
 		/// Save this image to png/jpeg stream of bytes
