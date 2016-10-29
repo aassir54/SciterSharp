@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{79D83D95-E87F-48DC-A653-1998BA9602E2}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		OmniCode-Settings.json = OmniCode-Settings.json
 		README.md = README.md
 		SciterSharp\SciterSharpOSX.nuspec = SciterSharp\SciterSharpOSX.nuspec
 	EndProjectSection
@@ -23,6 +24,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterSharpWindows", "SciterSharp\SciterSharpWindows.csproj", "{18B2E4E7-CB77-44C3-865B-BE05620ABA4D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciterSharpGTK", "SciterSharp\SciterSharpGTK.csproj", "{D60ACAE0-C246-4936-B92B-B756841DB545}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestsUI", "TestsUI", "{2ABBA2EF-6FEE-4F81-BF64-A1AB02BEE2C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGraphics", "Tests\TestGraphics.csproj", "{FABEBB54-7E6E-4DCD-A4A3-D713EA38731B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestTechs", "TestTechs", "{82186944-A5EB-44C7-AE4E-FCF08CE92043}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,8 +65,17 @@ Global
 		{D60ACAE0-C246-4936-B92B-B756841DB545}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D60ACAE0-C246-4936-B92B-B756841DB545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D60ACAE0-C246-4936-B92B-B756841DB545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FABEBB54-7E6E-4DCD-A4A3-D713EA38731B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FABEBB54-7E6E-4DCD-A4A3-D713EA38731B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FABEBB54-7E6E-4DCD-A4A3-D713EA38731B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FABEBB54-7E6E-4DCD-A4A3-D713EA38731B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00EAE4CA-18D6-4647-B6CD-355E90BEBA15} = {82186944-A5EB-44C7-AE4E-FCF08CE92043}
+		{B7F8726F-4B56-4A2A-8DFD-A0B525D58B5B} = {82186944-A5EB-44C7-AE4E-FCF08CE92043}
+		{FABEBB54-7E6E-4DCD-A4A3-D713EA38731B} = {2ABBA2EF-6FEE-4F81-BF64-A1AB02BEE2C5}
 	EndGlobalSection
 EndGlobal
