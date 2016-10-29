@@ -133,7 +133,7 @@ namespace SciterSharp
 #if WINDOWS
 		public SciterImage(Bitmap bmp)
 		{
-			var data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+			var data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);
 			Debug.Assert(bmp.Width*4 == data.Stride);
 			var r = _gapi.imageCreateFromPixmap(out _himg, (uint) bmp.Width, (uint) bmp.Height, true, data.Scan0);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
