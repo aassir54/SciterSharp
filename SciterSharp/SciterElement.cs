@@ -62,16 +62,6 @@ namespace SciterSharp
 			return null;
 		}
 
-		public void AttachEvh(SciterEventHandler evh)
-		{
-			_api.SciterAttachEventHandler(_he, evh._proc, IntPtr.Zero);
-		}
-
-		public void DetachEvh(SciterEventHandler evh)
-		{
-			_api.SciterDetachEventHandler(_he, evh._proc, IntPtr.Zero);
-		}
-
 		#region Query HTML
 		public string Tag
 		{
@@ -564,10 +554,16 @@ namespace SciterSharp
 		#endregion
 
 		#region Events
-		public void AttachEventHandler(SciterEventHandler evh)
+		public void AttachEvh(SciterEventHandler evh)
 		{
 			Debug.Assert(evh != null);
 			var r = _api.SciterAttachEventHandler(_he, evh._proc, IntPtr.Zero);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+		}
+		public void DetachEvh(SciterEventHandler evh)
+		{
+			Debug.Assert(evh != null);
+			var r = _api.SciterDetachEventHandler(_he, evh._proc, IntPtr.Zero);
 			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
 		}
 
