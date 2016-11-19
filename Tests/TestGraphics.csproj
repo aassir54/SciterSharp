@@ -60,6 +60,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Src\DrawBitmapBehavior.cs" />
+    <Compile Include="Src\DrawGeometryBehavior.cs" />
+    <Compile Include="Src\DrawTextBehavior.cs" />
     <Compile Include="Src\Host.cs" />
     <Compile Include="Src\Program.cs" />
   </ItemGroup>

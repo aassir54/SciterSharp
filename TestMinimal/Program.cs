@@ -16,7 +16,6 @@ namespace TestMinimal
 		static void Main(string[] args)
 		{
 			// TODO: think Andrew corrected child window creation
-
 			PInvokeWindows.OleInitialize(IntPtr.Zero);
 
 			// Create the window
@@ -26,8 +25,6 @@ namespace TestMinimal
 			wnd.Icon = Properties.Resources.Icon1;
 			//wnd.EnableDwmClientArea();
 
-			SciterWindow wnd_popup = new SciterWindow();
-			wnd_popup.CreatePopupAlphaWindow(400, 400, wnd._hwnd);
 
 			//wnd.CenterTopLevelWindow();
 			//wnd.AfterWindowCreate();
@@ -50,10 +47,13 @@ namespace TestMinimal
 			se_body[0].SetStyle("color", "#00F");
 
 
+			/*SciterWindow wnd_popup = new SciterWindow();
+			wnd_popup.CreatePopupAlphaWindow(400, 400, wnd._hwnd);
+			wnd_popup.LoadHtml("<html><body><style>html { background: red; }</style></body></html>");
+			wnd_popup.Show();*/
+
 			// Show window and Run message loop
 			wnd.Show();
-			wnd_popup.LoadHtml("<html><body><style>html { background: red; }</style></body></html>");
-			wnd_popup.Show();
 			PInvokeUtils.RunMsgLoop();
 		}
 	}

@@ -126,16 +126,16 @@ namespace SciterSharp.Interop
 			uint minor = API.SciterVersion(0);
 			if(minor < 0x00010000)
 			{
-				throw new Exception("Graphics API needs at least Sciter 3.3.1.0");
+				throw new Exception("Graphics API is compatible with at least Sciter 3.3.2.13");
 			}
 
 			if(_gapi == null)
 			{
 				int api_struct_size = Marshal.SizeOf(typeof(SciterXGraphics.ISciterGraphicsAPI));
 				if(IntPtr.Size == 8)
-					Debug.Assert(api_struct_size == 464);
+					Debug.Assert(api_struct_size == 536);
 				else
-					Debug.Assert(api_struct_size == 232);
+					Debug.Assert(api_struct_size == 268);
 
 				IntPtr api_ptr = API.GetSciterGraphicsAPI();
 				_gapi = (SciterXGraphics.ISciterGraphicsAPI)Marshal.PtrToStructure(api_ptr, typeof(SciterXGraphics.ISciterGraphicsAPI));
@@ -148,7 +148,7 @@ namespace SciterSharp.Interop
 			uint minor = API.SciterVersion(0);
 			if(minor < 0x00010006)
 			{
-				throw new Exception("Request API needs at least Sciter 3.3.1.6");
+				throw new Exception("Request API is compatible with at least Sciter 3.3.1.6");
 			}
 
 			if(_rapi == null)
@@ -626,7 +626,7 @@ namespace SciterSharp.Interop
 			//SCDOM_RESULT function(HNODE hn) SciterNodeRelease;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeRelease(IntPtr hn);
 			//SCDOM_RESULT function(HELEMENT he, HNODE* phn) SciterNodeCastFromElement;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeCastFromElement(IntPtr hn, out IntPtr phn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeCastFromElement(IntPtr he, out IntPtr phn);
 			//SCDOM_RESULT function(HNODE hn, HELEMENT* he) SciterNodeCastToElement;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeCastToElement(IntPtr hn, out IntPtr he);
 			//SCDOM_RESULT function(HNODE hn, HNODE* phn) SciterNodeFirstChild;
@@ -644,7 +644,7 @@ namespace SciterSharp.Interop
 			//SCDOM_RESULT function(HNODE hnode, UINT* pn) SciterNodeChildrenCount;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeChildrenCount(IntPtr hn, out uint pn);
 			//SCDOM_RESULT function(HNODE hnode, UINT* pNodeType /*NODE_TYPE*/) SciterNodeType;
-			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeType(IntPtr hn, out uint pn);
+			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeType(IntPtr hn, out SciterXDom.NODE_TYPE pn);
 			//SCDOM_RESULT function(HNODE hnode, LPCWSTR_RECEIVER rcv, LPVOID rcv_param) SciterNodeGetText;
 			public delegate SciterXDom.SCDOM_RESULT FPTR_SciterNodeGetText(IntPtr hn, SciterXDom.FPTR_LPCWSTR_RECEIVER rcv, IntPtr rcv_param);
 			//SCDOM_RESULT function(HNODE hnode, LPCWSTR text, UINT textLength) SciterNodeSetText;

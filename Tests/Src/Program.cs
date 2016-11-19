@@ -29,6 +29,8 @@ namespace TestGraphics
 			var host = new Host();
 			host.SetupWindow(wnd);
 			host.RegisterBehaviorHandler("DrawBitmap", typeof(DrawBitmapBehavior));
+			host.RegisterBehaviorHandler("DrawText", typeof(DrawTextBehavior));
+			host.RegisterBehaviorHandler("DrawGeometry", typeof(DrawGeometryBehavior));
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
 

@@ -1,5 +1,5 @@
 ﻿// Copyright 2016 Ramon F. Mendes
-//
+// 
 // This file is part of SciterSharp.
 // 
 // SciterSharp is free software: you can redistribute it and/or modify
@@ -42,9 +42,12 @@ namespace SciterSharp
 #endif
 
 	public class SciterWindow
+#if WINDOWS
+		: System.Windows.Forms.IWin32Window
+#endif
 	{
 		protected static SciterX.ISciterAPI _api = SciterX.API;
-		public IntPtr _hwnd { get; set; }
+		public IntPtr _hwnd { get; protected set; }
 		private SciterXDef.FPTR_SciterWindowDelegate _proc;
 #if GTKMONO
 		public IntPtr _gtkwindow { get; private set; }
@@ -109,6 +112,13 @@ namespace SciterSharp
 			CreateWindow(frame, creationFlags);
 		}
 
+		/*
+		/// <summary>
+		/// Create an owned top-level Sciter window
+		/// </summary>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <param name="owner_hwnd"></param>
 		public void CreatePopupAlphaWindow(int width, int height, IntPtr owner_hwnd)
 		{
 			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
@@ -116,7 +126,7 @@ namespace SciterSharp
 			frame.bottom = height;
 			CreateWindow(frame, SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_ALPHA | SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_TOOL, owner_hwnd);
 			// Sciter BUG: window comes with WM_EX_APPWINDOW style
-		}
+		}*/
 
 #if WINDOWS
 		public void CreateChildWindow(IntPtr hwnd_parent)
@@ -248,6 +258,9 @@ namespace SciterSharp
 #endif
 		}
 
+		/// <summary>
+		/// Close the window. Posts WM_CLOSE message on Windows.
+		/// </summary>
 		public void Close()
 		{
 #if WINDOWS
@@ -259,6 +272,15 @@ namespace SciterSharp
 #endif
 		}
 
+#if WINDOWS
+		public bool IsVisible
+		{
+			get
+			{
+				return PInvokeWindows.IsWindowVisible(_hwnd);
+			}
+		}
+#endif
 
 		public IntPtr VM
 		{
@@ -335,6 +357,19 @@ namespace SciterSharp
 			if(outhe == IntPtr.Zero)
 				return null;
 			return new SciterElement(outhe);
+		}
+
+		/// <summary>
+		/// Searches this windows DOM tree for element with the given UID
+		/// </summary>
+		/// <returns>The element, or null if it doesn't exists</returns>
+		public SciterElement ElementByUID(uint uid)
+		{
+			IntPtr he;
+			_api.SciterGetElementByUID(_hwnd, uid, out he);
+			if(he != IntPtr.Zero)
+				return new SciterElement(he);
+			return null;
 		}
 
 		public uint GetMinWidth()
@@ -414,6 +449,15 @@ namespace SciterSharp
 		protected virtual bool ProcessWindowMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam, ref IntPtr lResult)// overrisable
 		{
 			return false;
+		}
+
+
+		public IntPtr Handle
+		{
+			get
+			{
+				return _hwnd;
+			}
 		}
 #endif
 	}

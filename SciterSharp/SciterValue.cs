@@ -153,22 +153,22 @@ namespace SciterSharp
 			return sv;
 		}
 
-		public bool IsUndefined() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_UNDEFINED; }
-		public bool IsBool() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_BOOL; }
-		public bool IsFloat() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_FLOAT; }
-		public bool IsString() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING; }
-		public bool IsSymbol() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL; }
-		public bool IsErrorString() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_ERROR; }
-		public bool IsDate() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_DATE; }
-		public bool IsCurrency() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_CURRENCY; }
-		public bool IsMap() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_MAP; }
-		public bool IsArray() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_ARRAY; }
-		public bool IsFunction() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_FUNCTION; }
-		public bool IsBytes() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_BYTES; }
-		public bool IsObject() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT; }
-		public bool IsDomElement() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_DOM_OBJECT; }
-		public bool IsNativeFunction() { return _api.ValueIsNativeFunctor(ref data)!=0; }
-		public bool IsNull() { return data.t == (uint) SciterXValue.VALUE_TYPE.T_NULL; }
+		public bool IsUndefined		{ get { return data.t == (uint)SciterXValue.VALUE_TYPE.T_UNDEFINED; } }
+		public bool IsBool			{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_BOOL; } }
+		public bool IsFloat			{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_FLOAT; } }
+		public bool IsString		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING; } }
+		public bool IsSymbol		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL; } }
+		public bool IsErrorString	{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_ERROR; } }
+		public bool IsDate			{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_DATE; } }
+		public bool IsCurrency		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_CURRENCY; } }
+		public bool IsMap			{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_MAP; } }
+		public bool IsArray			{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_ARRAY; } }
+		public bool IsFunction		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_FUNCTION; } }
+		public bool IsBytes			{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_BYTES; } }
+		public bool IsObject		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT; } }
+		public bool IsDomElement	{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_DOM_OBJECT; } }
+		public bool IsNativeFunction{ get { return _api.ValueIsNativeFunctor(ref data) != 0; } }
+		public bool IsNull			{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_NULL; } }
 
 		public bool Get(bool defv)
 		{
@@ -234,7 +234,7 @@ namespace SciterSharp
 
 		public string ToJSONString(SciterXValue.VALUE_STRING_CVT_TYPE how = SciterXValue.VALUE_STRING_CVT_TYPE.CVT_JSON_LITERAL)
 		{
-			if(how==SciterXValue.VALUE_STRING_CVT_TYPE.CVT_SIMPLE && IsString())
+			if(how==SciterXValue.VALUE_STRING_CVT_TYPE.CVT_SIMPLE && IsString)
 				return Get("");
 
 			SciterValue outdata = new SciterValue(this);
@@ -350,17 +350,17 @@ namespace SciterSharp
 		}
 		
 
-		public bool IsObjectNative()	{ return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_NATIVE; }
-		public bool IsObjectArray()		{ return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_ARRAY; }
-		public bool IsObjectFunction()	{ return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_FUNCTION; }
-		public bool IsObjectObject()	{ return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_OBJECT; }
-		public bool IsObjectClass()		{ return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_CLASS; }
-		public bool IsObjectError()		{ return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_ERROR; }
-		
+		public bool IsObjectNative		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_NATIVE; } }
+		public bool IsObjectArray		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_ARRAY; } }
+		public bool IsObjectFunction	{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_FUNCTION; } }
+		public bool IsObjectObject		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_OBJECT; } }
+		public bool IsObjectClass		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_CLASS; } }
+		public bool IsObjectError		{ get { return data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_ERROR; } }
+
 
 		public SciterValue Call(IList<SciterValue> args, SciterValue self = null, string url_or_script_name = null)
 		{
-			Debug.Assert(IsFunction() || IsObjectFunction());
+			Debug.Assert(IsFunction || IsObjectFunction);
 
 			SciterValue rv = new SciterValue();
 			SciterXValue.VALUE[] arr_VALUE = args.Select(sv => sv.data).ToArray();
@@ -384,7 +384,7 @@ namespace SciterSharp
 
 		public IEnumerable<SciterValue> AsEnumerable()
 		{
-			if(!IsArray() && !IsObject())
+			if(!IsArray && !IsObject)
 				throw new ArgumentException("This SciterValue is not an array or object");
 			for(int i = 0; i < Length; i++)
 			{
@@ -394,7 +394,7 @@ namespace SciterSharp
 
 		public IDictionary<SciterValue, SciterValue> AsDictionary()
 		{
-			if(!IsObject())
+			if(!IsObject)
 				throw new ArgumentException("This SciterValue is not an object");
 
 			Dictionary<SciterValue, SciterValue> dic = new Dictionary<SciterValue, SciterValue>();
