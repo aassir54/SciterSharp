@@ -58,7 +58,7 @@ namespace SciterSharp
 		/// <param name="evh"></param>
 		public void AttachEvh(SciterEventHandler evh)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
 			Debug.Assert(evh != null);
 			Debug.Assert(_window_evh == null, "You can attach only a single SciterEventHandler per SciterHost/window");
 
@@ -68,7 +68,7 @@ namespace SciterSharp
 
 		public SciterValue CallFunction(string name, params SciterValue[] args)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
 			Debug.Assert(name != null);
 
 			SciterXValue.VALUE vret = new SciterXValue.VALUE();
@@ -78,7 +78,7 @@ namespace SciterSharp
 
 		public SciterValue EvalScript(string script)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
 			Debug.Assert(script != null);
 
 			SciterXValue.VALUE vret = new SciterXValue.VALUE();
@@ -92,7 +92,7 @@ namespace SciterSharp
 		/// <param name="what">The delegate which will be invoked</param>
 		public void InvokePost(Action what)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
 			Debug.Assert(what != null);
 
 			GCHandle handle = GCHandle.Alloc(what);
@@ -105,7 +105,7 @@ namespace SciterSharp
 		/// <param name="what">The delegate which will be invoked</param>
 		public void InvokeSend(Action what, uint timeout = 3000)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
 			Debug.Assert(what != null);
 			Debug.Assert(timeout > 0);
 
@@ -198,7 +198,7 @@ namespace SciterSharp
 			{
 				if(_root == null)
 				{
-					Debug.Assert(_hwnd != IntPtr.Zero, "Call SetupCallback() first");
+					Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
 					IntPtr heRoot;
 					_api.SciterGetRootElement(_hwnd, out heRoot);
 					Debug.Assert(heRoot != IntPtr.Zero);
@@ -252,7 +252,10 @@ namespace SciterSharp
 				case SciterXDef.SC_DATA_LOADED:
 					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
 					OnDataLoaded(sdl);
+
+#if WINDOWS
 					SciterStatus.OnData(sdl);
+#endif
 					return 0;
 					
 				case SciterXDef.SC_ATTACH_BEHAVIOR:

@@ -47,18 +47,23 @@ namespace SciterSharp
 		public readonly IntPtr _hgfx;
 
 		private SciterGraphics() { }
-		//~SciterGraphics() { _gapi.gRelease(_hgfx); }
 
 		public SciterGraphics(IntPtr hgfx)
 		{
+			Debug.Assert(hgfx != IntPtr.Zero);
+			// TODO: C++ sciter::graphics does a gAddRef() here
 			_hgfx = hgfx;
+			_gapi.gAddRef(hgfx);
 		}
-		
+
+		/*
+		DON'T KNOW IF IT WORKS AND IF YOU MUST CALL gAddRef()
+		SO NOT SAFE
 		public SciterGraphics(SciterImage img)
 		{
 			var r = _gapi.gCreate(img._himg, out _hgfx);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
-		}
+		}*/
 
 		public void BlendImage(SciterImage img, float x, float y)
 		{
@@ -67,6 +72,134 @@ namespace SciterSharp
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 		}
 
+		#region Draw Geometries
+		public void Rectangle(float x1, float y1, float x2, float y2)
+		{
+			var r = _gapi.gRectangle(_hgfx, x1, y1, x2, y2);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void Line(float x1, float y1, float x2, float y2)
+		{
+			var r = _gapi.gLine(_hgfx, x1, y1, x2, y2);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void Polygon(IList<Tuple<float, float>> points_xy)
+		{
+			List<float> points = new List<float>();
+			foreach(var item in points_xy)
+			{
+				points.Add(item.Item1);
+				points.Add(item.Item2);
+			}
+			var r = _gapi.gPolygon(_hgfx, points.ToArray(), (uint)points_xy.Count);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void Polyline(IList<Tuple<float, float>> points_xy)
+		{
+			List<float> points = new List<float>();
+			foreach(var item in points_xy)
+			{
+				points.Add(item.Item1);
+				points.Add(item.Item2);
+			}
+			var r = _gapi.gPolyline(_hgfx, points.ToArray(), (uint)points_xy.Count);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void Ellipse(float x, float y, float rx, float ry)
+		{
+			var r = _gapi.gEllipse(_hgfx, x, y, rx, ry);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+		#endregion
+
+		#region Drawing attributes
+		public float LineWidth
+		{
+			set
+			{
+				var r = _gapi.gLineWidth(_hgfx, value);
+				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			}
+		}
+
+		public SciterXGraphics.SCITER_LINE_JOIN_TYPE LineJoin
+		{
+			set
+			{
+				var r = _gapi.gLineJoin(_hgfx, value);
+				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			}
+		}
+
+		public SciterXGraphics.SCITER_LINE_CAP_TYPE LineCap
+		{
+			set
+			{
+				var r = _gapi.gLineCap(_hgfx, value);
+				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			}
+		}
+
+#if WINDOWS
+		public Color LineColor
+		{
+			set
+			{
+				var r = _gapi.gLineColor(_hgfx, ToRGBA(value));
+				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			}
+		}
+
+		public Color FillColor
+		{
+			set
+			{
+				var r = _gapi.gFillColor(_hgfx, ToRGBA(value));
+				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			}
+		}
+#endif
+		#endregion
+
+		#region Affine tranformations
+		public void Rotate(float radians, float cx, float cy)
+		{
+			var r = _gapi.gRotate(_hgfx, radians, ref cx, ref cy);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void Translate(float cx, float cy)
+		{
+			var r = _gapi.gTranslate(_hgfx, cx, cy);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void Scale(float x, float y)
+		{
+			var r = _gapi.gScale(_hgfx, x, y);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void Skew(float dx, float dy)
+		{
+			var r = _gapi.gSkew(_hgfx, dx, dy);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+		#endregion
+
+		#region Text
+		public void DrawText(SciterText text, float px, float py, uint position)
+		{
+			var r = _gapi.gDrawText(_hgfx, text._htext, px, py, position);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+		#endregion
+
+		#region Clipping
 		public void PushClipBox(float x1, float y1, float x2, float y2, float opacity = 1)
 		{
 			var r = _gapi.gPushClipBox(_hgfx, x1, y1, x2, y2, opacity);
@@ -84,30 +217,72 @@ namespace SciterSharp
 			var r = _gapi.gPopClip(_hgfx);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 		}
+		#endregion
 
-		public void Translate(float cx, float cy)
+		#region State save/restore
+		public void StateSave()
 		{
-			var r = _gapi.gTranslate(_hgfx, cx, cy);
+			var r = _gapi.gStateSave(_hgfx);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 		}
 
+		public void StateRestore()
+		{
+			var r = _gapi.gStateRestore(_hgfx);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+		#endregion
+
+		#region IDisposable Support
+		private bool disposedValue = false;
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if(!disposedValue)
+			{
+				_gapi.gRelease(_hgfx);
+
+				disposedValue = true;
+			}
+		}
+
+		~SciterGraphics()
+		{
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(false);
+		}
+
+		// This code added to correctly implement the disposable pattern.
 		public void Dispose()
 		{
-			_gapi.gRelease(_hgfx);
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(true);
+			// TODO: uncomment the following line if the finalizer is overridden above.
+			// GC.SuppressFinalize(this);
 		}
+		#endregion
+
+#if WINDOWS
+		private static uint ToRGBA(Color clr)
+		{
+			return _gapi.RGBA(clr.R, clr.G, clr.B, clr.A);
+		}
+#endif
 	}
 
 	public class SciterImage : IDisposable
 	{
 		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
-		public readonly IntPtr _himg;
+		public IntPtr _himg { get; private set; }
 
-		private SciterImage() { }
+		private SciterImage() { }// non-user usable
 
 		public SciterImage(uint width, uint height, bool withAlpha)
 		{
-			var r = _gapi.imageCreate(out _himg, width, height, withAlpha);
+			IntPtr himg;
+			var r = _gapi.imageCreate(out himg, width, height, withAlpha);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			_himg = himg;
 		}
 
 		/// <summary>
@@ -115,8 +290,10 @@ namespace SciterSharp
 		/// </summary>
 		public SciterImage(byte[] data)
 		{
-			var r = _gapi.imageLoad(data, (uint) data.Length, out _himg);
+			IntPtr himg;
+			var r = _gapi.imageLoad(data, (uint) data.Length, out himg);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			_himg = himg;
 		}
 
 		/// <summary>
@@ -126,8 +303,10 @@ namespace SciterSharp
 		/// </summary>
 		public SciterImage(IntPtr data, uint width, uint height, bool withAlpha)
 		{
-			var r = _gapi.imageCreateFromPixmap(out _himg, width, height, withAlpha, data);
+			IntPtr himg;
+			var r = _gapi.imageCreateFromPixmap(out himg, width, height, withAlpha, data);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			_himg = himg;
 		}
 
 #if WINDOWS
@@ -135,8 +314,12 @@ namespace SciterSharp
 		{
 			var data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppPArgb);
 			Debug.Assert(bmp.Width*4 == data.Stride);
-			var r = _gapi.imageCreateFromPixmap(out _himg, (uint) bmp.Width, (uint) bmp.Height, true, data.Scan0);
+
+			IntPtr himg;
+			var r = _gapi.imageCreateFromPixmap(out himg, (uint) bmp.Width, (uint) bmp.Height, true, data.Scan0);
 			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			_himg = himg;
+
 			bmp.UnlockBits(data);
 		}
 #endif
@@ -161,13 +344,16 @@ namespace SciterSharp
 			return ret;
 		}
 
-		public PInvokeUtils.SIZE Dimensions()
+		public PInvokeUtils.SIZE Dimension
 		{
-			uint width, height;
-			bool usesAlpha;
-			var r = _gapi.imageGetInfo(_himg, out width, out height, out usesAlpha);
-			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
-			return new PInvokeUtils.SIZE() { cx = (int) width, cy = (int) height };
+			get
+			{
+				uint width, height;
+				bool usesAlpha;
+				var r = _gapi.imageGetInfo(_himg, out width, out height, out usesAlpha);
+				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+				return new PInvokeUtils.SIZE() { cx = (int)width, cy = (int)height };
+			}
 		}
 
 		public void Clear(RGBAColor clr)
@@ -208,6 +394,66 @@ namespace SciterSharp
 
 	public class SciterPath
 	{
-		public readonly IntPtr _hpath;
+		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
+		public IntPtr _hpath { get; private set; }
+	}
+
+	public class SciterText
+	{
+		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
+		public IntPtr _htext { get; private set; }
+
+		private SciterText() { }// non-user usable
+
+		public static SciterText Create(string text, SciterXGraphics.SCITER_TEXT_FORMAT format)
+		{
+			IntPtr htext;
+			var r = _gapi.textCreate(out htext, text, (uint) text.Length, ref format);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			Debug.Assert(htext != IntPtr.Zero);
+
+			SciterText st = new SciterText();
+			st._htext = htext;
+			return st;
+		}
+
+		public static SciterText CreateForElement(string text, SciterElement element)
+		{
+			IntPtr htext;
+			var r = _gapi.textCreateForElement(out htext, text, (uint)text.Length, element._he);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			Debug.Assert(htext != IntPtr.Zero);
+
+			SciterText st = new SciterText();
+			st._htext = htext;
+			return st;
+		}
+
+		public class TextMetrics
+		{
+			public float minWidth;
+			public float maxWidth;
+			public float height;
+			public float ascent;
+			public float descent;
+			public uint nLines;
+		}
+
+		public TextMetrics Metrics
+		{
+			get
+			{
+				var m = new TextMetrics();
+				var r = _gapi.textGetMetrics(_htext, out m.minWidth, out m.maxWidth, out m.height, out m.ascent, out m.descent, out m.nLines);
+				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+				return m;
+			}
+		}
+
+		public void SetBox(float width, float height)
+		{
+			var r = _gapi.textSetBox(_htext, width, height);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
 	}
 }

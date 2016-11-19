@@ -84,16 +84,16 @@ namespace SciterSharp.Interop
 		public struct SCITER_TEXT_FORMAT
 		{
 			[MarshalAs(UnmanagedType.LPWStr)]
-			string                fontFamily;
-			uint                  fontWeight; // 100...900, 400 - normal, 700 - bold
-			bool                  fontItalic;
-			float                 fontSize;   // dips
-			float                 lineHeight; // dips
-			SCITER_TEXT_DIRECTION textDirection;
-			SCITER_TEXT_ALIGNMENT textAlignment; // horizontal alignment
-			SCITER_TEXT_ALIGNMENT lineAlignment; // a.k.a. vertical alignment for roman writing systems
+			public string fontFamily;
+			public uint fontWeight; // 100...900, 400 - normal, 700 - bold
+			public bool fontItalic;
+			public float fontSize;   // dips
+			public float lineHeight; // dips
+			public SCITER_TEXT_DIRECTION textDirection;
+			public SCITER_TEXT_ALIGNMENT textAlignment; // horizontal alignment
+			public SCITER_TEXT_ALIGNMENT lineAlignment; // a.k.a. vertical alignment for roman writing systems
 			[MarshalAs(UnmanagedType.LPWStr)]
-			string                localeName;
+			public string localeName;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -169,6 +169,17 @@ namespace SciterSharp.Interop
 			public FPTR_gPushClipPath			gPushClipPath;
 			public FPTR_gPopClip				gPopClip;
 
+			public FPTR_imagePaint				imagePaint;
+
+			public FPTR_vWrapGfx				vWrapGfx;
+			public FPTR_vWrapImage				vWrapImage;
+			public FPTR_vWrapPath				vWrapPath;
+			public FPTR_vWrapText				vWrapText;
+			public FPTR_vUnWrapGfx				vUnWrapGfx;
+			public FPTR_vUnWrapImage			vUnWrapImage;
+			public FPTR_vUnWrapPath				vUnWrapPath;
+			public FPTR_vUnWrapText				vUnWrapText;
+
 
 			#region SECTION: image primitives
 
@@ -204,6 +215,8 @@ namespace SciterSharp.Interop
 				UINT quality // png: 0, jpeg:, 10 - 100 );
 			*/
 			public delegate bool image_write_function(IntPtr prm, IntPtr data, uint data_length);
+
+			public delegate bool image_paint_function(IntPtr prm, IntPtr hgfx, uint width, uint height);
 
 			public delegate GRAPHIN_RESULT FPTR_imageSave(IntPtr himg, image_write_function pfn, IntPtr prm, uint bpp, uint quality);
 
@@ -248,11 +261,11 @@ namespace SciterSharp.Interop
 
 			// Closed polygon.
 			// GRAPHIN_RESULT SCFN(gPolygon) ( HGFX hgfx, const POS* xy, UINT num_points );
-			public delegate GRAPHIN_RESULT FPTR_gPolygon(IntPtr hgfx, ref float xy, uint num_points);
+			public delegate GRAPHIN_RESULT FPTR_gPolygon(IntPtr hgfx, float[] xy, uint num_points);
 
 			// Polyline.
 			// GRAPHIN_RESULT SCFN(gPolyline) ( HGFX hgfx, const POS* xy, UINT num_points );
-			public delegate GRAPHIN_RESULT FPTR_gPolyline(IntPtr hgfx);
+			public delegate GRAPHIN_RESULT FPTR_gPolyline(IntPtr hgfx, float[] xy, uint num_points);
 			#endregion
 
 			#region SECTION: Path operations
@@ -289,7 +302,7 @@ namespace SciterSharp.Interop
 
 			#endregion
 
-			#region SECTION: affine tranformations:
+			#region SECTION: affine tranformations
 
 			// GRAPHIN_RESULT SCFN(gRotate) ( HGFX hgfx, ANGLE radians, POS* cx /*= 0*/, POS* cy /*= 0*/ );
 			public delegate GRAPHIN_RESULT FPTR_gRotate(IntPtr hgfx, float radians, ref float cx, ref float cy);
@@ -336,11 +349,11 @@ namespace SciterSharp.Interop
 
 			// COLOR for solid lines/strokes
 			// GRAPHIN_RESULT SCFN(gLineColor) ( HGFX hgfx, COLOR color);
-			public delegate GRAPHIN_RESULT FPTR_gLineColor(IntPtr gfx, float color);
+			public delegate GRAPHIN_RESULT FPTR_gLineColor(IntPtr gfx, uint color);
 
 			// COLOR for solid fills
 			// GRAPHIN_RESULT SCFN(gFillColor) ( HGFX hgfx, COLOR color );
-			public delegate GRAPHIN_RESULT FPTR_gFillColor(IntPtr gfx, float color);
+			public delegate GRAPHIN_RESULT FPTR_gFillColor(IntPtr gfx, uint color);
 
 			//inline void
 			//      graphics_no_fill ( HGFX hgfx ) { graphics_fill_color(hgfx, graphics_rgbt(0,0,0,0xFF)); }
@@ -374,13 +387,13 @@ namespace SciterSharp.Interop
 
 			// create text layout using explicit format declaration
 			// GRAPHIN_RESULT SCFN(textCreate)(HTEXT* ptext, LPCWSTR text, UINT textLength, const SCITER_TEXT_FORMAT* format );
-			public delegate GRAPHIN_RESULT FPTR_textCreate(out IntPtr ptext, [MarshalAs(UnmanagedType.LPWStr)]string text, uint textLength, ref SCITER_TEXT_FORMAT format);
+			public delegate GRAPHIN_RESULT FPTR_textCreate(out IntPtr htext, [MarshalAs(UnmanagedType.LPWStr)]string text, uint textLength, ref SCITER_TEXT_FORMAT format);
 
 			// GRAPHIN_RESULT SCFN(textGetMetrics)(HTEXT text, DIM* minWidth, DIM* maxWidth, DIM* height, DIM* ascent, DIM* descent, UINT* nLines);
-			public delegate GRAPHIN_RESULT FPTR_textGetMetrics(IntPtr text, out float minWidth, out float maxWidth, out float height, out float ascent, out float descent, out uint nLines);
+			public delegate GRAPHIN_RESULT FPTR_textGetMetrics(IntPtr htext, out float minWidth, out float maxWidth, out float height, out float ascent, out float descent, out uint nLines);
 
 			// GRAPHIN_RESULT SCFN(textSetBox)(HTEXT text, DIM width, DIM height);
-			public delegate GRAPHIN_RESULT FPTR_textSetBox(IntPtr gfx, float width, float height);
+			public delegate GRAPHIN_RESULT FPTR_textSetBox(IntPtr htext, float width, float height);
 
 			// draw text with position (1..9 on MUMPAD) at px,py
 			// Ex: gDrawText( 100,100,5) will draw text box with its center at 100,100 px
@@ -441,6 +454,32 @@ namespace SciterSharp.Interop
 			// pop clip layer previously set by gPushClipBox or gPushClipPath
 			// GRAPHIN_RESULT SCFN(gPopClip) ( HGFX hgfx);
 			public delegate GRAPHIN_RESULT FPTR_gPopClip(IntPtr hgfx);
+
+			#endregion
+
+			#region SECTION: image painter
+
+			public delegate GRAPHIN_RESULT FPTR_imagePaint(IntPtr himg, image_paint_function pPainter, IntPtr prm);
+
+			#endregion
+
+			#region SECTION: VALUE interface
+
+			public delegate GRAPHIN_RESULT FPTR_vWrapGfx(IntPtr hgfx, ref SciterXValue.VALUE toValue);
+
+			public delegate GRAPHIN_RESULT FPTR_vWrapImage(IntPtr himg, ref SciterXValue.VALUE toValue);
+
+			public delegate GRAPHIN_RESULT FPTR_vWrapPath(IntPtr hpath, ref SciterXValue.VALUE toValue);
+
+			public delegate GRAPHIN_RESULT FPTR_vWrapText(IntPtr htext, ref SciterXValue.VALUE toValue);
+
+			public delegate GRAPHIN_RESULT FPTR_vUnWrapGfx(ref SciterXValue.VALUE fromValue, ref IntPtr phgfx);
+
+			public delegate GRAPHIN_RESULT FPTR_vUnWrapImage(ref SciterXValue.VALUE fromValue, ref IntPtr phimg);
+
+			public delegate GRAPHIN_RESULT FPTR_vUnWrapPath(ref SciterXValue.VALUE fromValue, ref IntPtr phpath);
+
+			public delegate GRAPHIN_RESULT FPTR_vUnWrapText(ref SciterXValue.VALUE fromValue, ref IntPtr phtext);
 
 			#endregion
 		}

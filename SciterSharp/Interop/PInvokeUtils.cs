@@ -24,13 +24,13 @@ using System.Runtime.InteropServices;
 
 namespace SciterSharp.Interop
 {
-    public static class PInvokeUtils
-    {
+	public static class PInvokeUtils
+	{
 		public static void RunMsgLoop()
 		{
 #if WINDOWS
 			PInvokeWindows.MSG msg;
-			while(PInvokeWindows.GetMessage(out msg, IntPtr.Zero, 0, 0)!=0)
+			while(PInvokeWindows.GetMessage(out msg, IntPtr.Zero, 0, 0) != 0)
 			{
 				PInvokeWindows.TranslateMessage(ref msg);
 				PInvokeWindows.DispatchMessage(ref msg);
@@ -66,20 +66,20 @@ namespace SciterSharp.Interop
 
 		// PInvoke structs ===============================================================
 		[StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int left, top, right, bottom;
+		public struct RECT
+		{
+			public int left, top, right, bottom;
 
 			public int Width { get { return right - left; } }
 			public int Height { get { return bottom - top; } }
 		}
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            public int X;
-            public int Y;
-        }
+		[StructLayout(LayoutKind.Sequential)]
+		public struct POINT
+		{
+			public int X;
+			public int Y;
+		}
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SIZE
@@ -87,5 +87,5 @@ namespace SciterSharp.Interop
 			public int cx;
 			public int cy;
 		}
-    }
+	}
 }

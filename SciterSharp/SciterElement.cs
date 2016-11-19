@@ -41,6 +41,18 @@ namespace SciterSharp
 			_he = he;
 		}
 
+		public SciterElement(SciterValue sv)
+		{
+			if(!sv.IsObject)
+				throw new ArgumentException("The given SciterValue is not a TIScript Element reference");
+
+			IntPtr he = sv.GetObjectData();
+			if(he == IntPtr.Zero)
+				throw new ArgumentException("IntPtr.Zero received at SciterElement constructor");
+
+			_he = he;
+		}
+
 		public static SciterElement Create(string tagname, string text = null)
 		{
 			IntPtr he;
@@ -50,69 +62,15 @@ namespace SciterSharp
 			return null;
 		}
 
-		#region Operators and overrides
-		public static bool operator ==(SciterElement a, SciterElement b)
+		public void AttachEvh(SciterEventHandler evh)
 		{
-			if((object)a == null || (object)b == null)
-				return Object.Equals(a, b);
-			return a._he == b._he;
-		}
-		public static bool operator !=(SciterElement a, SciterElement b)
-		{
-			return !(a == b);
+			_api.SciterAttachEventHandler(_he, evh._proc, IntPtr.Zero);
 		}
 
-		public SciterElement this[uint idx]
+		public void DetachEvh(SciterEventHandler evh)
 		{
-			get
-			{
-				return GetChild(idx);
-			}
+			_api.SciterDetachEventHandler(_he, evh._proc, IntPtr.Zero);
 		}
-
-		public string this[string name]
-		{
-			get
-			{
-				return GetAttribute(name);
-			}
-			set
-			{
-				SetAttribute(name, value);
-			}
-		}
-
-		public override bool Equals(object o)
-		{
-			return Object.ReferenceEquals(this, o);
-		}
-
-		public override int GetHashCode()
-		{
-			return _he.ToInt32();
-		}
-
-		public override string ToString()
-		{
-			string tag = Tag;
-			string id = GetAttribute("id");
-			string classes = GetAttribute("class");
-			uint childcount = this.ChildrenCount;
-
-			StringBuilder str = new StringBuilder();
-			str.Append("<" + tag);
-			if(id != null)
-				str.Append(" #" + id);
-			if(classes != null)
-				str.Append(" ." + String.Join(".", classes.Split(' ')));
-			if(childcount == 0)
-				str.Append(" />");
-			else
-				str.Append(">...</" + tag + ">");
-
-			return str.ToString();
-		}
-		#endregion
 
 		#region Query HTML
 		public string Tag
@@ -174,6 +132,22 @@ namespace SciterSharp
 				if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
 					Debug.Assert(strval == null);
 				return strval;
+			}
+
+			set
+			{
+				_api.SciterSetElementText(_he, value, (uint) value.Length);
+			}
+		}
+
+		public void SetHTML(string html, SciterXDom.SET_ELEMENT_HTML where = SciterXDom.SET_ELEMENT_HTML.SIH_REPLACE_CONTENT)
+		{
+			if(html==null)
+				Clear();
+			else
+			{
+				var data = Encoding.UTF8.GetBytes(html);
+				_api.SciterSetElementHtml(_he, data, (uint) data.Length, where);
 			}
 		}
 		#endregion
@@ -276,6 +250,14 @@ namespace SciterSharp
 		#endregion
 
 		#region State
+		public SciterXDom.ELEMENT_STATE_BITS State
+		{
+			get
+			{
+				return GetState();
+			}
+		}
+
 		public SciterXDom.ELEMENT_STATE_BITS GetState()
 		{
 			uint bits;
@@ -291,13 +273,6 @@ namespace SciterSharp
 		}
 		#endregion
 
-		public IntPtr GetNativeHwnd(bool rootWindow = true)
-		{
-			IntPtr hwnd;
-			_api.SciterGetElementHwnd(_he, out hwnd, rootWindow);
-			return hwnd;
-		}
-
 		public string CombineURL(string url = "")
 		{
 			IntPtr buffer = PInvokeUtils.NativeUtf16FromString(url, 2048);
@@ -308,6 +283,13 @@ namespace SciterSharp
 		}
 
 		#region Integers
+		public IntPtr GetNativeHwnd(bool rootWindow = true)
+		{
+			IntPtr hwnd;
+			_api.SciterGetElementHwnd(_he, out hwnd, rootWindow);
+			return hwnd;
+		}
+
 		public uint UID
 		{
 			get
@@ -354,6 +336,97 @@ namespace SciterSharp
 			_api.SciterCloneElement(_he, out clone_he);
 			return new SciterElement(clone_he);
 		}
+
+		public SciterNode ToNode()
+		{
+			IntPtr hn;
+			_api.SciterNodeCastFromElement(_he, out hn);
+			return new SciterNode(hn);
+		}
+
+		public bool Enabled // deeply enabled
+		{
+			get
+			{
+				bool b;
+				_api.SciterIsElementEnabled(_he, out b);
+				return b;
+			}
+		}
+
+		public bool Visible // deeply visible
+		{
+			get
+			{
+				bool b;
+				_api.SciterIsElementVisible(_he, out b);
+				return b;
+			}
+		}
+
+		#region Operators and overrides
+		public static bool operator ==(SciterElement a, SciterElement b)
+		{
+			if((object)a == null || (object)b == null)
+				return Object.Equals(a, b);
+			return a._he == b._he;
+		}
+		public static bool operator !=(SciterElement a, SciterElement b)
+		{
+			return !(a == b);
+		}
+
+		public SciterElement this[uint idx]
+		{
+			get
+			{
+				return GetChild(idx);
+			}
+		}
+
+		public string this[string name]
+		{
+			get
+			{
+				return GetAttribute(name);
+			}
+			set
+			{
+				SetAttribute(name, value);
+			}
+		}
+
+		public override bool Equals(object o)
+		{
+			return Object.ReferenceEquals(this, o);
+		}
+
+		public override int GetHashCode()
+		{
+			return _he.ToInt32();
+		}
+
+		public override string ToString()
+		{
+			string tag = Tag;
+			string id = GetAttribute("id");
+			string classes = GetAttribute("class");
+			uint childcount = this.ChildrenCount;
+
+			StringBuilder str = new StringBuilder();
+			str.Append("<" + tag);
+			if(id != null)
+				str.Append(" #" + id);
+			if(classes != null)
+				str.Append(" ." + String.Join(".", classes.Split(' ')));
+			if(childcount == 0)
+				str.Append(" />");
+			else
+				str.Append(">...</" + tag + ">");
+
+			return str.ToString();
+		}
+		#endregion
 
 		#region DOM navigation
 		public SciterElement GetChild(uint idx)
@@ -491,6 +564,13 @@ namespace SciterSharp
 		#endregion
 
 		#region Events
+		public void AttachEventHandler(SciterEventHandler evh)
+		{
+			Debug.Assert(evh != null);
+			var r = _api.SciterAttachEventHandler(_he, evh._proc, IntPtr.Zero);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+		}
+
 		public bool SendEvent(uint event_code, uint reason = 0, SciterElement heSource = null)
 		{
 			bool handled;
@@ -518,6 +598,16 @@ namespace SciterSharp
 			_api.SciterGetElementLocation(_he, out rc, area);
 			return rc;
 		}
+
+		public PInvokeUtils.SIZE SizePadding
+		{
+			get
+			{
+				PInvokeUtils.RECT rc;
+				_api.SciterGetElementLocation(_he, out rc, SciterXDom.ELEMENT_AREAS.ROOT_RELATIVE | SciterXDom.ELEMENT_AREAS.PADDING_BOX);
+				return new PInvokeUtils.SIZE() { cx = rc.Width, cy = rc.Height };
+			}
+		}
 		#endregion
 
 		/// <summary>
@@ -528,26 +618,6 @@ namespace SciterSharp
 			IntPtr heFound;
 			_api.SciterSelectParent(_he, selector, 1, out heFound);
 			return heFound != IntPtr.Zero;
-		}
-
-		public bool Enabled // deeply enabled
-		{
-			get
-			{
-				bool b;
-				_api.SciterIsElementEnabled(_he, out b);
-				return b;
-			}
-		}
-
-		public bool Visible // deeply visible
-		{
-			get
-			{
-				bool b;
-				_api.SciterIsElementVisible(_he, out b);
-				return b;
-			}
 		}
 
 		public void Update(bool andForceRender = false)
@@ -572,6 +642,12 @@ namespace SciterSharp
 				SciterXValue.VALUE val;
 				_api.SciterGetValue(_he, out val);
 				return new SciterValue(val);
+			}
+
+			set
+			{
+				var val = value.ToVALUE();
+				_api.SciterSetValue(_he, ref val);
 			}
 		}
 
@@ -687,5 +763,90 @@ namespace SciterSharp
 				return new SciterNode(hn);
 			return null;
 		}
+
+		public uint ChildrenCount
+		{
+			get
+			{
+				uint n;
+				_api.SciterNodeChildrenCount(_hn, out n);
+				return n;
+			}
+		}
+
+		public SciterElement ToElement()
+		{
+			IntPtr he;
+			var r = _api.SciterNodeCastToElement(_hn, out he);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+			return new SciterElement(he);
+		}
+
+		public bool IsText
+		{
+			get
+			{
+				SciterXDom.NODE_TYPE nodeType;
+				var r = _api.SciterNodeType(_hn, out nodeType);
+				Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+				return nodeType == SciterXDom.NODE_TYPE.NT_TEXT;
+			}
+		}
+		public bool IsComment
+		{
+			get
+			{
+				SciterXDom.NODE_TYPE nodeType;
+				var r = _api.SciterNodeType(_hn, out nodeType);
+				Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+				return nodeType == SciterXDom.NODE_TYPE.NT_COMMENT;
+			}
+		}
+		public bool IsElement
+		{
+			get
+			{
+				SciterXDom.NODE_TYPE nodeType;
+				var r = _api.SciterNodeType(_hn, out nodeType);
+				Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+				return nodeType == SciterXDom.NODE_TYPE.NT_ELEMENT;
+			}
+		}
+
+		public SciterNode this[uint idx]
+		{
+			get
+			{
+				return GetChild(idx);
+			}
+		}
+
+		public string Text
+		{
+			get
+			{
+				string strval = null;
+				SciterXDom.FPTR_LPCWSTR_RECEIVER frcv = (IntPtr str, uint str_length, IntPtr param) =>
+				{
+					strval = Marshal.PtrToStringUni(str, (int)str_length);
+				};
+
+				var r = _api.SciterNodeGetText(_hn, frcv, IntPtr.Zero);
+				if(r == SciterXDom.SCDOM_RESULT.SCDOM_OK_NOT_HANDLED)
+					Debug.Assert(strval == null);
+				return strval;
+			}
+		}
+
+		#region DOM navigation
+		public SciterNode GetChild(uint idx)
+		{
+			IntPtr child_hn;
+			_api.SciterNodeNthChild(_hn, idx, out child_hn);
+			if(child_hn == IntPtr.Zero)
+				return null;
+			return new SciterNode(child_hn);
+		}
+		#endregion
 	}
 }

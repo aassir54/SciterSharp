@@ -123,16 +123,16 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct MOUSE_PARAMS
 		{
-			public uint        cmd;// UINT
-			public IntPtr      target;// HELEMENT
-			public PInvokeUtils.POINT  pos;// POINT
-			public PInvokeUtils.POINT  pos_view;// POINT
-			public uint        button_state;// UINT
-			public uint        alt_state;// UINT
-			public uint        cursor_type;// UINT
-			public bool        is_on_icon;// BOOL
-			public IntPtr      dragging;// HELEMENT
-			public uint        dragging_mode;// UINT
+			public MOUSE_EVENTS			cmd;// MOUSE_EVENTS
+			public IntPtr				target;// HELEMENT
+			public PInvokeUtils.POINT	pos;// POINT
+			public PInvokeUtils.POINT	pos_view;// POINT
+			public uint				button_state;// UINT
+			public KEYBOARD_STATES	alt_state;// UINT
+			public uint				cursor_type;// UINT
+			public bool				is_on_icon;// BOOL
+			public IntPtr			dragging;// HELEMENT
+			public uint				dragging_mode;// UINT
 		}
 
 		public enum CURSOR_TYPE : uint
@@ -165,10 +165,10 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct KEY_PARAMS
 		{
-			public uint    cmd;
-			public IntPtr  target;// HELEMENT
-			public uint    key_code;
-			public uint    alt_state;
+			public KEY_EVENTS	cmd;
+			public IntPtr		target;// HELEMENT
+			public uint			key_code;
+			public KEYBOARD_STATES alt_state;
 		}
 	    
 		public enum FOCUS_EVENTS : uint
@@ -182,10 +182,10 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct FOCUS_PARAMS
 		{
-			public uint		cmd;
-			public IntPtr	target;// HELEMENT
-			public bool		by_mouse_click;
-			public bool		cancel;
+			public FOCUS_EVENTS	cmd;
+			public IntPtr		target;// HELEMENT
+			public bool			by_mouse_click;
+			public bool			cancel;
 		}
 	
 		public enum SCROLL_EVENTS : uint
@@ -205,10 +205,10 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SCROLL_PARAMS
 		{
-			public uint	cmd;
-			public IntPtr	target;// HELEMENT
-			public int		pos;
-			public bool	vertical;
+			public SCROLL_EVENTS	cmd;
+			public IntPtr			target;// HELEMENT
+			public int				pos;
+			public bool				vertical;
 		}
 
 		public enum GESTURE_CMD : uint
@@ -244,14 +244,17 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct GESTURE_PARAMS
 		{
-			public uint		cmd;
+			public GESTURE_CMD	cmd;
 			public IntPtr		target;
 			public PInvokeUtils.POINT	pos;
 			public PInvokeUtils.POINT	pos_view;
-			public uint		flags;
-			public uint		delta_time;
+			/// <summary>
+			/// GESTURE_TYPE_FLAGS or GESTURE_STATE combination
+			/// </summary>
+			public uint					flags;
+			public uint					delta_time;
 			public PInvokeUtils.SIZE	delta_xy;
-			public double		delta_v;
+			public double				delta_v;
 		}
 
 		public enum DRAW_EVENTS : uint
@@ -266,7 +269,7 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct DRAW_PARAMS
 		{
-			public DRAW_EVENTS			cmd;	// DRAW_EVENTS
+			public DRAW_EVENTS			cmd;
 			public IntPtr				gfx;	// HGFX - hdc to paint on
 			public PInvokeUtils.RECT	area;	// element area, to get invalid area to paint use GetClipBox,
 			public uint					reserved;	// for DRAW_BACKGROUND/DRAW_FOREGROUND - it is a border box
@@ -418,7 +421,7 @@ namespace SciterSharp.Interop
 		[StructLayout(LayoutKind.Sequential)]
 		public struct BEHAVIOR_EVENT_PARAMS
 		{
-			public uint	cmd;
+			public BEHAVIOR_EVENTS cmd;
 			public IntPtr	heTarget;// HELEMENT
 			public IntPtr	he;// HELEMENT
 			public IntPtr	reason;// UINT_PTR
