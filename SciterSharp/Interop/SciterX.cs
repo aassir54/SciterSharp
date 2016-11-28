@@ -51,24 +51,34 @@ namespace SciterSharp.Interop
 			}
 		}
 
+		public static bool UseSkiaDll
+		{
+			get; set;
+		}
+
 		private static ISciterAPI? _api = null;
 		private static SciterXGraphics.ISciterGraphicsAPI? _gapi = null;
 		private static SciterXRequest.ISciterRequestAPI? _rapi = null;
 
-		#if WINDOWS
+#if WINDOWS
 		[DllImport("sciter32", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI32();
 		[DllImport("sciter64", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI64();
-		#elif GTKMONO
+
+		[DllImport("sciter32_skia", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI32_Skia();
+		[DllImport("sciter64_skia", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI64_Skia();
+#elif GTKMONO
 		[DllImport("sciter-gtk-64.so")]
 		private static extern IntPtr SciterAPI();
-		#elif OSX
+#elif OSX
 		[DllImport("sciter-osx-32", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI32();
 		[DllImport("sciter-osx-64", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI64();
-		#endif
+#endif
 
 		private static ISciterAPI LoadAPI()
 		{
@@ -81,12 +91,18 @@ namespace SciterSharp.Interop
 				if(IntPtr.Size == 8)
 				{
 					Debug.Assert(api_struct_size == 680 * 2);
-					api_ptr = SciterAPI64();
+					if(UseSkiaDll)
+						api_ptr = SciterAPI64_Skia();
+					else
+						api_ptr = SciterAPI64();
 				}
 				else
 				{
 					Debug.Assert(api_struct_size == 680);
-					api_ptr = SciterAPI32();
+					if(UseSkiaDll)
+						api_ptr = SciterAPI32_Skia();
+					else
+						api_ptr = SciterAPI32();
 				}
 			#elif GTKMONO
 				if(IntPtr.Size != 8)
@@ -113,7 +129,7 @@ namespace SciterSharp.Interop
 				// here we test the minimum Sciter version this library is compatible with
 				uint major = _api.Value.SciterVersion(1);
 				uint minor = _api.Value.SciterVersion(0);
-				Debug.Assert(major == 0x00030003);
+				Debug.Assert(major >= 0x00030003);
 				Debug.Assert(minor >= 0x00000006);
 				Debug.Assert(_api.Value.version==0);
 			}

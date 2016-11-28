@@ -78,9 +78,9 @@ namespace SciterSharp.Interop
 			[MarshalAs(UnmanagedType.LPWStr)]
 			public string uri;				// LPCWSTR - [in] Zero terminated string, fully qualified uri, for example "http://server/folder/file.ext".
 
-			public IntPtr outData;			// LPCBYTE - [in,out] pointer to loaded data to return. if data exists in the cache then this field contain pointer to it
-			public uint outDataSize;		// UINT - [in,out] loaded data size to return.
-			public uint dataType;			// UINT - [in] SciterResourceType
+			public IntPtr outData;								// LPCBYTE - [in,out] pointer to loaded data to return. if data exists in the cache then this field contain pointer to it
+			public uint outDataSize;							// UINT - [in,out] loaded data size to return.
+			public SciterXRequest.SciterResourceType dataType;	// UINT - [in] SciterResourceType
 
 			public IntPtr requestId;        // HREQUEST - [in] request handle that can be used with sciter-x-request API
 
@@ -97,13 +97,13 @@ namespace SciterSharp.Interop
 			[MarshalAs(UnmanagedType.LPWStr)]
 			public string uri;  // LPCWSTR - [in] Zero terminated string, fully qualified uri, for example "http://server/folder/file.ext".
 
-			public IntPtr data;		// LPCBYTE - [in] pointer to loaded data.
-			public uint dataSize;	// UINT - [in] loaded data size (in bytes).
-			public uint dataType;	// UINT - [in] SciterResourceType
-			public uint status;		// UINT - [in] 
-									// status = 0 (dataSize == 0) - unknown error. 
-									// status = 100..505 - http response status, Note: 200 - OK! 
-									// status > 12000 - wininet error code, see ERROR_INTERNET_*** in wininet.h
+			public IntPtr data;									// LPCBYTE - [in] pointer to loaded data.
+			public uint dataSize;								// UINT - [in] loaded data size (in bytes).
+			public SciterXRequest.SciterResourceType dataType;	// UINT - [in] SciterResourceType
+			public uint status;									// UINT - [in] 
+																// status = 0 (dataSize == 0) - unknown error. 
+																// status = 100..505 - http response status, Note: 200 - OK! 
+																// status > 12000 - wininet error code, see ERROR_INTERNET_*** in wininet.h
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -152,10 +152,12 @@ namespace SciterSharp.Interop
 
 		public enum GFX_LAYER : uint
 		{
-			GFX_LAYER_GDI      = 1,
-			GFX_LAYER_WARP     = 2,
-			GFX_LAYER_D2D      = 3,
-			GFX_LAYER_AUTO     = 0xFFFF,
+			GFX_LAYER_GDI = 1,
+			GFX_LAYER_WARP = 2,
+			GFX_LAYER_D2D = 3,
+			GFX_LAYER_SKIA = 4,
+			GFX_LAYER_SKIA_OPENGL = 5,
+			GFX_LAYER_AUTO = 0xFFFF,
 		}
 
 		public enum SCITER_RT_OPTIONS : uint

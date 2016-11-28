@@ -35,8 +35,11 @@ namespace SciterSharp
 
 		private static List<SciterEventHandler> _attached_handlers = new List<SciterEventHandler>();// we keep a copy of all attached instances to guard from GC removal
 
-		public SciterEventHandler() { _proc = EventProc; }
+		public SciterEventHandler() { _proc = EventProc; Name = this.GetType().FullName; }
+		public SciterEventHandler(string name) { Name = name; }
+		public string Name { get; set; }
 		public readonly SciterXBehaviors.FPTR_ElementEventProc _proc;// keep a copy of the delegate so it survives GC
+
 
 		// Overridables
 		protected virtual void Subscription(SciterElement se, out SciterXBehaviors.EVENT_GROUPS event_groups)

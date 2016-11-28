@@ -497,7 +497,7 @@ namespace SciterSharp
 			SciterXDom.FPTR_SciterElementCallback cbk = (IntPtr he, IntPtr param) =>
 			{
 				se = new SciterElement(he);
-				return false;
+				return true;// true stops enumeration
 			};
 			_api.SciterSelectElementsW(_he, selector, cbk, IntPtr.Zero);
 			return se;
@@ -509,7 +509,7 @@ namespace SciterSharp
 			SciterXDom.FPTR_SciterElementCallback cbk = (IntPtr he, IntPtr param) =>
 			{
 				list.Add(new SciterElement(he));
-				return true;
+				return false;// false continue enumeration
 			};
 			_api.SciterSelectElementsW(_he, selector, cbk, IntPtr.Zero);
 			return list;
@@ -824,7 +824,8 @@ namespace SciterSharp
 				string strval = null;
 				SciterXDom.FPTR_LPCWSTR_RECEIVER frcv = (IntPtr str, uint str_length, IntPtr param) =>
 				{
-					strval = Marshal.PtrToStringUni(str, (int)str_length);
+					if(str != IntPtr.Zero)
+						strval = Marshal.PtrToStringUni(str, (int)str_length);
 				};
 
 				var r = _api.SciterNodeGetText(_hn, frcv, IntPtr.Zero);

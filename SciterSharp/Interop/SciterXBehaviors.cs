@@ -127,7 +127,7 @@ namespace SciterSharp.Interop
 			public IntPtr				target;// HELEMENT
 			public PInvokeUtils.POINT	pos;// POINT
 			public PInvokeUtils.POINT	pos_view;// POINT
-			public uint				button_state;// UINT
+			public uint				button_state;// UINT ->> actually SciterXBehaviorsMOUSE_BUTTONS, but for MOUSE_EVENTS.MOUSE_WHEEL event it is the delta
 			public KEYBOARD_STATES	alt_state;// UINT
 			public uint				cursor_type;// UINT
 			public bool				is_on_icon;// BOOL
@@ -154,7 +154,7 @@ namespace SciterSharp.Interop
 			CURSOR_DRAG_MOVE,
 			CURSOR_DRAG_COPY,
 		}
-	    
+		
 		public enum KEY_EVENTS : uint
 		{
 			KEY_DOWN = 0,
@@ -170,13 +170,14 @@ namespace SciterSharp.Interop
 			public uint			key_code;
 			public KEYBOARD_STATES alt_state;
 		}
-	    
+
 		public enum FOCUS_EVENTS : uint
 		{
-			FOCUS_LOST = 0, // non-bubbling event, target is new focus element
-			FOCUS_GOT = 1,  // non-bubbling event, target is old focus element
-			FOCUS_IN = 2,   // bubbling event/notification, target is an element that got focus
-			FOCUS_OUT = 3,  // bubbling event/notification, target is an element that lost focus
+			FOCUS_IN = 0,		// container got focus on element inside it, target is an element that got focus
+			FOCUS_OUT = 1,		// container lost focus from any element inside it, target is an element that lost focus
+			FOCUS_LOST = 2,		// target element lost focus
+			FOCUS_GOT = 3,		// target element got focus
+			FOCUS_REQUEST = 4,	// bubbling event/request, gets sent on child-parent chain to accept/reject focus to be set on the child (target)
 		}
 
 		[StructLayout(LayoutKind.Sequential)]

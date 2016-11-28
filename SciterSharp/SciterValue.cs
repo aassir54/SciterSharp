@@ -76,6 +76,7 @@ namespace SciterSharp
 
 		public SciterValue(bool v)		{ _api.ValueInit(out data); _api.ValueIntDataSet(ref data, v ? 1 : 0, (uint) SciterXValue.VALUE_TYPE.T_BOOL, 0); }
 		public SciterValue(int v)		{ _api.ValueInit(out data); _api.ValueIntDataSet(ref data, v, (uint) SciterXValue.VALUE_TYPE.T_INT, 0); }
+		public SciterValue(uint v)		{ _api.ValueInit(out data); _api.ValueIntDataSet(ref data, (int) v, (uint) SciterXValue.VALUE_TYPE.T_INT, 0); }
 		public SciterValue(double v)	{ _api.ValueInit(out data); _api.ValueFloatDataSet(ref data, v, (uint) SciterXValue.VALUE_TYPE.T_FLOAT, 0); }
 		public SciterValue(string str)	{ _api.ValueInit(out data); _api.ValueStringDataSet(ref data, str, (uint) str.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_STRING); }
 		public SciterValue(byte[] bs)	{ _api.ValueInit(out data); _api.ValueBinaryDataSet(ref data, bs, (uint) bs.Length, (uint) SciterXValue.VALUE_TYPE.T_BYTES, 0); }
@@ -95,17 +96,19 @@ namespace SciterSharp
 				_api.ValueIntDataSet(ref data, (bool) ic==true ? 1 : 0, (uint) SciterXValue.VALUE_TYPE.T_BOOL, 0);
 			else if(ic is int)
 				_api.ValueIntDataSet(ref data, (int) ic, (uint) SciterXValue.VALUE_TYPE.T_INT, 0);
+			else if(ic is uint)
+				_api.ValueIntDataSet(ref data, (int)(uint) ic, (uint)SciterXValue.VALUE_TYPE.T_INT, 0);
 			else if(ic is double)
 				_api.ValueFloatDataSet(ref data, (double) ic, (uint) SciterXValue.VALUE_TYPE.T_FLOAT, 0);
 			else if(ic is string)
 				_api.ValueStringDataSet(ref data, (string) ic, (uint) ((string) ic).Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_STRING);
 			else
-				throw new InvalidOperationException();
+				throw new Exception("Can not create a SciterValue from type '" + ic.GetType() + "'");
 		}
 
 		public static SciterValue FromList<T>(IList<T> list) where T : /*struct,*/ IConvertible
 		{
-            Debug.Assert(list != null);
+			Debug.Assert(list != null);
 
 			SciterValue sv = new SciterValue();
 			for(int i = 0; i < list.Count; i++)
@@ -114,7 +117,7 @@ namespace SciterSharp
 		}
 		public static SciterValue FromDictionary<T>(IDictionary<string, T> dic) where T : /*struct,*/ IConvertible
 		{
-            Debug.Assert(dic != null);
+			Debug.Assert(dic != null);
 
 			SciterValue sv = new SciterValue();
 			foreach(var item in dic)
@@ -123,10 +126,10 @@ namespace SciterSharp
 		}
 		public static SciterValue FromDictionary(IDictionary<string, SciterValue> dic)
 		{
-            Debug.Assert(dic != null);
+			Debug.Assert(dic != null);
 
 			SciterValue sv = new SciterValue();
-            foreach(var item in dic)
+			foreach(var item in dic)
 				sv.SetItem(new SciterValue(item.Key), new SciterValue(item.Value));
 			return sv;
 		}

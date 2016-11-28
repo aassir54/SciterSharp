@@ -112,6 +112,14 @@ namespace SciterSharp
 			CreateWindow(frame, creationFlags);
 		}
 
+		public void CreateOwnedWindow(IntPtr owner, int width, int height, SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags)
+		{
+			PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
+			frame.right = width;
+			frame.bottom = height;
+			CreateWindow(frame, creationFlags, owner);
+		}
+
 		/*
 		/// <summary>
 		/// Create an owned top-level Sciter window

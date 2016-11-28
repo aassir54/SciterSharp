@@ -183,7 +183,7 @@ namespace SciterSharp
 		// Behavior factory
 		public void RegisterBehaviorHandler(string behaviorName, Type eventHandlerType)
 		{
-			if(!typeof(SciterEventHandler).IsAssignableFrom(eventHandlerType))
+			if(!typeof(SciterEventHandler).IsAssignableFrom(eventHandlerType) || typeof(SciterEventHandler) == eventHandlerType)
 				throw new Exception("The 'eventHandlerType' type must extend SciterEventHandler");
 			_behaviorMap[behaviorName] = eventHandlerType;
 		}
@@ -230,6 +230,7 @@ namespace SciterSharp
 			if(_behaviorMap.ContainsKey(behaviorName))
 			{
 				elementEvh = (SciterEventHandler)Activator.CreateInstance(_behaviorMap[behaviorName]);
+				elementEvh.Name = "Create by registered native behavior factory: " + behaviorName;
 				return true;
 			}
 			elementEvh = null;
