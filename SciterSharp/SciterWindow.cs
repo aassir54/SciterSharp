@@ -348,7 +348,9 @@ namespace SciterSharp
 			{
 				Debug.Assert(_hwnd != IntPtr.Zero);
 				IntPtr he;
-				_api.SciterGetRootElement(_hwnd, out he);
+				var r = _api.SciterGetRootElement(_hwnd, out he);
+				Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+
 				return new SciterElement(he);
 			}
 		}
@@ -360,7 +362,8 @@ namespace SciterSharp
 		{
 			PInvokeUtils.POINT pt = new PInvokeUtils.POINT() { X = x, Y = y };
 			IntPtr outhe;
-			_api.SciterFindElement(_hwnd, pt, out outhe);
+			var r = _api.SciterFindElement(_hwnd, pt, out outhe);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
 
 			if(outhe == IntPtr.Zero)
 				return null;
@@ -374,7 +377,9 @@ namespace SciterSharp
 		public SciterElement ElementByUID(uint uid)
 		{
 			IntPtr he;
-			_api.SciterGetElementByUID(_hwnd, uid, out he);
+			var r = _api.SciterGetElementByUID(_hwnd, uid, out he);
+			Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
+
 			if(he != IntPtr.Zero)
 				return new SciterElement(he);
 			return null;
@@ -395,9 +400,9 @@ namespace SciterSharp
 		/// <summary>
 		/// Update pending changes in Sciter window and forces painting if necessary
 		/// </summary>
-		public void UpdateWindow()
+		public bool UpdateWindow()
 		{
-			_api.SciterUpdateWindow(_hwnd);
+			return _api.SciterUpdateWindow(_hwnd);
 		}
 
 		public SciterValue CallFunction(string name, params SciterValue[] args)

@@ -14,9 +14,17 @@ namespace SciterSharp.Interop
 			PInvokeWindows.MessageBox(owner, text, caption, PInvokeWindows.MessageBoxOptions.OkOnly | PInvokeWindows.MessageBoxOptions.IconExclamation);
 		}
 
-		public static void ShowMessageBox(this SciterWindow wnd, string text, string caption)
+		/// <summary>
+		/// Show a system message-box owned by this Sciter window. If caption is null, it will be the title of the Sciter window
+		/// </summary>
+		/// <param name="wnd"></param>
+		/// <param name="text"></param>
+		/// <param name="caption"></param>
+		public static void ShowMessageBox(this SciterWindow wnd, string text, string caption = null)
 		{
-			Show(wnd._hwnd, text,  caption);
+			if(caption == null)
+				caption = wnd.Title;
+			Show(wnd._hwnd, text, caption);
 		}
 	}
 }
