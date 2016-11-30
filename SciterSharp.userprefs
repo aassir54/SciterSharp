@@ -1,14 +1,14 @@
 ﻿<Properties StartupConfiguration="{32DEDB6C-01A9-4DBF-A5E3-05F63DC8DFF1}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="OSXPublishNuget/Program.cs">
     <Files>
-      <File FileName="OSXPublishNuget/Program.cs" Line="9" Column="38" />
+      <File FileName="OSXPublishNuget/Program.cs" Line="21" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="SciterSharp" expanded="True">
             <Node name="OSXPublishNuget" expanded="True">
-              <Node name="References" selected="True" />
+              <Node name="Program.cs" selected="True" />
             </Node>
           </Node>
         </State>
@@ -20,7 +20,6 @@
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.TestMinimal PreferredExecutionTarget="MonoDevelop.Default" />
   <DisabledProjects>
     <String>SciterSharp/SciterSharpWindows.csproj</String>
     <String>SciterSharp/SciterSharpGTK.csproj</String>
