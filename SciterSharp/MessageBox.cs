@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SciterSharp.Interop;
+#if OSX
+using AppKit;
+using Foundation;
+#endif
 
-#if WINDOWS
-namespace SciterSharp.Interop
+namespace SciterSharp
 {
 	public static class MessageBox
 	{
 		public static void Show(IntPtr owner, string text, string caption)
 		{
+#if WINDOWS
 			PInvokeWindows.MessageBox(owner, text, caption, PInvokeWindows.MessageBoxOptions.OkOnly | PInvokeWindows.MessageBoxOptions.IconExclamation);
+#elif OSX
+			NSAlert alert = new NSAlert();
+			alert.MessageText = text;
+			alert.RunModal();
+#endif
 		}
 
 		/// <summary>
@@ -28,4 +38,3 @@ namespace SciterSharp.Interop
 		}
 	}
 }
-#endif

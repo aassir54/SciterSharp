@@ -50,7 +50,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interop\MessageBox.cs" />
+    <Compile Include="MessageBox.cs" />
     <Compile Include="Interop\PInvokeWindows.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
     <Compile Include="Interop\SciterXRequest.cs" />
