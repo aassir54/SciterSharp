@@ -1,0 +1,25 @@
+﻿<Properties StartupConfiguration="{BAD1F9FD-2FA7-44A7-85F3-BD2ACA077044}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SciterSharp/MessageBox.cs">
+    <Files>
+      <File FileName="SciterSharp/MessageBox.cs" Line="23" Column="40" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="SciterSharp" expanded="True">
+            <Node name="SciterSharpOSX" expanded="True" />
+            <Node name="SciterSharpWindows" expanded="True">
+              <Node name="MessageBox.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.TestMinimal PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

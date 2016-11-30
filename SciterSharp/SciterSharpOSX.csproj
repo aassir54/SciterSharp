@@ -76,6 +76,7 @@
     <Compile Include="Interop\SciterXVideoAPI.cs" />
     <Compile Include="Interop\TIScript.cs" />
     <Compile Include="Interop\PInvokeWindows.cs" />
+    <Compile Include="MessageBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SciterSharpOSX.dll.config">
