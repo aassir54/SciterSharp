@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Interop\SciterXGraphics.cs" />
     <Compile Include="Interop\SciterXRequest.cs" />
+    <Compile Include="LibVersion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SciterArchive.cs" />
     <Compile Include="SciterDebugOutputHandler.cs" />
