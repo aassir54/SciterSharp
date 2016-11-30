@@ -74,6 +74,7 @@
     <Compile Include="Interop\SciterX.cs" />
     <Compile Include="Interop\SciterXVideoAPI.cs" />
     <Compile Include="Interop\TIScript.cs" />
+    <Compile Include="LibVersion.cs" />
     <Compile Include="WinForms\SciterControl.cs">
       <SubType>Component</SubType>
     </Compile>
