@@ -84,6 +84,7 @@ namespace SciterSharp
 		/// <param name="creationFlags">Flags for the window creation, defaults to SW_MAIN | SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_ENABLE_DEBUG</param>
 		public void CreateWindow(PInvokeUtils.RECT frame = new PInvokeUtils.RECT(), SciterXDef.SCITER_CREATE_WINDOW_FLAGS creationFlags = DefaultCreateFlags, IntPtr parent = new IntPtr())
 		{
+			Debug.Assert(_hwnd == IntPtr.Zero);
 			_hwnd = _api.SciterCreateWindow(
 				creationFlags,
 				ref frame,
@@ -266,6 +267,13 @@ namespace SciterSharp
 #endif
 		}
 
+		public void ShowModal()
+		{
+			Show();
+			PInvokeUtils.RunMsgLoop();
+		}
+
+
 		/// <summary>
 		/// Close the window. Posts WM_CLOSE message on Windows.
 		/// </summary>
@@ -351,6 +359,8 @@ namespace SciterSharp
 				var r = _api.SciterGetRootElement(_hwnd, out he);
 				Debug.Assert(r == SciterXDom.SCDOM_RESULT.SCDOM_OK);
 
+				if(he == IntPtr.Zero)
+					return null;// no page loaded yet?
 				return new SciterElement(he);
 			}
 		}

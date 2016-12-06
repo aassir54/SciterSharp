@@ -20,8 +20,8 @@ namespace TestMinimal
 
 			// Create the window
 			var wnd = new SciterWindow();
-			//wnd.CreateMainWindowNative(1500, 800);
 			wnd.CreateMainWindow(1500, 800);
+			var r = wnd.RootElement;
 			wnd.Icon = Properties.Resources.Icon1;
 			//wnd.EnableDwmClientArea();
 

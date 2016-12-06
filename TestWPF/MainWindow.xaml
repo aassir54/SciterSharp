@@ -8,6 +8,5 @@
         Title="MainWindow" Height="672.302" Width="833.454" Loaded="Window_Loaded">
 	<Grid>
 		<Border x:Name="SciterBorderHost" HorizontalAlignment="Left" Height="237" Margin="102,44,0,0" VerticalAlignment="Top" Width="341"/>
-
 	</Grid>
 </Window>

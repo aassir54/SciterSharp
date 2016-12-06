@@ -21,10 +21,6 @@ namespace TestGraphics
 	{
 		protected override bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)
 		{
-			switch(name)
-			{
-			}
-
 			result = null;
 			return false;
 		}
@@ -51,7 +47,7 @@ namespace TestGraphics
 		public void SetupWindow(SciterWindow wnd)
 		{
 			_wnd = wnd;
-			SetupCallback(wnd._hwnd);
+			SetupWindow(wnd._hwnd);
 		}
 
 		public void SetupPage(string page_from_res_folder)

@@ -54,7 +54,7 @@ namespace TestMinimal
 		public void SetupWindow(SciterWindow wnd)
 		{
 			_wnd = wnd;
-			SetupCallback(wnd._hwnd);
+			SetupWindow(wnd._hwnd);
 		}
 
 		public void SetupPage(string path)

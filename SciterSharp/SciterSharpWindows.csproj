@@ -36,10 +36,11 @@
     <DocumentationFile>bin\Release\SciterSharpWindows.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SciterSharp.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,6 +51,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveResource.cs" />
     <Compile Include="MessageBox.cs" />
     <Compile Include="Interop\PInvokeWindows.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
@@ -80,9 +82,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SciterSharp.pfx" />
+    <None Include="LibConsole\console.tis" />
+    <None Include="LibConsole\debug-peer.tis" />
+    <None Include="LibConsole\utils.tis" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)scripts\packWindows.bat</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

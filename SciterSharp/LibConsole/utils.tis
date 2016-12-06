@@ -1,0 +1,55 @@
+
+namespace Utils
+{
+	const IsWindows = view.mediaVars()["os-vendor"] == "Microsoft";//System.OS.toString().indexOf("Windows")!=-1;
+	const IsOSX_UI = view.mediaVars()["os-vendor"] == "Apple";
+	const IsOSX = System.OS.toString().indexOf("MacOSX")!=-1;
+	const InDBGView = View.omni || View.omniview;
+
+	const SciterVersion = String.printf("%d.%d.%d.%d", 
+		(Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
+		(Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
+}
+
+function Element.tagname()
+{
+	var name = this.tag;
+	var id = this.id;
+	var classes = this.@#class;
+	if(id)
+		name += "#" + id;
+	if(classes)
+		name += "." + classes.split(" ").join(".");
+	return "<" + name + ">";
+}
+
+function Element.install_link_handler()// does work for a parent frame
+{
+	this.onMouse = function(evt)
+	{
+		if(evt.type==(Event.MOUSE_UP | Event.SINKING) && evt.target.$is(a))
+		{
+			if(evt.target.@#href)
+				Sciter.launch(evt.target.@#href);
+			return true;
+		}
+	}
+}
+
+function Element.hide()
+{
+	this.style#visibility = "none";
+}
+function Element.show()
+{
+	this.style#visibility = "visible";
+}
+function Element.toggle()
+{
+	this.style#visibility = this.isVisible ? "none" : "visible";
+}
+
+function popupAttachment(anchorPoint, popupPoint)// 1, 7 is the most common
+{
+	return (popupPoint << 16) | anchorPoint;
+}

@@ -40,10 +40,35 @@ namespace SciterSharp
 		private SciterXDef.FPTR_SciterHostCallback _cbk;
 		private SciterEventHandler _window_evh;
 
-		public void SetupCallback(IntPtr hwnd)
+		private static Dictionary<string, byte[]> _lc_files = new Dictionary<string, byte[]>();
+
+		static SciterHost()
+		{
+			var arch = new SciterArchive();
+			arch.Open(SciterAppResource.ArchiveResource.resources);
+
+			_lc_files = new Dictionary<string, byte[]>
+			{
+				{ "sciter:debug-peer.tis", arch.Get("console.tis") },
+				{ "sciter:utils.tis", arch.Get("utils.tis") },
+			};
+
+			arch.Close();
+		}
+
+		public SciterHost()
+		{
+		}
+
+		public SciterHost(SciterWindow wnd)
+		{
+			SetupWindow(wnd._hwnd);
+		}
+
+		public void SetupWindow(IntPtr hwnd)
 		{
 			Debug.Assert(hwnd != IntPtr.Zero);
-			Debug.Assert(_hwnd == IntPtr.Zero, "You already called SetupCallback()");
+			Debug.Assert(_hwnd == IntPtr.Zero, "You already called SetupWindow()");
 
 			_hwnd = hwnd;
 
@@ -58,7 +83,7 @@ namespace SciterSharp
 		/// <param name="evh"></param>
 		public void AttachEvh(SciterEventHandler evh)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 			Debug.Assert(evh != null);
 			Debug.Assert(_window_evh == null, "You can attach only a single SciterEventHandler per SciterHost/window");
 
@@ -68,7 +93,7 @@ namespace SciterSharp
 
 		public SciterValue CallFunction(string name, params SciterValue[] args)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 			Debug.Assert(name != null);
 
 			SciterXValue.VALUE vret = new SciterXValue.VALUE();
@@ -78,7 +103,7 @@ namespace SciterSharp
 
 		public SciterValue EvalScript(string script)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 			Debug.Assert(script != null);
 
 			SciterXValue.VALUE vret = new SciterXValue.VALUE();
@@ -92,7 +117,7 @@ namespace SciterSharp
 		/// <param name="what">The delegate which will be invoked</param>
 		public void InvokePost(Action what)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 			Debug.Assert(what != null);
 
 			GCHandle handle = GCHandle.Alloc(what);
@@ -105,7 +130,7 @@ namespace SciterSharp
 		/// <param name="what">The delegate which will be invoked</param>
 		public void InvokeSend(Action what, uint timeout = 3000)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 			Debug.Assert(what != null);
 			Debug.Assert(timeout > 0);
 
@@ -139,11 +164,11 @@ namespace SciterSharp
 		public void DebugInspect(string inspector_exe_path)
 		{
 			var ps = Process.GetProcessesByName(inspector_exe_path);
-			foreach(var p in ps)
+			foreach (var p in ps)
 				p.Kill();
 
 #if WINDOWS
-			if(!File.Exists(inspector_exe_path) && !File.Exists(inspector_exe_path + ".exe"))
+			if (!File.Exists(inspector_exe_path) && !File.Exists(inspector_exe_path + ".exe"))
 				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + inspector_exe_path;
 #elif OSX
 			if(!File.Exists(inspector_exe_path))
@@ -154,7 +179,7 @@ namespace SciterSharp
 #endif
 
 			var po = Process.Start(inspector_exe_path);
-			if(po.HasExited)
+			if (po.HasExited)
 				throw new Exception("Could not run inspector. Make sure Sciter DLL is also present in the inspector tool directory.");
 
 			Task.Run(() =>
@@ -162,7 +187,7 @@ namespace SciterSharp
 				Thread.Sleep(1000);
 				InvokePost(() =>
 				{
-					EvalScript("view.connectToInspector()");;
+					EvalScript("view.connectToInspector()"); ;
 				});
 			});
 		}
@@ -177,13 +202,15 @@ namespace SciterSharp
 		/// </param>
 		public IntPtr PostNotification(IntPtr wparam, IntPtr lparam, uint timeout = 0)
 		{
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 			return _api.SciterPostCallback(_hwnd, wparam, lparam, timeout);
 		}
+
 
 		// Behavior factory
 		public void RegisterBehaviorHandler(string behaviorName, Type eventHandlerType)
 		{
-			if(!typeof(SciterEventHandler).IsAssignableFrom(eventHandlerType) || typeof(SciterEventHandler) == eventHandlerType)
+			if (!typeof(SciterEventHandler).IsAssignableFrom(eventHandlerType) || typeof(SciterEventHandler) == eventHandlerType)
 				throw new Exception("The 'eventHandlerType' type must extend SciterEventHandler");
 			_behaviorMap[behaviorName] = eventHandlerType;
 		}
@@ -196,9 +223,9 @@ namespace SciterSharp
 		{
 			get
 			{
-				if(_root == null)
+				if (_root == null)
 				{
-					Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupCallback() first");
+					Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 					IntPtr heRoot;
 					_api.SciterGetRootElement(_hwnd, out heRoot);
 					Debug.Assert(heRoot != IntPtr.Zero);
@@ -213,6 +240,7 @@ namespace SciterSharp
 		{
 			get
 			{
+				Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 				IntPtr heFocus;
 				_api.SciterGetRootElement(_hwnd, out heFocus);
 				Debug.Assert(heFocus != IntPtr.Zero);
@@ -220,26 +248,7 @@ namespace SciterSharp
 			}
 		}
 
-
-		// Overridables
-		protected virtual SciterXDef.LoadResult OnLoadData(SciterXDef.SCN_LOAD_DATA sld) { return SciterXDef.LoadResult.LOAD_OK; }
-		protected virtual void OnDataLoaded(SciterXDef.SCN_DATA_LOADED sdl) { }
-		protected virtual bool OnAttachBehavior(SciterElement el, string behaviorName, out SciterEventHandler elementEvh)
-		{
-			// returns a new SciterEventHandler if the behaviorName was registered by a previous RegisterBehaviorHandler() call
-			if(_behaviorMap.ContainsKey(behaviorName))
-			{
-				elementEvh = (SciterEventHandler)Activator.CreateInstance(_behaviorMap[behaviorName]);
-				elementEvh.Name = "Create by registered native behavior factory: " + behaviorName;
-				return true;
-			}
-			elementEvh = null;
-			return false;
-		}
-		protected virtual void OnEngineDestroyed() { }
-		protected virtual IntPtr OnPostedNotification(IntPtr wparam, IntPtr lparam) { return IntPtr.Zero; }
-		protected virtual void OnGraphicsCriticalFailure(IntPtr hwnd) { }
-
+		// Notification handler
 		private uint HandleNotification(IntPtr ptrNotification, IntPtr callbackParam)
 		{
 			SciterXDef.SCITER_CALLBACK_NOTIFICATION scn = (SciterXDef.SCITER_CALLBACK_NOTIFICATION)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCITER_CALLBACK_NOTIFICATION));
@@ -251,10 +260,10 @@ namespace SciterSharp
 					return (uint)OnLoadData(sld);
 
 				case SciterXDef.SC_DATA_LOADED:
-					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED) Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
+					SciterXDef.SCN_DATA_LOADED sdl = (SciterXDef.SCN_DATA_LOADED)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_DATA_LOADED));
 					OnDataLoaded(sdl);
 					return 0;
-					
+
 				case SciterXDef.SC_ATTACH_BEHAVIOR:
 					SciterXDef.SCN_ATTACH_BEHAVIOR sab = (SciterXDef.SCN_ATTACH_BEHAVIOR)Marshal.PtrToStructure(ptrNotification, typeof(SciterXDef.SCN_ATTACH_BEHAVIOR));
 					SciterEventHandler elementEvh;
@@ -312,5 +321,33 @@ namespace SciterSharp
 			}
 			return 0;
 		}
+
+		// Overridables
+		protected virtual SciterXDef.LoadResult OnLoadData(SciterXDef.SCN_LOAD_DATA sld)
+		{
+			// Do default loading of lib_console
+			if(_lc_files.ContainsKey(sld.uri))
+			{
+				Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
+				_api.SciterDataReady(_hwnd, sld.uri, _lc_files[sld.uri], (uint)_lc_files[sld.uri].Length);
+			}
+			return (uint)SciterXDef.LoadResult.LOAD_OK;
+		}
+		protected virtual void OnDataLoaded(SciterXDef.SCN_DATA_LOADED sdl) { }
+		protected virtual bool OnAttachBehavior(SciterElement el, string behaviorName, out SciterEventHandler elementEvh)
+		{
+			// returns a new SciterEventHandler if the behaviorName was registered by a previous RegisterBehaviorHandler() call
+			if (_behaviorMap.ContainsKey(behaviorName))
+			{
+				elementEvh = (SciterEventHandler)Activator.CreateInstance(_behaviorMap[behaviorName]);
+				elementEvh.Name = "Create by registered native behavior factory: " + behaviorName;
+				return true;
+			}
+			elementEvh = null;
+			return false;
+		}
+		protected virtual void OnEngineDestroyed() { }
+		protected virtual IntPtr OnPostedNotification(IntPtr wparam, IntPtr lparam) { return IntPtr.Zero; }
+		protected virtual void OnGraphicsCriticalFailure(IntPtr hwnd) { }
 	}
 }
