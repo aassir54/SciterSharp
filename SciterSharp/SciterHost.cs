@@ -52,6 +52,7 @@ namespace SciterSharp
 				{ "sciter:debug-peer.tis", arch.Get("console.tis") },
 				{ "sciter:utils.tis", arch.Get("utils.tis") },
 			};
+			Debug.Assert(_lc_files.Values.All(v => v != null));
 
 			arch.Close();
 		}

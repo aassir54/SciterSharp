@@ -30,7 +30,7 @@ namespace SciterSharp
 	{
 #if DEBUG
 		private volatile bool _is_attached = false;
-		~SciterEventHandler() { Debug.Assert(_is_attached == false); }
+		~SciterEventHandler() { Debug.Assert(!_attached_handlers.Contains(this)); Debug.Assert(_is_attached == false); }
 #endif
 
 		private static List<SciterEventHandler> _attached_handlers = new List<SciterEventHandler>();// we keep a copy of all attached instances to guard from GC removal

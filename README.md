@@ -2,11 +2,11 @@
 
 ACTUAL SCITER VERSION: 3.3.3.2
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.37-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.42-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.37-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.42-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
-OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.37-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
+OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v1.0.42-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 Browse the C# source-code: http://sourcebrowser.io/Browse/MISoftware/SciterSharp
 
@@ -18,13 +18,17 @@ The source is made portable to work in Windows, Linux/GTK+3/Mono and OSX/Mono.
 
 License: **GNU GENERAL PUBLIC LICENSE Version 3**
 
-## Documentation / Support / Tools
+## Documentation
 
-[Introductory walk-through for writing apps with SciterSharp](http://www.codeproject.com/Articles/1057199/Sciter-HTML-Csharp-based-desktop-apps-walkthrough).
+[Introductory walk-through for writing apps with SciterSharp](http://www.codeproject.com/Articles/1057199/Sciter-HTML-Csharp-based-desktop-apps-walkthrough)
+
+[Monday NATIVE]()
 
 [Desktop cross-platform demo app + source-code](https://github.com/midiway/OctoDeskdex)
 
-[Get help at Sciter Forum](http://sciter.com/forums/)
+## Get help
+
+[SciterSharp C# Forum](http://sciter.com/forums/forum/scitersharp-c/)
 
 ---
 

@@ -53,3 +53,12 @@ function popupAttachment(anchorPoint, popupPoint)// 1, 7 is the most common
 {
 	return (popupPoint << 16) | anchorPoint;
 }
+
+function readFileText(path)
+{
+	var stream = Stream.openFile(path);
+	var txt = "";
+	while(var ln = stream.readln())
+		txt += ln;
+	return txt;
+}
