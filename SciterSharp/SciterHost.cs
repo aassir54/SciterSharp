@@ -66,6 +66,18 @@ namespace SciterSharp
 			SetupWindow(wnd._hwnd);
 		}
 
+		public void SetupWindow(SciterWindow wnd)
+		{
+			Debug.Assert(wnd != null);
+			Debug.Assert(wnd._hwnd != IntPtr.Zero);
+			Debug.Assert(wnd._hwnd == IntPtr.Zero, "You already called SetupWindow()");
+
+			_hwnd = wnd._hwnd;
+
+			_cbk = this.HandleNotification;
+			_api.SciterSetCallback(_hwnd, Marshal.GetFunctionPointerForDelegate(_cbk), IntPtr.Zero);
+		}
+
 		public void SetupWindow(IntPtr hwnd)
 		{
 			Debug.Assert(hwnd != IntPtr.Zero);

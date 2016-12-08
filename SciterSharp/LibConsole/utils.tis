@@ -9,6 +9,20 @@ namespace Utils
 	const SciterVersion = String.printf("%d.%d.%d.%d", 
 		(Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
 		(Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
+
+	function popupAttachment(anchorPoint = 1, popupPoint = 7)// 1, 7 is the most common
+	{
+		return (popupPoint << 16) | anchorPoint;
+	}
+
+	function readFileText(path)
+	{
+		var stream = Stream.openFile(path);
+		var txt = "";
+		while(var ln = stream.readln())
+			txt += ln;
+		return txt;
+	}
 }
 
 function Element.tagname()
@@ -47,18 +61,4 @@ function Element.show()
 function Element.toggle()
 {
 	this.style#visibility = this.isVisible ? "none" : "visible";
-}
-
-function popupAttachment(anchorPoint, popupPoint)// 1, 7 is the most common
-{
-	return (popupPoint << 16) | anchorPoint;
-}
-
-function readFileText(path)
-{
-	var stream = Stream.openFile(path);
-	var txt = "";
-	while(var ln = stream.readln())
-		txt += ln;
-	return txt;
 }
