@@ -23,6 +23,19 @@ namespace Utils
 			txt += ln;
 		return txt;
 	}
+
+	// Makes clicking in <a href="XYZ"> open the browser, and so to not do navigating inside the Sciter engine
+	// ex.: Utils.installLinkHandler(self);
+	//
+	// Does work for a parent frame, so Utils.installLinkHandler($(frame))
+	function installLinkHandler(el)
+	{
+		el.on("mouseup", "a[href]", function(evt) {
+			if(evt.target.@#href)
+				Sciter.launch(evt.target.@#href);
+			return true;
+		});
+	}
 }
 
 function Element.tagname()
@@ -35,19 +48,6 @@ function Element.tagname()
 	if(classes)
 		name += "." + classes.split(" ").join(".");
 	return "<" + name + ">";
-}
-
-function Element.install_link_handler()// does work for a parent frame
-{
-	this.onMouse = function(evt)
-	{
-		if(evt.type==(Event.MOUSE_UP | Event.SINKING) && evt.target.$is(a))
-		{
-			if(evt.target.@#href)
-				Sciter.launch(evt.target.@#href);
-			return true;
-		}
-	}
 }
 
 function Element.hide()
