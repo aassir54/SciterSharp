@@ -70,7 +70,7 @@ namespace SciterSharp
 		{
 			Debug.Assert(wnd != null);
 			Debug.Assert(wnd._hwnd != IntPtr.Zero);
-			Debug.Assert(wnd._hwnd == IntPtr.Zero, "You already called SetupWindow()");
+			Debug.Assert(_hwnd == IntPtr.Zero, "You already called SetupWindow()");
 
 			_hwnd = wnd._hwnd;
 

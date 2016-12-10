@@ -21,7 +21,6 @@ namespace console
 	}
 	function plog(params..)
 	{
-		//if(params)
 		self.post(::log.apply(undefined, params));
 	}
 	
