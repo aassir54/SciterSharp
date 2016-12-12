@@ -110,7 +110,7 @@ namespace SciterSharp.Interop
 
 		// Native functor
 		// alias NATIVE_FUNCTOR_INVOKE = void function(VOID* tag, UINT argc, const VALUE* argv, VALUE* retval);// retval may contain error definition
-		public delegate bool FPTR_NATIVE_FUNCTOR_INVOKE(IntPtr tag, uint argc, VALUE[] argv);
+		public delegate bool FPTR_NATIVE_FUNCTOR_INVOKE(IntPtr tag, uint argc, IntPtr argv, out VALUE retval);
 		// alias NATIVE_FUNCTOR_RELEASE = void function(VOID* tag);
 		public delegate bool FPTR_NATIVE_FUNCTOR_RELEASE(IntPtr tag);
 

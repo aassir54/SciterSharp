@@ -51,7 +51,7 @@ namespace TestMinimal
 #endif
 		}
 
-		public void SetupWindow(SciterWindow wnd)
+		new public void SetupWindow(SciterWindow wnd)
 		{
 			_wnd = wnd;
 			SetupWindow(wnd._hwnd);
