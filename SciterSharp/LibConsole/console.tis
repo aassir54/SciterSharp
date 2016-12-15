@@ -114,7 +114,10 @@ namespace console
 
 
 // aliases
+//var Omni = View.omnidata;
+
 const log = console.log;
 const plog = console.plog;
 const trace = console.log;// OMNI only
+const ptrace = console.ptrace;
 const count = console.count;
