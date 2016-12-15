@@ -95,8 +95,10 @@ namespace console
 			log("\t" + frame[1] + ", " + frame[2] + ", line " + frame[0]);
 	}
 
-	// Omni-only PICKERS
-	function colorpick(el, prop) {}
+	// Omni ONLY
+	function show(el) {}
+	function dom(el) {}
+	function colorpick(el, css_prop) {}
 	function colortouch(el, what=#bg, mode=#hue-saturation) {}
 	function texturepick(el, what=#bg) {}
 	function fontpick(el) {}
