@@ -21,14 +21,12 @@ namespace TestMinimal
 			// Create the window
 			var wnd = new SciterWindow();
 			wnd.CreateMainWindow(1500, 800);
-			var r = wnd.RootElement;
+			wnd.Title = "Sciter Bootstrap";
+			wnd.CenterTopLevelWindow();
 			wnd.Icon = Properties.Resources.Icon1;
+
 			//wnd.EnableDwmClientArea();
-
-
-			//wnd.CenterTopLevelWindow();
 			//wnd.AfterWindowCreate();
-			//wnd.Title = "Sciter Bootstrap";
 
 			// Prepares SciterHost and then load the page
 			var host = new Host();
@@ -45,7 +43,6 @@ namespace TestMinimal
 
 			// set <h1> color to blue
 			se_body[0].SetStyle("color", "#00F");
-
 
 			/*SciterWindow wnd_popup = new SciterWindow();
 			wnd_popup.CreatePopupAlphaWindow(400, 400, wnd._hwnd);
