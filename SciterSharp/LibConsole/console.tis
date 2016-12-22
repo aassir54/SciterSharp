@@ -102,6 +102,7 @@ namespace console
 	function colortouch(el, what=#bg, mode=#hue-saturation) {}
 	function texturepick(el, what=#bg) {}
 	function fontpick(el) {}
+	function mypick(cbk_creator = undefined, el = undefined) {}
 
 
 	// ------------------------------------------------------

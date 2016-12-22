@@ -50,32 +50,18 @@ namespace SciterSharp.Interop
 				return string.Format("{0}.{1}.{2}.{3}", (major>>16) & 0xffff, major & 0xffff, (minor >> 16) & 0xffff, minor & 0xffff);
 			}
 		}
-
-		public static bool UseSkiaDll
-		{
-			get; set;
-		}
-
+		
 		private static ISciterAPI? _api = null;
 		private static SciterXGraphics.ISciterGraphicsAPI? _gapi = null;
 		private static SciterXRequest.ISciterRequestAPI? _rapi = null;
 
 #if WINDOWS
-		[DllImport("sciter32", EntryPoint = "SciterAPI")]
-		private static extern IntPtr SciterAPI32();
-		[DllImport("sciter64", EntryPoint = "SciterAPI")]
-		private static extern IntPtr SciterAPI64();
-
-		[DllImport("sciter32_skia", EntryPoint = "SciterAPI")]
-		private static extern IntPtr SciterAPI32_Skia();
-		[DllImport("sciter64_skia", EntryPoint = "SciterAPI")]
-		private static extern IntPtr SciterAPI64_Skia();
+		[DllImport("sciter", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI();
 #elif GTKMONO
 		[DllImport("sciter-gtk-64.so")]
 		private static extern IntPtr SciterAPI();
 #elif OSX
-		[DllImport("sciter-osx-32", EntryPoint = "SciterAPI")]
-		private static extern IntPtr SciterAPI32();
 		[DllImport("sciter-osx-64", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI64();
 #endif
@@ -91,26 +77,20 @@ namespace SciterSharp.Interop
 				if(IntPtr.Size == 8)
 				{
 					Debug.Assert(api_struct_size == 680 * 2);
-					if(UseSkiaDll)
-						api_ptr = SciterAPI64_Skia();
-					else
-						api_ptr = SciterAPI64();
+					api_ptr = SciterAPI();
 				}
 				else
 				{
 					Debug.Assert(api_struct_size == 680);
-					if(UseSkiaDll)
-						api_ptr = SciterAPI32_Skia();
-					else
-						api_ptr = SciterAPI32();
+					api_ptr = SciterAPI();
 				}
-			#elif GTKMONO
+#elif GTKMONO
 				if(IntPtr.Size != 8)
 					throw new Exception("SciterSharp GTK/Mono only supports 64bits builds");
 
 				Debug.Assert(api_struct_size == 1296);
 				api_ptr = SciterAPI();
-			#elif OSX
+#elif OSX
 				if(IntPtr.Size == 8)
 				{
 					Debug.Assert(api_struct_size == 648 * 2);
@@ -121,7 +101,7 @@ namespace SciterSharp.Interop
 					Debug.Assert(api_struct_size == 648);
 					api_ptr = SciterAPI32();
 				}
-			#endif
+#endif
 
 				_api = (ISciterAPI)Marshal.PtrToStructure(api_ptr, typeof(ISciterAPI));
 
@@ -129,8 +109,8 @@ namespace SciterSharp.Interop
 				// here we test the minimum Sciter version this library is compatible with
 				uint major = _api.Value.SciterVersion(1);
 				uint minor = _api.Value.SciterVersion(0);
-				Debug.Assert(major >= 0x00030003);
-				Debug.Assert(minor >= 0x00000006);
+				Debug.Assert(major >= 0x00040000);
+				Debug.Assert(minor >= 0x00000000);
 				Debug.Assert(_api.Value.version==0);
 			}
 
@@ -139,17 +119,11 @@ namespace SciterSharp.Interop
 
 		private static SciterXGraphics.ISciterGraphicsAPI LoadGraphicsAPI()
 		{
-			uint minor = API.SciterVersion(0);
-			if(minor < 0x00010000)
-			{
-				throw new Exception("Graphics API is compatible with at least Sciter 3.3.2.13");
-			}
-
 			if(_gapi == null)
 			{
 				int api_struct_size = Marshal.SizeOf(typeof(SciterXGraphics.ISciterGraphicsAPI));
 				if(IntPtr.Size == 8)
-					Debug.Assert(api_struct_size == 536);
+					Debug.Assert(api_struct_size == 268*2);
 				else
 					Debug.Assert(api_struct_size == 268);
 
@@ -161,17 +135,11 @@ namespace SciterSharp.Interop
 
 		private static SciterXRequest.ISciterRequestAPI LoadRequestAPI()
 		{
-			uint minor = API.SciterVersion(0);
-			if(minor < 0x00010006)
-			{
-				throw new Exception("Request API is compatible with at least Sciter 3.3.1.6");
-			}
-
 			if(_rapi == null)
 			{
 				int api_struct_size = Marshal.SizeOf(typeof(SciterXRequest.ISciterRequestAPI));
 				if(IntPtr.Size == 8)
-					Debug.Assert(api_struct_size == 208);
+					Debug.Assert(api_struct_size == 104*2);
 				else
 					Debug.Assert(api_struct_size == 104);
 

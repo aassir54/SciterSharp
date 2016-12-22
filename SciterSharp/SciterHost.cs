@@ -182,7 +182,7 @@ namespace SciterSharp
 
 #if WINDOWS
 			if (!File.Exists(inspector_exe_path) && !File.Exists(inspector_exe_path + ".exe"))
-				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + inspector_exe_path;
+				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + '\\' + inspector_exe_path;
 #elif OSX
 			if(!File.Exists(inspector_exe_path))
 				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + "../../../" +  inspector_exe_path;
