@@ -28,7 +28,12 @@ namespace SciterSharp.WinForms
 		protected override void OnHandleCreated(EventArgs e)
 		{
 			SciterWnd.CreateChildWindow(Handle);
-			SciterWnd.LoadHtml("<body><code>Use the 'SciterWnd' property of this WinForms Control instance to manage this Sciter child window.</code></body>");
+			SciterWnd.LoadHtml(
+				"<body>" +
+					"<code>Add an event handler to the <b>HandleCreated</b> to to any needed initialization for this Sciter window</code><br/><br/>" +
+					"<code>In the handler, use the <b>'SciterWnd'</b> property of this Control instance to manage this Sciter child window.</code>" +
+				"</body>"
+				);
 			SciterWnd.Show();
 			base.OnHandleCreated(e);
 		}
