@@ -30,8 +30,8 @@ namespace SciterSharp.WinForms
 			SciterWnd.CreateChildWindow(Handle);
 			SciterWnd.LoadHtml(
 				"<body>" +
-					"<code>Add an event handler to the <b>HandleCreated</b> to to any needed initialization for this Sciter window</code><br/><br/>" +
-					"<code>In the handler, use the <b>'SciterWnd'</b> property of this Control instance to manage this Sciter child window.</code>" +
+					"<pre>Add an event handler to the <b>HandleCreated</b> event for any needed initialization for the Sciter window</pre><br/>" +
+					"<pre>In the handler, use the <b>'SciterWnd'</b> property of this Control instance to access the SciterWindow instance.</pre>" +
 				"</body>"
 				);
 			SciterWnd.Show();
