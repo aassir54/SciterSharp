@@ -1,11 +1,10 @@
-﻿using SciterSharp.Interop;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TestForms
+namespace TestWinForms
 {
 	static class Program
 	{
@@ -15,8 +14,6 @@ namespace TestForms
 		[STAThread]
 		static void Main()
 		{
-            PInvokeWindows.OleInitialize(IntPtr.Zero);
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new Form1());
