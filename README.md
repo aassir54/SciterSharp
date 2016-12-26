@@ -1,6 +1,6 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 4.0.0.0
+ACTUAL SCITER VERSION: 4.0.0.1
 
 Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.0-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
@@ -42,11 +42,13 @@ License: **GNU GENERAL PUBLIC LICENSE Version 3**
 
 ### Sciter Bootstrap
 
-Quick start your desktop app by downloading a [Sciter Bootstrap Multi-platform template](http://misoftware.rs/Bootstrap/Download). The package contains a solution with 3 projects,  which you build for **Windows** with VS, and for **Linux** and **OSX** with MonoDevelop. All projects comes with this library already configured and necessary boilterplate code to create a Sciter window and load an initial HTML page.
+Quick start your desktop app with our [Sciter Bootstrap](http://misoftware.rs/Bootstrap) on-line tool.
+
+All projects comes with this library already configured and the necessary boilterplate code to create a Sciter window and load its initial HTML file.
+
+The cross-platform template contains a solution with 3 projects, which you build for **Windows** with VS, and for **Linux** and **OSX** with Xamarin.
 
 ### NuGet
-
-SciterSharp is available on NuGet.
 
 ```
 Windows package:
@@ -130,10 +132,8 @@ Here is a summary of the classes from SciterSharp namespace and their mapping ov
 
 With SciterSharp, you can easily create a Sciter child window for you WinForms or WPF application.
 
-There is not yet documentation on how to achieve it, but you can look at the two samples project included in this repo: TestWPF and TestForms.
+There is not yet documentation on how to achieve it, but you can look at the two samples project included in this repo: Tests/TestWinForms and Tests/TestWPF.
 
 ## Todo's (help appreciated) 
 
 - add as C# documentation all the helpful API comments found in the official Sciter SDK C headers
-- provide an on-line version of the docs from the C# source-code (anyone knows a good tool for automating it?)
-- maybe a Xamarin port: http://jonathanpeppers.com/Blog/xamarin-ios-under-the-hood-calling-objective-c-from-csharp
