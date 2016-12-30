@@ -28,9 +28,9 @@ namespace TestGraphics
 			// Prepares SciterHost and then load the page
 			var host = new Host();
 			host.SetupWindow(wnd);
-			host.RegisterBehaviorHandler("DrawBitmap", typeof(DrawBitmapBehavior));
-			host.RegisterBehaviorHandler("DrawText", typeof(DrawTextBehavior));
-			host.RegisterBehaviorHandler("DrawGeometry", typeof(DrawGeometryBehavior));
+			host.RegisterBehaviorHandler(typeof(DrawBitmapBehavior), "DrawBitmap");
+			host.RegisterBehaviorHandler(typeof(DrawTextBehavior), "DrawText");
+			host.RegisterBehaviorHandler(typeof(DrawGeometryBehavior), "DrawGeometry");
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
 
