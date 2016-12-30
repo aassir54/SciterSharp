@@ -1,14 +1,14 @@
-﻿using System;
+using SciterSharp;
+using SciterSharp.Interop;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SciterSharp;
-using SciterSharp.Interop;
+using System.Diagnostics;
+using System.IO;
 
-namespace TestMinimal
+namespace TestCore
 {
 	class Host : BaseHost
 	{
@@ -19,12 +19,6 @@ namespace TestMinimal
 
 	class HostEvh : SciterEventHandler
 	{
-		public bool OnWhat(SciterElement el, SciterValue[] args, out SciterValue result)
-		{
-			result = null;
-			return true;
-		}
-
 		protected override bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)
 		{
 			switch(name)
@@ -34,10 +28,18 @@ namespace TestMinimal
 					return true;
 			}
 
-			return base.OnScriptCall(se, name, args, out result);
+			result = null;
+			return false;
 		}
 	}
 
+
+
+	// This base class overrides OnLoadData and does the resource loading strategy
+	// explained at http://misoftware.rs/Bootstrap/Dev
+	//
+	// - in DEBUG mode: resources loaded directly from the file system
+	// - in RELEASE mode: resources loaded from by a SciterArchive (packed binary data contained as C# code in ArchiveResource.cs)
 	class BaseHost : SciterHost
 	{
 		protected static SciterX.ISciterAPI _api = SciterX.API;
@@ -46,27 +48,28 @@ namespace TestMinimal
 
 		public BaseHost()
 		{
-#if !DEBUG
-			_archive.Open(SciterSharpAppResource.ArchiveResource.resources);
-#endif
+		#if !DEBUG
+			_archive.Open(SciterAppResource.ArchiveResource.resources);
+		#endif
 		}
 
-		new public void SetupWindow(SciterWindow wnd)
+		public void Setup(SciterWindow wnd)
 		{
 			_wnd = wnd;
-			SetupWindow(wnd._hwnd);
+			SetupWindow(wnd);
 		}
 
-		public void SetupPage(string path)
+		public void SetupPage(string page_from_res_folder)
 		{
-#if DEBUG
-			string cwd = System.Environment.CurrentDirectory;
-			Debug.Assert(File.Exists(cwd + "\\res\\" + path));
-			string url = "file:///" + cwd + "\\res\\" + path;
-			url = url.Replace('\\', '/');
-#else
-			string url = "archive://app/" + path;
-#endif
+		#if DEBUG
+			string path = Environment.CurrentDirectory + "/../../res/" + page_from_res_folder;
+			Debug.Assert(File.Exists(path));
+            path = path.Replace('\\', '/');
+
+			string url = "file:///" + path;
+		#else
+			string url = "archive://app/" + page_from_res_folder;
+		#endif
 
 			bool res = _wnd.LoadPage(url);
 			Debug.Assert(res);
@@ -74,18 +77,13 @@ namespace TestMinimal
 
 		protected override SciterXDef.LoadResult OnLoadData(SciterXDef.SCN_LOAD_DATA sld)
 		{
-			SciterRequest rq = new SciterRequest(sld.requestId);
-			string r1 = rq.Url;
-			string r2 = rq.ContentUrl;
-			var r3 = rq.RequestedType;
-
 			if(sld.uri.StartsWith("archive://app/"))
 			{
 				// load resource from SciterArchive
 				string path = sld.uri.Substring(14);
 				byte[] data = _archive.Get(path);
-				if(data != null)
-					_api.SciterDataReady(_wnd._hwnd, sld.uri, data, (uint)data.Length);
+				if(data!=null)
+					_api.SciterDataReady(_wnd._hwnd, sld.uri, data, (uint) data.Length);
 			}
 			return base.OnLoadData(sld);
 		}

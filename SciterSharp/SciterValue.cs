@@ -207,6 +207,7 @@ namespace SciterSharp
 
 		public bool IsUndefined		{ get { return _data.t == (uint)SciterXValue.VALUE_TYPE.T_UNDEFINED; } }
 		public bool IsBool			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_BOOL; } }
+		public bool IsInt			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_INT; } }
 		public bool IsFloat			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_FLOAT; } }
 		public bool IsString		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING; } }
 		public bool IsSymbol		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL; } }

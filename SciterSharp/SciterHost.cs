@@ -221,10 +221,12 @@ namespace SciterSharp
 
 
 		// Behavior factory
-		public void RegisterBehaviorHandler(string behaviorName, Type eventHandlerType)
+		public void RegisterBehaviorHandler(Type eventHandlerType, string behaviorName = null)
 		{
 			if (!typeof(SciterEventHandler).IsAssignableFrom(eventHandlerType) || typeof(SciterEventHandler) == eventHandlerType)
 				throw new Exception("The 'eventHandlerType' type must extend SciterEventHandler");
+			if(behaviorName == null)
+				behaviorName = eventHandlerType.Name;
 			_behaviorMap[behaviorName] = eventHandlerType;
 		}
 
