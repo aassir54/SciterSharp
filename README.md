@@ -132,7 +132,9 @@ Here is a summary of the classes from SciterSharp namespace and their mapping ov
 
 With SciterSharp, you can easily create a Sciter child window for you WinForms or WPF application.
 
-There is not yet documentation on how to achieve it, but you can look at the two samples project included in this repo: Tests/TestWinForms and Tests/TestWPF.
+For samples, you can look at the two samples project included in this repo: Tests/TestWinForms and Tests/TestWPF.
+
+Tutorial to add a Sciter control to a WinForms application: [WinForms + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1162179/WinForms-plusSciter-embeddable-HTML-CSS-TIScript-c).
 
 ## Todo's (help appreciated) 
 
