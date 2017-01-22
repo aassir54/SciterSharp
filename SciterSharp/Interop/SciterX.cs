@@ -50,14 +50,24 @@ namespace SciterSharp.Interop
 				return string.Format("{0}.{1}.{2}.{3}", (major>>16) & 0xffff, major & 0xffff, (minor >> 16) & 0xffff, minor & 0xffff);
 			}
 		}
-		
+
+
+
 		private static ISciterAPI? _api = null;
 		private static SciterXGraphics.ISciterGraphicsAPI? _gapi = null;
 		private static SciterXRequest.ISciterRequestAPI? _rapi = null;
 
 #if WINDOWS
+		public static bool Use3264DLLNaming { get; set; }
+
 		[DllImport("sciter", EntryPoint = "SciterAPI")]
 		private static extern IntPtr SciterAPI();
+
+		[DllImport("sciter32", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI32();
+
+		[DllImport("sciter64", EntryPoint = "SciterAPI")]
+		private static extern IntPtr SciterAPI64();
 #elif GTKMONO
 		[DllImport("sciter-gtk-64.so")]
 		private static extern IntPtr SciterAPI();
@@ -76,13 +86,19 @@ namespace SciterSharp.Interop
 			#if WINDOWS
 				if(IntPtr.Size == 8)
 				{
-					Debug.Assert(api_struct_size == 680 * 2);
-					api_ptr = SciterAPI();
+					Debug.Assert(api_struct_size == 684 * 2);
+					if(Use3264DLLNaming)
+						api_ptr = SciterAPI64();
+					else
+						api_ptr = SciterAPI();
 				}
 				else
 				{
-					Debug.Assert(api_struct_size == 680);
-					api_ptr = SciterAPI();
+					Debug.Assert(api_struct_size == 684);
+					if(Use3264DLLNaming)
+						api_ptr = SciterAPI32();
+					else
+						api_ptr = SciterAPI();
 				}
 #elif GTKMONO
 				if(IntPtr.Size != 8)
@@ -349,6 +365,8 @@ namespace SciterSharp.Interop
 			public FPTR_SciterRenderOnDirectXWindow SciterRenderOnDirectXWindow;
 			public FPTR_SciterRenderOnDirectXTexture SciterRenderOnDirectXTexture;
 #endif
+
+			public FPTR_SciterProcX SciterProcX;
 
 
 
@@ -742,6 +760,9 @@ namespace SciterSharp.Interop
 			// BOOL SCFN(SciterRenderOnDirectXTexture ) (HWINDOW hwnd, HELEMENT elementToRenderOrNull, IDXGISurface* surface);
 			public delegate bool FPTR_SciterRenderOnDirectXTexture(IntPtr hwnd, IntPtr elementToRenderOrNull, IntPtr surface);
 #endif
+
+			// BOOL SCFN(SciterProcX)(HWINDOW hwnd, SCITER_X_MSG* pMsg ); // returns TRUE if handled
+			public delegate bool FPTR_SciterProcX(IntPtr hwnd, IntPtr pMsg);
 		}
 	}
 }

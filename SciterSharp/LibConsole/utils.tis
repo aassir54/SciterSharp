@@ -1,10 +1,16 @@
-
 namespace Utils
 {
 	const IsWindows = view.mediaVars()["os-vendor"] == "Microsoft";//System.OS.toString().indexOf("Windows")!=-1;
 	const IsOSX = System.OS.toString().indexOf("MacOSX")!=-1;
 	const IsOSX_UI = view.mediaVars()["os-vendor"] == "Apple";
-	const InDBGView = View.omni || View.omniview;
+
+	property InDBGView(val)
+	{
+		get
+		{
+			return !!View.omni || !!View.omniview;
+		}
+	}
 
 	const SciterVersion = String.printf("%d.%d.%d.%d", 
 		(Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,

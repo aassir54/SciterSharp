@@ -171,27 +171,16 @@ namespace SciterSharp
 		public void CenterTopLevelWindow()
 		{
 #if WINDOWS
-			IntPtr hwndParent = PInvokeWindows.GetDesktopWindow();
-			PInvokeUtils.RECT rectWindow, rectParent;
-
+			PInvokeUtils.RECT rectWindow;
 			PInvokeWindows.GetWindowRect(_hwnd, out rectWindow);
-			PInvokeWindows.GetWindowRect(hwndParent, out rectParent);
 
-			int nWidth = rectWindow.right - rectWindow.left;
-			int nHeight = rectWindow.bottom - rectWindow.top;
-
-			int nX = ((rectParent.right - rectParent.left) - nWidth) / 2 + rectParent.left;
-			int nY = ((rectParent.bottom - rectParent.top) - nHeight) / 2 + rectParent.top;
-
-			int nScreenWidth = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CXSCREEN);
-			int nScreenHeight = PInvokeWindows.GetSystemMetrics(PInvokeWindows.SystemMetric.SM_CYSCREEN);
-
-			if(nX < 0) nX = 0;
-			if(nY < 0) nY = 0;
-			if(nX + nWidth > nScreenWidth) nX = nScreenWidth - nWidth;
-			if(nY + nHeight > nScreenHeight) nY = nScreenHeight - nHeight;
-
-			PInvokeWindows.MoveWindow(_hwnd, nX, nY, nWidth, nHeight, false);
+			PInvokeUtils.RECT rectWorkArea = new PInvokeUtils.RECT();
+			PInvokeWindows.SystemParametersInfo(PInvokeWindows.SPI_GETWORKAREA, 0, ref rectWorkArea, 0);
+			
+			int nX = (rectWorkArea.Width - rectWindow.Width) / 2 + rectWorkArea.left;
+			int nY = (rectWorkArea.Height - rectWindow.Height) / 2 + rectWorkArea.top;
+			
+			PInvokeWindows.MoveWindow(_hwnd, nX, nY, rectWindow.Width, rectWindow.Height, false);
 #elif GTKMONO
 			int screen_width = PInvokeGTK.gdk_screen_width();
 			int screen_height = PInvokeGTK.gdk_screen_height();

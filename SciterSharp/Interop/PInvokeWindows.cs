@@ -121,7 +121,11 @@ namespace SciterSharp.Interop
 
 		[DllImport("user32.dll")]
 		public static extern IntPtr DispatchMessage([In] ref MSG lpmsg);
-		
+
+		public const int SPI_GETWORKAREA = 0x0030;
+		[DllImport("user32.dll", SetLastError = true)]
+		public static extern bool SystemParametersInfo(int uiAction, int uiParam, ref PInvokeUtils.RECT area, int fWinIni);
+
 
 		#region CreateChildWindow workaround
 		[DllImport("user32.dll", SetLastError=true)]

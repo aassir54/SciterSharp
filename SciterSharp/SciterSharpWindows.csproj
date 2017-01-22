@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveResource.cs" />
+    <Compile Include="Interop\SciterXMsg.cs" />
     <Compile Include="MessageBox.cs" />
     <Compile Include="Interop\PInvokeWindows.cs" />
     <Compile Include="Interop\PInvokeGTK.cs" />
