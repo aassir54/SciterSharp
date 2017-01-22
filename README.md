@@ -1,12 +1,12 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 4.0.0.1
+ACTUAL SCITER VERSION: 4.0.0.2
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.0-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.0-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
-OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.0-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
+OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 Browse the C# source-code: http://sourcebrowser.io/Browse/MISoftware/SciterSharp
 
