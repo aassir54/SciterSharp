@@ -2,11 +2,11 @@
 
 ACTUAL SCITER VERSION: 4.0.0.2
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.8-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.8-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
-OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.9-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
+OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.8-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 Browse the C# source-code: http://sourcebrowser.io/Browse/MISoftware/SciterSharp
 
@@ -34,9 +34,9 @@ License: **GNU GENERAL PUBLIC LICENSE Version 3**
 
 **Tools:**
 
-[OmniView - VS extension to preview Sciter HTML content](http://misoftware.rs/Home/Post/OmniView)
+[OmniView](http://misoftware.rs/Home/Post/OmniView) - VS extension to preview Sciter HTML content
 
-[OmniFiddler - easily edit and share Sciter content](http://misoftware.rs/Home/Post/OmniFiddler)
+[The Library](http://misoftware.rs/Home/Post/TheLibrary) - It is a collection of helpful content (like Sciter's SDK documentation), tooling, and HTML samples
 
 ## Quick Start
 
@@ -130,13 +130,12 @@ Here is a summary of the classes from SciterSharp namespace and their mapping ov
 
 ## WinForms and WPF
 
-With SciterSharp, you can easily create a Sciter child window for you WinForms or WPF application.
+You can easily create a Sciter child window for you WinForms or WPF application. For samples, you can look at the two samples project included in this repo: Tests/TestWinForms and Tests/TestWPF.
 
-For samples, you can look at the two samples project included in this repo: Tests/TestWinForms and Tests/TestWPF.
+**Tutorials:**
 
-WinForms tutorial: [WinForms + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1162179/WinForms-plusSciter-embeddable-HTML-CSS-TIScript-c).
-
-WPF tutorial: [WPF + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1166329/WPF-plus-Sciter-Embeddable-HTML-CSS-TIScript-Contr).
+- WinForms: [WinForms + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1162179/WinForms-plusSciter-embeddable-HTML-CSS-TIScript-c).
+- WPF tutorial: [WPF + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1166329/WPF-plus-Sciter-Embeddable-HTML-CSS-TIScript-Contr).
 
 ## Todo's (help appreciated) 
 
