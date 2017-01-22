@@ -92,6 +92,16 @@ The Sciter native library requires the following packages:
 
 - [Mono installation](http://www.mono-project.com/docs/getting-started/install/mac/)
 
+## WinForms and WPF
+
+You can easily create a Sciter child window for you WinForms or WPF application. For samples, you can look at the two samples project included in this repo: Tests/TestWinForms and Tests/TestWPF.
+
+**Tutorials:**
+
+- WinForms: [WinForms + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1162179/WinForms-plusSciter-embeddable-HTML-CSS-TIScript-c).
+- WPF tutorial: [WPF + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1166329/WPF-plus-Sciter-Embeddable-HTML-CSS-TIScript-Contr).
+
+
 ## Know Issues
 
 Sciter have problems with video cards of old computers because the engine by default, is GPU accelerated. For me, in an old notebook I have, the execution hangs when I create the Sciter window. The solution is to switch the graphic engine to non-GPU mode, that is, CPU only. It's possible through the following Sciter API call:
@@ -127,15 +137,6 @@ Here is a summary of the classes from SciterSharp namespace and their mapping ov
 - **class SciterPath**
 - **class SciterText**
 - **class SciterRequest**: Request native API
-
-## WinForms and WPF
-
-You can easily create a Sciter child window for you WinForms or WPF application. For samples, you can look at the two samples project included in this repo: Tests/TestWinForms and Tests/TestWPF.
-
-**Tutorials:**
-
-- WinForms: [WinForms + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1162179/WinForms-plusSciter-embeddable-HTML-CSS-TIScript-c).
-- WPF tutorial: [WPF + Sciter: embeddable HTML/CSS/TIScript control for modern UI development](https://www.codeproject.com/Articles/1166329/WPF-plus-Sciter-Embeddable-HTML-CSS-TIScript-Contr).
 
 ## Todo's (help appreciated) 
 
