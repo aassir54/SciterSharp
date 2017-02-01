@@ -32,7 +32,6 @@ namespace SciterSharp
 
 	class SciterValueFunctor : SciterValue
 	{
-
 	}
 
 	public class SciterValue
@@ -437,7 +436,7 @@ namespace SciterSharp
 
 		public IEnumerable<SciterValue> AsEnumerable()
 		{
-			if(!IsArray && !IsObject)
+			if(!IsArray && !IsObject && !IsMap)
 				throw new ArgumentException("This SciterValue is not an array or object");
 			for(int i = 0; i < Length; i++)
 			{
@@ -447,7 +446,7 @@ namespace SciterSharp
 
 		public IDictionary<SciterValue, SciterValue> AsDictionary()
 		{
-			if(!IsObject)
+			if(!IsObject && !IsMap)
 				throw new ArgumentException("This SciterValue is not an object");
 
 			Dictionary<SciterValue, SciterValue> dic = new Dictionary<SciterValue, SciterValue>();

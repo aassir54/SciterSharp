@@ -10,4 +10,4 @@ obj/
 .vs
 *.sdf
 .DS_Store
-
+*.db

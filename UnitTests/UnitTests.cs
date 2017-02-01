@@ -31,7 +31,7 @@ namespace UnitTests
 			res.Append(new SciterValue(1));
 			string r = res.ToString();
 			string r2 = res.ToString();
-			string r3 = res.ToJSONString(SciterSharp.Interop.SciterXValue.VALUE_STRING_CVT_TYPE.CVT_JSON_LITERAL);
+			string r3 = res.ToJSONString(SciterXValue.VALUE_STRING_CVT_TYPE.CVT_JSON_LITERAL);
 
 			{
 				// http://sciter.com/forums/topic/erasing-sequence-elements-with-scitervalue/
@@ -45,7 +45,16 @@ namespace UnitTests
 
 			// Datetime
 			{
-				SciterValue sv = new SciterValue(DateTime.Now);
+				var now = DateTime.Now;
+				SciterValue sv = new SciterValue(now);
+				Assert.IsTrue(sv.GetDate() == now);
+			}
+
+			// SciterValue.AsDictionary
+			{
+				SciterValue sv = SciterValue.FromJSONString("{ a: 1, b: true }");
+				var dic = sv.AsDictionary();
+				Assert.IsTrue(dic.Count == 2);
 			}
 		}
 
