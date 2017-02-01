@@ -107,16 +107,9 @@ namespace SciterSharp.Interop
 				Debug.Assert(api_struct_size == 1296);
 				api_ptr = SciterAPI();
 #elif OSX
-				if(IntPtr.Size == 8)
-				{
-					Debug.Assert(api_struct_size == 648 * 2);
-					api_ptr = SciterAPI64();
-				}
-				else
-				{
-					Debug.Assert(api_struct_size == 648);
-					api_ptr = SciterAPI32();
-				}
+				Debug.Assert(IntPtr.Size == 8);
+				Debug.Assert(api_struct_size == 648 * 2);
+				api_ptr = SciterAPI64();
 #endif
 
 				_api = (ISciterAPI)Marshal.PtrToStructure(api_ptr, typeof(ISciterAPI));
