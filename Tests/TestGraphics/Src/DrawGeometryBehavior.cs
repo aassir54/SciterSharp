@@ -27,8 +27,8 @@ namespace TestGraphics
 						Tuple.Create(50.0f, 150.0f)
 					};
 
-					g.LineColor = Color.Blue;
-					g.FillColor = Color.Red;
+					g.LineColor = new RGBAColor(0, 0, 255);
+					g.FillColor = new RGBAColor(255, 0, 0);
 					g.LineWidth = 5;
 					g.Polygon(points);
 					g.Ellipse(200, 50, 50, 50);

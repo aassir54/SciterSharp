@@ -35,10 +35,26 @@ namespace SciterSharp
 		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
 		public uint c;
 
-		public RGBAColor(uint r, uint g, uint b, uint alpha)
+		public RGBAColor(int r, int g, int b, int alpha = 255)
 		{
-			c = _gapi.RGBA(r, g, b, alpha);
+			c = _gapi.RGBA((uint)r, (uint)g, (uint)b, (uint)alpha);
 		}
+
+		public static RGBAColor White = new RGBAColor(255, 255, 255);
+		public static RGBAColor Black = new RGBAColor(0, 0, 0);
+		public static RGBAColor Invalid = new RGBAColor(-1, -1, -1);
+
+#if WINDOWS
+		public static RGBAColor FromColor(Color clr)
+		{
+			return new RGBAColor(clr.R, clr.G, clr.B, clr.A);
+		}
+
+		private static uint ToRGBA(Color clr)
+		{
+			return _gapi.RGBA(clr.R, clr.G, clr.B, clr.A);
+		}
+#endif
 	}
 
 	public class SciterGraphics : IDisposable
@@ -143,26 +159,24 @@ namespace SciterSharp
 				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 			}
 		}
-
-#if WINDOWS
-		public Color LineColor
+		
+		public RGBAColor LineColor
 		{
 			set
 			{
-				var r = _gapi.gLineColor(_hgfx, ToRGBA(value));
+				var r = _gapi.gLineColor(_hgfx, value.c);
 				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 			}
 		}
 
-		public Color FillColor
+		public RGBAColor FillColor
 		{
 			set
 			{
-				var r = _gapi.gFillColor(_hgfx, ToRGBA(value));
+				var r = _gapi.gFillColor(_hgfx, value.c);
 				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
 			}
 		}
-#endif
 		#endregion
 
 		#region Affine tranformations
@@ -261,13 +275,6 @@ namespace SciterSharp
 			// GC.SuppressFinalize(this);
 		}
 		#endregion
-
-#if WINDOWS
-		private static uint ToRGBA(Color clr)
-		{
-			return _gapi.RGBA(clr.R, clr.G, clr.B, clr.A);
-		}
-#endif
 	}
 
 	public class SciterImage : IDisposable
