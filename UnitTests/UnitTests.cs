@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SciterSharp;
@@ -74,6 +75,13 @@ namespace UnitTests
 
 			var b = gapi.gPushClipPath(hgfx, hpath, 0.5f);
 			var c = gapi.gPopClip(hgfx);
+
+			// RGBA
+			var rgba = new RGBAColor(1, 2, 3, 4);
+			Assert.IsTrue(rgba.R == 1);
+			Assert.IsTrue(rgba.G == 2);
+			Assert.IsTrue(rgba.B == 3);
+			Assert.IsTrue(rgba.A == 4);
 		}
 
 

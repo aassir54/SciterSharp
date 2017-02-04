@@ -33,12 +33,18 @@ namespace SciterSharp
 	public struct RGBAColor
 	{
 		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
-		public uint c;
+		public uint c { get; private set; }
+
+		public byte R { get { return (byte) (c & 0xFF); } }
+		public byte G { get { return (byte) ((c>>8) & 0xFF); } }
+		public byte B { get { return (byte) ((c>>16) & 0xFF);  } }
+		public byte A { get { return (byte) ((c>>24) & 0xFF); } }
 
 		public RGBAColor(int r, int g, int b, int alpha = 255)
 		{
 			c = _gapi.RGBA((uint)r, (uint)g, (uint)b, (uint)alpha);
 		}
+
 
 		public static RGBAColor White = new RGBAColor(255, 255, 255);
 		public static RGBAColor Black = new RGBAColor(0, 0, 0);
