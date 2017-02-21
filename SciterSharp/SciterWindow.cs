@@ -252,7 +252,7 @@ namespace SciterSharp
 				_nsview.Window.MakeKeyWindow();
 				_nsview.Window.MakeKeyAndOrderFront(null);
 			} else {
-				_nsview.Window.Miniaturize(_nsview.Window);// PerformMiniaturize?
+				_nsview.Window.OrderOut(_nsview.Window);// PerformMiniaturize?
 			}
 #endif
 		}

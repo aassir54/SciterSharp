@@ -409,6 +409,7 @@ namespace SciterSharp.Interop
 			BY_MOUSE_CLICK,
 			BY_KEY_CLICK,
 			SYNTHESIZED,
+			BY_MOUSE_ON_ICON,
 		}
 
 		public enum EDIT_CHANGED_REASON : uint
@@ -417,6 +418,7 @@ namespace SciterSharp.Interop
 			BY_INS_CHARS,
 			BY_DEL_CHAR,
 			BY_DEL_CHARS,
+			BY_UNDO_REDO,
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -438,7 +440,7 @@ namespace SciterSharp.Interop
 		public enum BEHAVIOR_METHOD_IDENTIFIERS : uint
 		{
 			DO_CLICK = 0,
-			GET_TEXT_VALUE = 1,
+			/*GET_TEXT_VALUE = 1,
 			SET_TEXT_VALUE,
 			TEXT_EDIT_GET_SELECTION,
 			TEXT_EDIT_SET_SELECTION,
@@ -448,7 +450,7 @@ namespace SciterSharp.Interop
 			TEXT_EDIT_GET_CARET_POSITION, 
 			TEXT_EDIT_GET_SELECTION_TEXT,
 			TEXT_EDIT_GET_SELECTION_HTML,
-			TEXT_EDIT_CHAR_POS_AT_XY,
+			TEXT_EDIT_CHAR_POS_AT_XY,*/
 			IS_EMPTY      = 0xFC,
 			GET_VALUE     = 0xFD,
 			SET_VALUE     = 0xFE,
