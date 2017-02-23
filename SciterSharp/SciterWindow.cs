@@ -70,6 +70,23 @@ namespace SciterSharp
 #endif
 		}
 
+		public SciterWindow(IntPtr hwnd)
+		{
+#if WINDOWS
+			_proc = InternalProcessSciterWindowMessage;
+#else
+			_proc = null;
+#endif
+			_hwnd = hwnd;
+
+#if GTKMONO
+			_gtkwindow = PInvokeGTK.gtk_widget_get_toplevel(_hwnd);
+			Debug.Assert(_gtkwindow != IntPtr.Zero);
+#elif OSX
+			_nsview = new OSXView(_hwnd);
+#endif
+		}
+
 		public const SciterXDef.SCITER_CREATE_WINDOW_FLAGS DefaultCreateFlags =
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_MAIN |
 			SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_TITLEBAR |

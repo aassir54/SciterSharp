@@ -280,6 +280,17 @@ namespace SciterSharp
 			return hwnd;
 		}
 
+		public SciterWindow Window
+		{
+			get
+			{
+				IntPtr hwnd = GetNativeHwnd();
+				if(hwnd != IntPtr.Zero)
+					return new SciterWindow(hwnd);
+				return null;
+			}
+		}
+
 		public uint UID
 		{
 			get
