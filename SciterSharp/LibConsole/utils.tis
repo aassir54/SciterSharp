@@ -30,7 +30,7 @@ namespace Utils
 		return txt;
 	}
 
-	function readStremToEnd(stream)
+	function readStreamToEnd(stream)
 	{
 		var txt = "";
 		var line;
