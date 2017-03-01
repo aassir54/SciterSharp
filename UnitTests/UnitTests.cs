@@ -97,6 +97,20 @@ namespace UnitTests
 		}
 
 		[TestMethod]
+		public void TestThings()
+		{
+			SciterWindow wnd = new SciterWindow();
+			wnd.CreateMainWindow(1500, 800);
+			wnd.Title = "Wtf";
+
+			SciterHost host = new SciterHost(wnd);
+			wnd.LoadHtml("<html></html>");
+
+			var sv = wnd.EvalScript("Utils.readStreamToEnd");
+			Assert.IsTrue(!sv.IsUndefined);
+		}
+
+		[TestMethod]
 		public void TestODH()
 		{
 			TestableDOH odh = new TestableDOH();

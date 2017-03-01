@@ -29,7 +29,7 @@ using SciterSharp.Interop;
 
 namespace SciterSharp
 {
-	public abstract class SciterHost
+	public class SciterHost
 	{
 		const int INVOKE_NOTIFICATION = 0x8206241;
 
@@ -72,10 +72,7 @@ namespace SciterSharp
 			Debug.Assert(wnd._hwnd != IntPtr.Zero);
 			Debug.Assert(_hwnd == IntPtr.Zero, "You already called SetupWindow()");
 
-			_hwnd = wnd._hwnd;
-
-			_cbk = this.HandleNotification;
-			_api.SciterSetCallback(_hwnd, Marshal.GetFunctionPointerForDelegate(_cbk), IntPtr.Zero);
+			SetupWindow(wnd._hwnd);
 		}
 
 		public void SetupWindow(IntPtr hwnd)
