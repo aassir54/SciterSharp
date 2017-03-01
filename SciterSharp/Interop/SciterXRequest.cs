@@ -198,6 +198,14 @@ namespace SciterSharp.Interop
 			// REQUEST_RESULT SCFN(RequestSetRspHeader)( HREQUEST rq, LPCWSTR name, LPCWSTR value );
 			public delegate REQUEST_RESULT FPTR_RequestSetRspHeader(IntPtr rq, [MarshalAs(UnmanagedType.LPWStr)]string name, [MarshalAs(UnmanagedType.LPWStr)]string value);
 
+			// set received data type, string, mime type
+			// REQUEST_RESULT SCFN(RequestSetReceivedDataType)( HREQUEST rq, LPCSTR type );
+			public delegate REQUEST_RESULT FPTR_RequestSetReceivedDataType(IntPtr rq, [MarshalAs(UnmanagedType.LPStr)]string type);
+
+			// set received data encoding, string
+			// REQUEST_RESULT SCFN(RequestSetReceivedDataEncoding)( HREQUEST rq, LPCSTR encoding );
+			public delegate REQUEST_RESULT FPTR_RequestSetReceivedDataEncoding(IntPtr rq, [MarshalAs(UnmanagedType.LPStr)]string encoding);
+
 			// get received (so far) data
 			// REQUEST_RESULT SCFN(RequestGetData)( HREQUEST rq, LPCBYTE_RECEIVER* rcv, LPVOID rcv_param );
 			public delegate REQUEST_RESULT FPTR_RequestGetData(IntPtr rq, SciterXDom.FPTR_LPCBYTE_RECEIVER rcv, IntPtr rcv_param);

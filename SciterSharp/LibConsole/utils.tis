@@ -30,6 +30,15 @@ namespace Utils
 		return txt;
 	}
 
+	function readStremToEnd(stream)
+	{
+		var txt = "";
+		var line;
+		while((line = stream.readln()) !== undefined)
+			txt += line;
+		return txt;
+	}
+
 	// Makes clicking in <a href="XYZ"> open the browser, and so to not do navigating inside the Sciter engine
 	// ex.: Utils.installLinkHandler(self);
 	//
