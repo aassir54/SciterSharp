@@ -36,11 +36,10 @@
     <DocumentationFile>bin\Release\SciterSharpWindows.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>SciterMidi.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -85,6 +84,7 @@
   <ItemGroup>
     <None Include="LibConsole\console.tis" />
     <None Include="LibConsole\utils.tis" />
+    <None Include="SciterMidi.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
