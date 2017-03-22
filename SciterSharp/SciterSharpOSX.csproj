@@ -92,6 +92,8 @@
     <None Include="SciterSharpOSX.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="LibConsole\console.tis" />
+    <None Include="LibConsole\utils.tis" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>

@@ -10,7 +10,7 @@ namespace OSXPublishNuget
 	{
 		public static void Main(string[] args)
 		{
-			Environment.CurrentDirectory = "/Users/diazfabiana/Desktop/Ramon/SciterSharp/SciterSharp";
+			Environment.CurrentDirectory = "/Users/midiway/Desktop/SciterSharp/SciterSharp";
 			string nuspec = File.ReadAllText("SciterSharpOSX.nuspec");
 			nuspec = Regex.Replace(nuspec,
 						  "<version>.*?</version>",

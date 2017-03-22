@@ -1,7 +1,7 @@
 ﻿<Properties StartupConfiguration="{32DEDB6C-01A9-4DBF-A5E3-05F63DC8DFF1}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="OSXPublishNuget/Program.cs">
     <Files>
-      <File FileName="OSXPublishNuget/Program.cs" Line="14" Column="21" />
+      <File FileName="OSXPublishNuget/Program.cs" Line="13" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
@@ -9,6 +9,7 @@
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.ItemProperties.TestsUI.TestGraphics PreferredExecutionTarget="MonoDevelop.Default" />
   <DisabledProjects>
     <String>SciterSharp/SciterSharpWindows.csproj</String>
