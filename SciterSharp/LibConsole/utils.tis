@@ -32,7 +32,6 @@ namespace Utils
 
 	function readStreamToEnd(stream)
 	{
-
 		var txt = "";
 		var line;
 		while((line = stream.readln()) !== undefined)
@@ -77,4 +76,36 @@ function Element.show()
 function Element.toggle()
 {
 	this.style#visibility = this.isVisible ? "none" : "visible";
+}
+
+function Element.asViewMoveHandler()
+{
+	var captured = false;
+	var offx;
+	var offy;
+
+	this.onMouse = function(evt) {
+		if(captured)
+		{
+			if(evt.type == Event.MOUSE_MOVE)
+			{
+				view.move(evt.xScreen - offx, evt.yScreen - offy);
+			}
+			else if(evt.type == Event.MOUSE_UP || evt.type == Event.MOUSE_LEAVE)
+			{
+				this.capture(false);
+				captured = false;
+			}
+		} else {
+			if(evt.type == Event.MOUSE_DOWN)
+			{
+				var (x,y) = view.box(#position, #border, #screen);
+				offx = evt.xScreen - x;
+				offy = evt.yScreen - y;
+
+				captured = true;
+				this.capture(#strict);
+			}
+		}
+	};
 }
