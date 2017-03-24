@@ -152,7 +152,7 @@ namespace SciterSharp.Interop
 
 		public enum GFX_LAYER : uint
 		{
-			GFX_LAYER_GDI = 1,
+			GFX_LAYER_GDI = 1, GFX_LAYER_CG = 1, GFX_LAYER_CAIRO = 1,
 			GFX_LAYER_WARP = 2,
 			GFX_LAYER_D2D = 3,
 			GFX_LAYER_SKIA = 4,
