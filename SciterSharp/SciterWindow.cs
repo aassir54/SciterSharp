@@ -295,15 +295,17 @@ namespace SciterSharp
 #endif
 		}
 
-#if WINDOWS
 		public bool IsVisible
 		{
 			get
 			{
+#if WINDOWS
 				return PInvokeWindows.IsWindowVisible(_hwnd);
+#elif OSX
+				return _nsview.Window.IsVisible;
+#endif
 			}
 		}
-#endif
 
 		public IntPtr VM
 		{

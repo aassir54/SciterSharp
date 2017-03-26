@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{32DEDB6C-01A9-4DBF-A5E3-05F63DC8DFF1}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="OSXPublishNuget/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SciterSharp/SciterWindow.cs">
     <Files>
-      <File FileName="OSXPublishNuget/Program.cs" Line="13" Column="1" />
+      <File FileName="SciterSharp/SciterWindow.cs" Line="301" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
