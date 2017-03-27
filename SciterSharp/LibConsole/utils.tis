@@ -52,12 +52,12 @@ namespace Utils
 		});
 	}
 
-	function revealFile(path)
+	function revealPath(path)
 	{
 		if(Utils.IsWindows)
-			System.exec("explorer.exe", "/select," + filename.replace("/", "\\"));
+			System.exec("explorer.exe", "/select," + path.replace("/", "\\"));
 		else(Utils.IsOSX)
-			System.exec("open", "-R " + filename);
+			System.exec("open", "-R " + path);
 	}
 }
 
