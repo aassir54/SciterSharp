@@ -51,6 +51,14 @@ namespace Utils
 			return true;
 		});
 	}
+
+	function revealFile(path)
+	{
+		if(Utils.IsWindows)
+			System.exec("explorer.exe", "/select," + filename.replace("/", "\\"));
+		else(Utils.IsOSX)
+			System.exec("open", "-R " + filename);
+	}
 }
 
 function Element.tagname()
