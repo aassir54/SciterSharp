@@ -24,19 +24,17 @@ namespace Utils
 	function readFileText(path)
 	{
 		var stream = Stream.openFile(path);
-		var txt = "";
-		var ln;
-		while((ln = stream.readln()) !== undefined)
-			txt += ln;
-		return txt;
+		var ret = readStreamToEnd(path);
+		stream.close();
+		return ret;
 	}
 
 	function readStreamToEnd(stream)
 	{
 		var txt = "";
-		var line;
-		while((line = stream.readln()) !== undefined)
-			txt += line;
+		var ln;
+		while((ln = stream.readln()) !== undefined)
+			txt += ln + "\n";
 		return txt;
 	}
 
