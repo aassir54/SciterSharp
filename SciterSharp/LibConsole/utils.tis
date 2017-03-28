@@ -24,7 +24,7 @@ namespace Utils
 	function readFileText(path)
 	{
 		var stream = Stream.openFile(path);
-		var ret = readStreamToEnd(path);
+		var ret = readStreamToEnd(stream);
 		stream.close();
 		return ret;
 	}
