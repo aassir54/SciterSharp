@@ -25,7 +25,8 @@ namespace Utils
 	{
 		var stream = Stream.openFile(path);
 		var txt = "";
-		while(var ln = stream.readln())
+		var ln;
+		while((ln = stream.readln()) !== undefined)
 			txt += ln;
 		return txt;
 	}
@@ -57,7 +58,7 @@ namespace Utils
 		if(Utils.IsWindows)
 			System.exec("explorer.exe", "/select," + path.replace("/", "\\"));
 		else(Utils.IsOSX)
-			System.exec("open", "-R " + path);
+			System.exec("open", "-R \"" + path + "\"");
 	}
 }
 
