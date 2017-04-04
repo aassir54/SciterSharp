@@ -34,7 +34,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>SciterSharp.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -66,9 +67,6 @@
     <Compile Include="Interop\SciterXValue.cs" />
     <Compile Include="Interop\SciterXVideoAPI.cs" />
     <Compile Include="Interop\TIScript.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SciterSharp.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

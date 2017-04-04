@@ -345,9 +345,9 @@ namespace SciterSharp.Interop
 			//DO_SWITCH_TAB = ACTIVATE_CHILD,// command to switch tab programmatically, handled by behavior:tabs
 			//                               // use it as HTMLayoutPostEvent(tabsElementOrItsChild, DO_SWITCH_TAB, tabElementToShow, 0);
 
-			INIT_DATA_VIEW,                // request to virtual grid to initialize its view
+			//INIT_DATA_VIEW,                // request to virtual grid to initialize its view
 
-			ROWS_DATA_REQUEST,				// request from virtual grid to data source behavior to fill data in the table
+			//ROWS_DATA_REQUEST,				// request from virtual grid to data source behavior to fill data in the table
 											// parameters passed throug DATA_ROWS_PARAMS structure.
 
 			UI_STATE_CHANGED,				// ui state changed, observers shall update their visual states.
