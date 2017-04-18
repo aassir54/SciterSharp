@@ -69,9 +69,19 @@ function Element.tagname()
 		name += "#" + id;
 	if(classes)
 		name += "." + classes.split(" ").join(".");
-	return "<" + name + ">";
-}
 
+	for(var attr in this.attributes)
+	{
+		var val = this.attributes[attr];
+		if(val != undefined)
+			name += "[" + attr + "=" + val + "]";
+		else
+			name += "[" + attr + "]";
+	}
+
+	return "<" + name + ">";
+
+}
 function Element.hide()
 {
 	this.style#visibility = "none";
