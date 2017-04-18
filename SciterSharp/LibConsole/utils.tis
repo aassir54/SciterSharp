@@ -3,6 +3,7 @@ namespace Utils
 	const IsWindows = view.mediaVars()["os-vendor"] == "Microsoft";//System.OS.toString().indexOf("Windows")!=-1;
 	const IsOSX = System.OS.toString().indexOf("MacOSX")!=-1;
 	const IsOSX_UI = view.mediaVars()["os-vendor"] == "Apple";
+	const IsLinux = view.mediaVars()["os-vendor"] == "Linux";
 
 	property InDBGView(val)
 	{

@@ -301,6 +301,8 @@ namespace SciterSharp
 			{
 #if WINDOWS
 				return PInvokeWindows.IsWindowVisible(_hwnd);
+#elif GTKMONO
+				return PInvokeGTK.gtk_widget_get_visible(_gtkwindow) != 0;
 #elif OSX
 				return _nsview.Window.IsVisible;
 #endif

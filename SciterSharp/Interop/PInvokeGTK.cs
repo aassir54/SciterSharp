@@ -65,6 +65,9 @@ namespace SciterSharp.Interop
 
 		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void gtk_widget_destroy(IntPtr widget);
+
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int gtk_widget_get_visible(IntPtr widget);
 	}
 }
 #endif
