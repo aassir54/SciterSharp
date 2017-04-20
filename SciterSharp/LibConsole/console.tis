@@ -112,6 +112,9 @@ namespace console
 	const ns_bench_timers = {};
 }
 
+function DummyAspect()
+{
+}
 
 
 // aliases
