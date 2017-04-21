@@ -30,6 +30,15 @@ namespace Utils
 		return ret;
 	}
 
+	function writeFileText(path, data)
+	{
+		assert(typeof(data)==#string);
+
+		var stream = Stream.openFile(path, "w+");
+		stream.print(data);
+		stream.close();
+	}
+
 	function readStreamToEnd(stream)
 	{
 		var txt = "";
