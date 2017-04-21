@@ -34,7 +34,8 @@ namespace SciterSharp
 
 		public void Open(byte[] res_array)
 		{
-			Debug.Assert(_har == IntPtr.Zero);
+			if(_har != IntPtr.Zero)
+				throw new Exception("Archive already open.");
 
 			_pinnedArray = GCHandle.Alloc(res_array, GCHandleType.Pinned);
 			_har = _api.SciterOpenArchive(_pinnedArray.AddrOfPinnedObject(), (uint) res_array.Length);
@@ -43,7 +44,9 @@ namespace SciterSharp
 
 		public void Close()
 		{
-			Debug.Assert(_har != IntPtr.Zero);
+			if(_har == IntPtr.Zero)
+				throw new Exception("You haven't yet opened this archive.");
+			
 			_api.SciterCloseArchive(_har);
 			_har = IntPtr.Zero;
 			_pinnedArray.Free();
@@ -51,7 +54,8 @@ namespace SciterSharp
 
 		public byte[] Get(string path)
 		{
-			Debug.Assert(_har != IntPtr.Zero);
+			if(_har == IntPtr.Zero)
+				throw new Exception("You haven't yet opened this archive.");
 
 			IntPtr data_ptr;
 			uint data_count;
