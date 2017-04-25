@@ -60,7 +60,7 @@ namespace SciterSharp.Interop
 		// alias BOOL function(LPCSTR, HELEMENT, LPElementEventProc*, LPVOID*) SciterBehaviorFactory;
 		public delegate bool FPTR_SciterBehaviorFactory([MarshalAs(UnmanagedType.LPStr)]string s, IntPtr he, out FPTR_ElementEventProc proc, out IntPtr tag);
 
-
+		[Flags]
 		public enum PHASE_MASK : uint
 		{
 			BUBBLING = 0,		// bubbling (emersion) phase
@@ -68,13 +68,15 @@ namespace SciterSharp.Interop
 			HANDLED  = 0x10000
 		}
 
+		[Flags]
 		public enum MOUSE_BUTTONS : uint
 		{
-			MAIN_MOUSE_BUTTON = 1,
-			PROP_MOUSE_BUTTON = 2,
-			MIDDLE_MOUSE_BUTTON = 4,
+			MAIN_MOUSE_BUTTON = 0x1,
+			PROP_MOUSE_BUTTON = 0x2,
+			MIDDLE_MOUSE_BUTTON = 0x4,
 		}
 
+		[Flags]
 		public enum KEYBOARD_STATES : uint
 		{
 			CONTROL_KEY_PRESSED = 0x1,

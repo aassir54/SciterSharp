@@ -229,8 +229,50 @@ namespace SciterSharp
 			int screen_height = PInvokeGTK.gdk_screen_height();
 			return new PInvokeUtils.SIZE() { cx = screen_width, cy = screen_height };
 #elif OSX
-			return new PInvokeUtils.SIZE();// TODO
+			var sz = NSScreen.MainScreen.Frame.Size;
+			return new PInvokeUtils.SIZE((int)sz.Width, (int)sz.Height);
 #endif
+		}
+
+		public PInvokeUtils.SIZE ScreenSize
+		{
+			get
+			{
+#if WINDOWS
+#elif GTKMONO
+#elif OSX
+			var sz = _nsview.Window.Screen.Frame.Size;
+			return new PInvokeUtils.SIZE((int)sz.Width, (int)sz.Height);
+#endif
+			}
+		}
+
+		public PInvokeUtils.SIZE Size
+		{
+			get
+			{
+				var sz = _nsview.Window.Frame.Size;
+				return new PInvokeUtils.SIZE { cx = (int)sz.Width, cy = (int)sz.Height };
+			}
+		}
+
+		public PInvokeUtils.POINT Position
+		{
+			get
+			{
+#if OSX
+				var pos = _nsview.Window.Frame.Location;
+				return new PInvokeUtils.POINT((int)pos.X, (int)pos.Y);
+#endif
+			}
+
+			set
+			{
+#if OSX
+				var pt = new CoreGraphics.CGPoint(value.X, value.Y);
+				_nsview.Window.SetFrameTopLeftPoint(pt);
+#endif
+			}
 		}
 
 		/// <summary>

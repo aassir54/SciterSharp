@@ -17,6 +17,7 @@ namespace TestOSX
 			wnd.CreateMainWindow(500, 500);
 			wnd.LoadPage("/Users/midiway/Desktop/SciterSharp/Tests/TestOSX/res/index.html");
 			wnd.Show();
+			wnd.Position = new SciterSharp.Interop.PInvokeUtils.POINT(100, 40);
 
 			NSApplication.Main(args);
 		}

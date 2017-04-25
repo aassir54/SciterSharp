@@ -81,6 +81,12 @@ namespace SciterSharp.Interop
 		{
 			public int X;
 			public int Y;
+
+			public POINT(int x, int y)
+			{
+				X = x;
+				Y = y;
+			}
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -88,6 +94,12 @@ namespace SciterSharp.Interop
 		{
 			public int cx;
 			public int cy;
+
+			public SIZE(int x, int y)
+			{
+				cx = x;
+				cy = y;
+			}
 		}
 	}
 }
