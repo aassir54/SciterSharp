@@ -308,7 +308,6 @@ namespace SciterSharp
 			if(show)
 			{
 				_nsview.Window.MakeMainWindow();
-				_nsview.Window.MakeKeyWindow();
 				_nsview.Window.MakeKeyAndOrderFront(null);
 			} else {
 				_nsview.Window.OrderOut(_nsview.Window);// PerformMiniaturize?

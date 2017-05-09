@@ -1,22 +1,8 @@
 ﻿<Properties StartupConfiguration="{764A2B71-F267-4C2E-A4CD-33E050659BD6}|Default">
-  <MonoDevelop.Ide.Workbench>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="SciterSharp" expanded="True">
-            <Node name="TestsUI" expanded="True">
-              <Node name="TestGraphics" expanded="True">
-                <Node name="Src" expanded="True" />
-              </Node>
-            </Node>
-            <Node name="SciterSharpOSX" expanded="True">
-              <Node name="Interop" expanded="True" />
-              <Node name="SciterWindow.cs" selected="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
+  <MonoDevelop.Ide.Workbench ActiveDocument="SciterSharp/SciterWindow.cs">
+    <Files>
+      <File FileName="SciterSharp/SciterWindow.cs" Line="311" Column="1" />
+    </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
