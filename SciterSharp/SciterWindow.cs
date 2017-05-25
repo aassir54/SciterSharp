@@ -290,7 +290,6 @@ namespace SciterSharp
 			set
 			{
 #if WINDOWS
-
 				PInvokeWindows.MoveWindow(_hwnd, value.X, value.Y, Size.cx, Size.cy, false);
 #elif GTKMONO
 				PInvokeGTK.gtk_window_move(_gtkwindow, value.X, value.Y);

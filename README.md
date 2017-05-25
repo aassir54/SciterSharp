@@ -1,6 +1,6 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 4.0.0.8
+ACTUAL SCITER VERSION: 4.0.1.0
 
 Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.21-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
@@ -18,6 +18,8 @@ The source is made portable to work in Windows, Linux/GTK+3/Mono and OSX/Mono.
 
 License: **GNU GENERAL PUBLIC LICENSE Version 3**
 
+Comercial License: **for inquiries, [contact me](mailto:ramon@misoftware.rs)**
+
 ## Documentation
 
 [Introductory walk-through for writing apps with SciterSharp](http://www.codeproject.com/Articles/1057199/Sciter-HTML-Csharp-based-desktop-apps-walkthrough)
@@ -34,9 +36,15 @@ License: **GNU GENERAL PUBLIC LICENSE Version 3**
 
 **Tools:**
 
-[OmniView](http://misoftware.rs/Home/Post/OmniView) - VS extension to preview Sciter HTML content
+[The Library](http://misoftware.rs/Home/Post/TheLibrary) - free app with a collection of Sciter related helpful content (like Sciter's SDK documentation), tooling, and HTML samples
 
-[The Library](http://misoftware.rs/Home/Post/TheLibrary) - It is a collection of helpful content (like Sciter's SDK documentation), tooling, and HTML samples
+[Omni](http://misoftware.rs/Omni) - desktop app with F12 tools (DOM inspecting and script debugging) for assisting the development of the HTML/CSS for Sciter pages
+
+[OmniCode](http://misoftware.rs/OmniCode) - Visual Studio extension that brings a full-featured TIScript and CSS editor for writing your HTML based code for Sciter technology
+
+[OmniView](http://misoftware.rs/Home/Post/OmniView) - Visual Studio extension to preview Sciter HTML content
+
+[OmniLite](http://misoftware.rs/Home/Post/OmniLite) - handy **signed** macOS desktop tool for previewing Sciter HTML
 
 ## Quick Start
 
