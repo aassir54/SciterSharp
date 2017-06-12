@@ -50,6 +50,16 @@ namespace Utils
 		stream.close();
 	}
 
+	function removeFile(path)
+	{
+		var task = Process.proxy();
+		task
+		if(Utils.IsWindows)
+			System.exec("cmd", "/select," + path.replace("/", "\\"));
+		else(Utils.IsOSX)
+			System.exec("open", "-R \"" + path + "\"");
+	}
+
 	function readStreamToEnd(stream)
 	{
 		var txt = "";

@@ -164,7 +164,7 @@ namespace SciterSharp
 
 			string wndclass = Marshal.PtrToStringUni(_api.SciterClassName());
 			_hwnd = PInvokeWindows.CreateWindowEx(0, wndclass, null, PInvokeWindows.WS_CHILD, 0, 0, rc.right, rc.bottom, hwnd_parent, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-			SetSciterOption(SciterXDef.SCITER_RT_OPTIONS.SCITER_SET_DEBUG_MODE, new IntPtr(1));
+			//SetSciterOption(SciterXDef.SCITER_RT_OPTIONS.SCITER_SET_DEBUG_MODE, new IntPtr(1));// NO, user should opt for it
 
 			/*PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
 			_hwnd = _api.SciterCreateWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CHILD, ref frame, _proc, IntPtr.Zero, hwnd_parent);
