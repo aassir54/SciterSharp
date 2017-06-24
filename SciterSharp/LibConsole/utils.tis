@@ -1,18 +1,10 @@
 namespace Utils
 {
-	const IsWindows = view.mediaVars()["os-vendor"] == "Microsoft";//System.OS.toString().indexOf("Windows")!=-1;
-	const IsOSX = System.OS.toString().indexOf("MacOSX")!=-1;
+	const IsWindows = System.PLATFORM == #Windows;
+	const IsLinux = System.PLATFORM == #Linux;
+	const IsOSX = System.PLATFORM == #OSX;
 	const IsOSX_UI = view.mediaVars()["os-vendor"] == "Apple";
-	const IsLinux = view.mediaVars()["os-vendor"] == "Linux";
-
-	property InDBGView(val)
-	{
-		get
-		{
-			return !!View.omni || !!View.omniview;
-		}
-	}
-
+	property InDBGView(val) { get { return !!View.omni || !!View.omniview; } }
 	const SciterVersion = String.printf("%d.%d.%d.%d", 
 		(Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
 		(Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
@@ -49,17 +41,6 @@ namespace Utils
 		stream.print(data);
 		stream.close();
 	}
-
-	function removeFile(path)
-	{
-		var task = Process.proxy();
-		task
-		if(Utils.IsWindows)
-			System.exec("cmd", "/select," + path.replace("/", "\\"));
-		else(Utils.IsOSX)
-			System.exec("open", "-R \"" + path + "\"");
-	}
-
 	function readStreamToEnd(stream)
 	{
 		var txt = "";
@@ -68,6 +49,30 @@ namespace Utils
 			txt += ln + "\n";
 		return txt;
 	}
+
+	function removeFile(path)
+	{
+		if(IsWindows)
+			await exec("cmd", "/c", "del " + path.replace("/", "\\"));
+		else
+			await exec("rm", path);
+	}
+
+	function exec(args..)
+	{
+		var oath = promise();
+		var out = "";
+		var proc = Process.proxy();
+		proc << event stdout (text) { out += text; log(text); }
+		proc << event stderr (text) { out += text; log(text); }
+		proc << event terminate(status) {
+			if( status == 0 ) oath(true,[out]);
+			else oath(false,[out]);
+		}
+		proc.exec.apply(proc,args);
+		return oath;
+	}
+
 
 	// Makes clicking in <a href="XYZ"> open the browser, and so to not do navigating inside the Sciter engine
 	// ex.: Utils.installLinkHandler(self);
@@ -88,6 +93,55 @@ namespace Utils
 			System.exec("explorer.exe", "/select," + path.replace("/", "\\"));
 		else(Utils.IsOSX)
 			System.exec("open", "-R \"" + path + "\"");
+	}
+
+	function emulateMoveWnd(el)
+	{
+		var moving = false;
+		var offX, offY;
+
+		el.on("mousedown", function(evt) {
+			moving = true;
+			this.capture(#strict);
+			offX = evt.xView;
+			offY = evt.yView;
+		});
+		el.on("mouseup", function(evt) {
+			moving = false;
+			this.capture(false);
+		});
+
+		el.on("mousemove", function(evt) {
+			if(moving)
+				view.move(evt.xScreen - offX, evt.yScreen - offY);
+		});
+	}
+
+	function emulateResizeWnd(el)
+	{
+		el.on("mousedown", function(evt) {
+			View.Proxy_view.Host_EmulateResizeWnd(el);
+		});
+	}
+
+	function shuffle(array)
+	{
+		var currentIndex = array.length, temporaryValue, randomIndex;
+
+		// While there remain elements to shuffle...
+		while (0 !== currentIndex)
+		{
+			// Pick a remaining element...
+			randomIndex = Math.floor(Math.random() * currentIndex).toInteger();
+			currentIndex -= 1;
+
+			// And swap it with the current element.
+			temporaryValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = temporaryValue;
+		}
+
+		return array;
 	}
 }
 

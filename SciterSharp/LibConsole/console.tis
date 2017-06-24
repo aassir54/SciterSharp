@@ -23,6 +23,25 @@ namespace console
 	{
 		self.post(::log.apply(undefined, params));
 	}
+
+	function trace(params..)
+	{
+		var tracewnd = View.tracewnd;
+		if(!tracewnd || tracewnd.windowState != View.WINDOW_SHOWN)
+		{
+			tracewnd = view.window({
+				type: View.TOOL_WINDOW,
+				url: "sciter:tracewnd.html",
+				alignment: 5
+			});
+		}
+		tracewnd.root.ns.View_AppendLine(params.join(" "));
+		View.tracewnd = tracewnd;
+	}
+	function ptrace(params..)
+	{
+		self.post(::trace.apply(undefined, params));
+	}
 	
 	function count()
 	{
@@ -122,6 +141,6 @@ function DummyAspect()
 
 const log = console.log;
 const plog = console.plog;
-const trace = console.log;// OMNI only
+const trace = console.trace;// OMNI only
 const ptrace = console.ptrace;
 const count = console.count;
