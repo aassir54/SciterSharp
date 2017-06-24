@@ -1,6 +1,6 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 4.0.0.7
+ACTUAL SCITER VERSION: 4.0.1.1
 
 Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.21-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
@@ -12,11 +12,13 @@ Browse the C# source-code: http://sourcebrowser.io/Browse/MISoftware/SciterSharp
 
 ## Cross-platform Sciter bindings for .NET
 
-This library provides bindings of Sciter C/C++ headers to the C# language. [Sciter](http://sciter.com/download/) is a multi-platform HTML engine. With this library you can create C#/.NET desktop applications using not just HTML, but all the features of Sciter: CSS3, SVG, scripting, AJAX, &lt;video&gt;, ... Sciter is free for commercial use.
+This library provides bindings of Sciter C/C++ headers to the C# language. [Sciter](http://sciter.com/download/) is a multi-platform HTML engine. With this library you can create C#/.NET desktop applications using not just HTML, but all the features of Sciter: CSS3, SVG, scripting, AJAX, &lt;video&gt;, ... Sciter is free for commercial use. If you want to use SciterSharp in a commercial product you should acquire a commercial license.
 
 The source is made portable to work in Windows, Linux/GTK+3/Mono and OSX/Mono.
 
 License: **GNU GENERAL PUBLIC LICENSE Version 3**
+
+Comercial License: **for inquiries, [contact me](mailto:ramon@misoftware.rs)**
 
 ## Documentation
 
@@ -34,9 +36,15 @@ License: **GNU GENERAL PUBLIC LICENSE Version 3**
 
 **Tools:**
 
-[OmniView](http://misoftware.rs/Home/Post/OmniView) - VS extension to preview Sciter HTML content
+[The Library](http://misoftware.rs/Home/Post/TheLibrary) - free app with a collection of Sciter related helpful content (like Sciter's SDK documentation), tooling, and HTML samples
 
-[The Library](http://misoftware.rs/Home/Post/TheLibrary) - It is a collection of helpful content (like Sciter's SDK documentation), tooling, and HTML samples
+[Omni](http://misoftware.rs/Omni) - desktop app with F12 tools (DOM inspecting and script debugging) for assisting the development of the HTML/CSS for Sciter pages
+
+[OmniCode](http://misoftware.rs/OmniCode) - Visual Studio extension that brings a full-featured TIScript and CSS editor for writing your HTML based code for Sciter technology
+
+[OmniView](http://misoftware.rs/Home/Post/OmniView) - Visual Studio extension to preview Sciter HTML content
+
+[OmniLite](http://misoftware.rs/Home/Post/OmniLite) - handy **signed** macOS desktop tool for previewing Sciter HTML
 
 ## Quick Start
 
@@ -44,7 +52,7 @@ License: **GNU GENERAL PUBLIC LICENSE Version 3**
 
 Quick start your desktop app with our [Sciter Bootstrap](http://misoftware.rs/Bootstrap) on-line tool.
 
-All projects comes with this library already configured and the necessary boilterplate code to create a Sciter window and load its initial HTML file.
+All projects come with this library already configured and the necessary boilterplate code to create a Sciter window and load its initial HTML file.
 
 The cross-platform template contains a solution with 3 projects, which you build for **Windows** with VS, and for **Linux** and **OSX** with Xamarin.
 

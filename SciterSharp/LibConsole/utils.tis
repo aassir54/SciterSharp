@@ -22,6 +22,17 @@ namespace Utils
 		return (popupPoint << 16) | anchorPoint;
 	}
 
+	function fileExists(path)
+	{
+		var stream = Stream.openFile(path, "r");
+		if(stream != null)
+		{
+			stream.close();
+			return true;
+		}
+		return false;
+	}
+
 	function readFileText(path)
 	{
 		var stream = Stream.openFile(path);
@@ -37,6 +48,16 @@ namespace Utils
 		var stream = Stream.openFile(path, "w+");
 		stream.print(data);
 		stream.close();
+	}
+
+	function removeFile(path)
+	{
+		var task = Process.proxy();
+		task
+		if(Utils.IsWindows)
+			System.exec("cmd", "/select," + path.replace("/", "\\"));
+		else(Utils.IsOSX)
+			System.exec("open", "-R \"" + path + "\"");
 	}
 
 	function readStreamToEnd(stream)

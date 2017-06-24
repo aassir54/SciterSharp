@@ -126,6 +126,24 @@ namespace SciterSharp.Interop
 		[DllImport("user32.dll", SetLastError = true)]
 		public static extern bool SystemParametersInfo(int uiAction, int uiParam, ref PInvokeUtils.RECT area, int fWinIni);
 
+		public const int MONITOR_DEFAULTTONULL = 0;
+		public const int MONITOR_DEFAULTTOPRIMARY = 1;
+		public const int MONITOR_DEFAULTTONEAREST = 2;
+		[DllImport("user32.dll")]
+		public static extern IntPtr MonitorFromWindow(IntPtr hwnd, int dwFlags);
+
+		[DllImport("user32.dll")]
+		public static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct MONITORINFO
+		{
+			public int cbSize;
+			public PInvokeUtils.RECT rcMonitor;
+			public PInvokeUtils.RECT rcWork;
+			public uint dwFlags;
+		}
+
 
 		#region CreateChildWindow workaround
 		[DllImport("user32.dll", SetLastError=true)]

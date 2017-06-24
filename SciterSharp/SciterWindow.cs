@@ -164,7 +164,7 @@ namespace SciterSharp
 
 			string wndclass = Marshal.PtrToStringUni(_api.SciterClassName());
 			_hwnd = PInvokeWindows.CreateWindowEx(0, wndclass, null, PInvokeWindows.WS_CHILD, 0, 0, rc.right, rc.bottom, hwnd_parent, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-			SetSciterOption(SciterXDef.SCITER_RT_OPTIONS.SCITER_SET_DEBUG_MODE, new IntPtr(1));
+			//SetSciterOption(SciterXDef.SCITER_RT_OPTIONS.SCITER_SET_DEBUG_MODE, new IntPtr(1));// NO, user should opt for it
 
 			/*PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
 			_hwnd = _api.SciterCreateWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CHILD, ref frame, _proc, IntPtr.Zero, hwnd_parent);
@@ -239,10 +239,15 @@ namespace SciterSharp
 			get
 			{
 #if WINDOWS
+				IntPtr hmonitor = PInvokeWindows.MonitorFromWindow(_hwnd, PInvokeWindows.MONITOR_DEFAULTTONEAREST);
+				PInvokeWindows.MONITORINFO mi = new PInvokeWindows.MONITORINFO() { cbSize = Marshal.SizeOf(typeof(PInvokeWindows.MONITORINFO)) };
+				PInvokeWindows.GetMonitorInfo(hmonitor, ref mi);
+				return new PInvokeUtils.SIZE(mi.rcMonitor.Width, mi.rcMonitor.Height);
 #elif GTKMONO
+				return new PInvokeUtils.SIZE();
 #elif OSX
-			var sz = _nsview.Window.Screen.Frame.Size;
-			return new PInvokeUtils.SIZE((int)sz.Width, (int)sz.Height);
+				var sz = _nsview.Window.Screen.Frame.Size;
+				return new PInvokeUtils.SIZE((int)sz.Width, (int)sz.Height);
 #endif
 			}
 		}
@@ -251,8 +256,18 @@ namespace SciterSharp
 		{
 			get
 			{
+#if WINDOWS
+				PInvokeUtils.RECT rectWindow;
+				PInvokeWindows.GetWindowRect(_hwnd, out rectWindow);
+				return new PInvokeUtils.SIZE { cx = rectWindow.Width, cy = rectWindow.Height };
+#elif GTKMONO
+				int window_width, window_height;
+				PInvokeGTK.gtk_window_get_size(_gtkwindow, out window_width, out window_height);
+				return new PInvokeUtils.SIZE(window_width, window_height);
+#elif OSX
 				var sz = _nsview.Window.Frame.Size;
 				return new PInvokeUtils.SIZE { cx = (int)sz.Width, cy = (int)sz.Height };
+#endif
 			}
 		}
 
@@ -260,7 +275,13 @@ namespace SciterSharp
 		{
 			get
 			{
-#if OSX
+#if WINDOWS
+				PInvokeUtils.RECT rectWindow;
+				PInvokeWindows.GetWindowRect(_hwnd, out rectWindow);
+				return new PInvokeUtils.POINT(rectWindow.left, rectWindow.top);
+#elif GTKMONO
+				return new PInvokeUtils.POINT();
+#elif OSX
 				var pos = _nsview.Window.Frame.Location;
 				return new PInvokeUtils.POINT((int)pos.X, (int)pos.Y);
 #endif
@@ -268,7 +289,11 @@ namespace SciterSharp
 
 			set
 			{
-#if OSX
+#if WINDOWS
+				PInvokeWindows.MoveWindow(_hwnd, value.X, value.Y, Size.cx, Size.cy, false);
+#elif GTKMONO
+				PInvokeGTK.gtk_window_move(_gtkwindow, value.X, value.Y);
+#elif OSX
 				var pt = new CoreGraphics.CGPoint(value.X, value.Y);
 				_nsview.Window.SetFrameTopLeftPoint(pt);
 #endif

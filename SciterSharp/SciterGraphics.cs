@@ -46,6 +46,10 @@ namespace SciterSharp
 		{
 			_clr = _gapi.RGBA((uint)r, (uint)g, (uint)b, (uint)alpha);
 		}
+		public RGBAColor(uint clr)
+		{
+			_clr = clr;
+		}
 
 
 		public static RGBAColor White = new RGBAColor(255, 255, 255);

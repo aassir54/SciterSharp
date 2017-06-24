@@ -30,8 +30,10 @@ namespace TestCore
 			host.Setup(wnd);
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
+			host.DebugInspect();
 
-            Debug.Assert(!host.EvalScript("Utils").IsUndefined);
+
+			Debug.Assert(!host.EvalScript("Utils").IsUndefined);
 
             // Show window and Run message loop
             wnd.Show();

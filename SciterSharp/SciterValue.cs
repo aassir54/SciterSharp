@@ -197,10 +197,28 @@ namespace SciterSharp
 		}
 		public static SciterValue MakeSymbol(string sym)
 		{
-			if(sym==null)
+			if(sym == null)
 				return null;
 			SciterValue sv = new SciterValue();
-			_api.ValueStringDataSet(ref sv._data, sym, (uint) sym.Length, (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL);
+			_api.ValueStringDataSet(ref sv._data, sym, (uint)sym.Length, (uint)SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL);
+			return sv;
+		}
+		public static SciterValue MakeColor(uint abgr)
+		{
+			SciterValue sv = new SciterValue();
+			_api.ValueIntDataSet(ref sv._data, (int) abgr, (uint)SciterXValue.VALUE_TYPE.T_COLOR, 0);
+			return sv;
+		}
+		public static SciterValue MakeDuration(double seconds)
+		{
+			SciterValue sv = new SciterValue();
+			_api.ValueFloatDataSet(ref sv._data, seconds, (uint)SciterXValue.VALUE_TYPE.T_DURATION, 0);
+			return sv;
+		}
+		public static SciterValue MakeAngle(double seconds)
+		{
+			SciterValue sv = new SciterValue();
+			_api.ValueFloatDataSet(ref sv._data, seconds, (uint)SciterXValue.VALUE_TYPE.T_ANGLE, 0);
 			return sv;
 		}
 
@@ -220,7 +238,10 @@ namespace SciterSharp
 		public bool IsObject		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT; } }
 		public bool IsDomElement	{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_DOM_OBJECT; } }
 		public bool IsNativeFunction{ get { return _api.ValueIsNativeFunctor(ref _data) != 0; } }
-		public bool IsNull			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_NULL; } }
+		public bool IsColor			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_COLOR; } }
+		public bool IsDuration		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_DURATION; } }
+		public bool IsAngle			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_ANGLE; } }
+		public bool IsNull			{ get { return _data.t == (uint)SciterXValue.VALUE_TYPE.T_NULL; } }
 
 		public bool Get(bool defv)
 		{
@@ -266,6 +287,24 @@ namespace SciterSharp
 				return ret;
 			}
 			return null;
+		}
+
+		public RGBAColor GetColor()
+		{
+			Debug.Assert(IsColor);
+			return new RGBAColor((uint) Get(0));
+		}
+
+		public double GetAngle()
+		{
+			Debug.Assert(IsAngle);
+			return Get(0.0);
+		}
+
+		public double GetDuration()
+		{
+			Debug.Assert(IsDuration);
+			return Get(0.0);
 		}
 
 #if WINDOWS

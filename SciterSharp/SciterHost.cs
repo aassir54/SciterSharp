@@ -49,7 +49,8 @@ namespace SciterSharp
 
 			_lc_files = new Dictionary<string, byte[]>
 			{
-				{ "sciter:debug-peer.tis", arch.Get("console.tis") },
+				{ "sciter:debug-peer.tis", arch.Get("debug-peer.tis") },
+				{ "sciter:console.tis", arch.Get("console.tis") },
 				{ "sciter:utils.tis", arch.Get("utils.tis") },
 			};
 			Debug.Assert(_lc_files.Values.All(v => v != null));
@@ -170,26 +171,36 @@ namespace SciterSharp
 		/// Runs the inspector process, waits 1 second, and calls view.connectToInspector() to inspect your page.
 		/// (Before everything it kills any previous instance of the inspector process)
 		/// </summary>
-		/// <param name="inspector_exe_path">Path to the inspector executable, can be an absolute or relative path.</param>
-		public void DebugInspect(string inspector_exe_path)
+		/// <param name="inspector_exe">Path to the inspector executable, can be an absolute or relative path.</param>
+		public void DebugInspect(string inspector_exe)
 		{
-			var ps = Process.GetProcessesByName(inspector_exe_path);
-			foreach (var p in ps)
+			var ps = Process.GetProcessesByName(inspector_exe);
+			foreach(var p in ps)
 				p.Kill();
 
+			string path = null;
 #if WINDOWS
-			if (!File.Exists(inspector_exe_path) && !File.Exists(inspector_exe_path + ".exe"))
-				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + '\\' + inspector_exe_path;
+			if(!File.Exists(inspector_exe) && !File.Exists(inspector_exe + ".exe"))
+				path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + '\\' + inspector_exe;
 #elif OSX
-			if(!File.Exists(inspector_exe_path))
-				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + "../../../" +  inspector_exe_path;
+			if(!File.Exists(inspector_exe))
+				path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + "../../../" +  inspector_exe;
 #else
-			if(!File.Exists(inspector_exe_path))
-				inspector_exe_path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + inspector_exe_path;
+			if(!File.Exists(inspector_exe))
+				path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + inspector_exe;
 #endif
 
-			var po = Process.Start(inspector_exe_path);
-			if (po.HasExited)
+			Process proc;
+			try
+			{
+				proc = Process.Start(path);
+			}
+			catch(Exception)
+			{
+				// try from PATH environment
+				proc = Process.Start(inspector_exe);
+			}
+			if(proc.HasExited)
 				throw new Exception("Could not run inspector. Make sure Sciter DLL is also present in the inspector tool directory.");
 
 			Task.Run(() =>
