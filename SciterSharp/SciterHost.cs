@@ -41,8 +41,8 @@ namespace SciterSharp
 		private SciterEventHandler _window_evh;
 
 		private static Dictionary<string, byte[]> _lc_files = new Dictionary<string, byte[]>();
-		public static bool InjectLibConsole { get; set; } = true;
-		public static bool InjectLibConsoleDebugPeer { get; set; } = true;
+		public static bool InjectLibConsole = true;
+		public static bool InjectLibConsoleDebugPeer = true;
 
 		static SciterHost()
 		{
