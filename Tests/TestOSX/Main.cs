@@ -8,6 +8,7 @@ namespace TestOSX
 	static class MainClass
 	{
 		static SciterMessages sm = new SciterMessages();
+		static Host host;
 
 		static void Main(string[] args)
 		{
@@ -15,9 +16,11 @@ namespace TestOSX
 
 			SciterWindow wnd = new SciterWindow();
 			wnd.CreateMainWindow(500, 500);
+			host = new Host(wnd);
+
 			wnd.LoadPage("/Users/midiway/Desktop/SciterSharp/Tests/TestOSX/res/index.html");
+			wnd.CenterTopLevelWindow();
 			wnd.Show();
-			wnd.Position = new SciterSharp.Interop.PInvokeUtils.POINT(100, 40);
 
 			NSApplication.Main(args);
 		}
