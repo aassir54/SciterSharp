@@ -1,5 +1,4 @@
 include "console.tis";
-include "utils.tis";
 
 //debugPeer
 !function() {
@@ -203,7 +202,6 @@ include "utils.tis";
     post(#deeLog, subsystem, severity, message);  
   });
   
- 
   view.resourceTracker( function(def) {
   
     //if(resources[def.url])

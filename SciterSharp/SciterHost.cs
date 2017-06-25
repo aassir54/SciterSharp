@@ -41,6 +41,8 @@ namespace SciterSharp
 		private SciterEventHandler _window_evh;
 
 		private static Dictionary<string, byte[]> _lc_files = new Dictionary<string, byte[]>();
+		public static bool InjectLibConsole = true;
+		public static bool InjectLibConsoleDebugPeer = true;
 
 		static SciterHost()
 		{
@@ -52,6 +54,7 @@ namespace SciterSharp
 				{ "sciter:debug-peer.tis", arch.Get("debug-peer.tis") },
 				{ "sciter:console.tis", arch.Get("console.tis") },
 				{ "sciter:utils.tis", arch.Get("utils.tis") },
+				{ "sciter:tracewnd.html", arch.Get("tracewnd.html") },
 			};
 			Debug.Assert(_lc_files.Values.All(v => v != null));
 
@@ -348,11 +351,17 @@ namespace SciterSharp
 		// Overridables
 		protected virtual SciterXDef.LoadResult OnLoadData(SciterXDef.SCN_LOAD_DATA sld)
 		{
-			// Do default loading of lib_console
-			if(_lc_files.ContainsKey(sld.uri))
+			if(InjectLibConsole)
 			{
 				Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
-				_api.SciterDataReady(_hwnd, sld.uri, _lc_files[sld.uri], (uint)_lc_files[sld.uri].Length);
+				// Do default loading of lib_console
+				if(_lc_files.ContainsKey(sld.uri))
+				{
+					if(InjectLibConsoleDebugPeer == false && sld.uri=="sciter:debug-peer.tis")
+						_api.SciterDataReady(_hwnd, sld.uri, _lc_files["sciter:console.tis"], (uint)_lc_files["sciter:console.tis"].Length);
+					else
+						_api.SciterDataReady(_hwnd, sld.uri, _lc_files[sld.uri], (uint)_lc_files[sld.uri].Length);
+				}
 			}
 			return (uint)SciterXDef.LoadResult.LOAD_OK;
 		}
