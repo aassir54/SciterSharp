@@ -17,6 +17,60 @@
 			if(evt.type == Event.KEY_DOWN && evt.keyCode == Event.VK_ESCAPE)
 				view.close();
 		}
+
+		view.focus = self#prompt.$(widget);
+	</script>
+
+	<script type="text/tiscript">
+		self#console.$(menu).on("click", "li", function(evt) {
+			switch(evt.target.@#cmd)
+			{
+			case "clear":
+				self#output.clear();
+				self#prompt.$(widget).state.focus = true;
+				break;
+			}
+			return true;
+		});
+
+		self#output.on("dblclick", "li", function() {
+			view.clipboard(#put, this.text);
+		});
+
+		self#output.EvalInput = function(input) {
+			var res;
+			try {
+				res = eval(input, view.parent.root.ns);
+			} catch(e) {
+				View_AppendLine(String.$({e}).trim());
+				return;
+			}
+			View_AppendLine(String.$({res}).trim());
+		};
+
+		// PROMPT
+		var last_command;
+
+		self#prompt.$(widget).on("keydown", function(evt) {
+			if(evt.keyCode==Event.VK_RETURN)
+			{
+				if(this.value)
+				{
+					last_command = this.value;
+					self#output.EvalInput(this.value);
+				}
+				this.value = undefined;
+				return true;
+			}
+			else if(evt.keyCode==Event.VK_UP)
+			{
+				if(last_command)
+				{
+					this.value = last_command;
+					this.setSelection(Integer.MAX, Integer.MAX);
+				}
+			}
+		});
 	</script>
 
 	<style>

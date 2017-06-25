@@ -2,11 +2,11 @@
 
 ACTUAL SCITER VERSION: 4.0.1.1
 
-Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.21-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
+Windows NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.24-blue.svg)](https://www.nuget.org/packages/SciterSharpWindows/)
 
-Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.21-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
+Linux/MONO/GTK NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.24-blue.svg)](https://www.nuget.org/packages/SciterSharpGTK/)
 
-OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.21-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
+OSX/Xamarin.Mac NuGet: [![NuGet](https://img.shields.io/badge/nuget-v2.0.24-blue.svg)](https://www.nuget.org/packages/SciterSharpOSX/)
 
 Browse the C# source-code: http://sourcebrowser.io/Browse/MISoftware/SciterSharp
 
