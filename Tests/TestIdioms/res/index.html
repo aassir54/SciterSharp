@@ -12,21 +12,6 @@
 		var revision_major = Sciter.REVISION >> 16;
 		var revision_minor = Sciter.REVISION & 0xFFFF;
 		$(h2).text = "Sciter version: " + String.printf("%d.%d.%d.%d", version_major, version_minor, revision_major, revision_minor);
-
-		class Here
-		{
-			var t = 567;
-		}
-		trace("WOW");
-
-		console.log(Utils);
-		console.log(Utils.InDBGView);
-		console.log(View.omniview);
-		console.log(View.omni);
-
-		View.omni = true;
-		console.log(Utils.InDBGView);
-		console.log(Utils.removeFile);
 	</script>
 </head>
 

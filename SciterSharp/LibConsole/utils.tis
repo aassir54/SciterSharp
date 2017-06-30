@@ -8,6 +8,7 @@ namespace Utils
 	const SciterVersion = String.printf("%d.%d.%d.%d", 
 		(Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
 		(Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
+	const Wtf = 123;
 
 	function popupAttachment(anchorPoint = 1, popupPoint = 7)// 1, 7 is the most common
 	{
@@ -90,9 +91,9 @@ namespace Utils
 	function revealPath(path)
 	{
 		if(Utils.IsWindows)
-			System.exec("explorer.exe", "/select," + path.replace("/", "\\"));
-		else(Utils.IsOSX)
-			System.exec("open", "-R \"" + path + "\"");
+			Utils.exec("explorer.exe", "/select," + path.replace("/", "\\"));
+		else if(Utils.IsOSX)
+			Utils.exec("open", "-R", path);
 	}
 
 	function emulateMoveWnd(el)
