@@ -1,9 +1,7 @@
 ﻿<Properties StartupConfiguration="{764A2B71-F267-4C2E-A4CD-33E050659BD6}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Tests/TestOSX/res/index.html">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SciterSharp/Interop/PInvokeUtils.cs">
     <Files>
-      <File FileName="Tests/TestOSX/res/index.html" Line="4" Column="6" />
-      <File FileName="Tests/TestOSX/Main.cs" Line="20" Column="1" />
-      <File FileName="SciterSharp/SciterWindow.cs" Line="128" Column="1" />
+      <File FileName="SciterSharp/Interop/PInvokeUtils.cs" Line="41" Column="71" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
@@ -13,11 +11,4 @@
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.TestsUI.TestOSX PreferredExecutionTarget="Test1" />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.TestsUI.TestGraphics PreferredExecutionTarget="MonoDevelop.Default" />
-  <DisabledProjects>
-    <String>SciterSharp/SciterSharpGTK.csproj</String>
-    <String>SciterSharp/SciterSharpWindows.csproj</String>
-    <String>Tests/TestWinForms/TestWinForms.csproj</String>
-  </DisabledProjects>
-  <MonoDevelop.Ide.ItemProperties.OSXPublishNuget PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
