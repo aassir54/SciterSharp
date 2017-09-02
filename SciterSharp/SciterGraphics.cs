@@ -26,6 +26,9 @@ using SciterSharp.Interop;
 #if WINDOWS
 using System.Drawing;
 using System.Drawing.Imaging;
+#elif OSX
+using Foundation;
+using CoreGraphics;
 #endif
 
 namespace SciterSharp
@@ -340,6 +343,24 @@ namespace SciterSharp
 			_himg = himg;
 
 			bmp.UnlockBits(data);
+		}
+#elif OSX
+		public SciterImage(CGImage img)
+		{
+			if(img.BitsPerPixel != 32)
+				throw new Exception("Unsupported BitsPerPixel");
+			if(img.BitsPerComponent != 8)
+				throw new Exception("Unsupported BitsPerComponent");
+			if(img.BytesPerRow != img.Width * (img.BitsPerPixel/img.BitsPerComponent))
+				throw new Exception("Unsupported stride");
+			
+			using(var data = img.DataProvider.CopyData())
+			{
+				IntPtr himg;
+				var r = _gapi.imageCreateFromPixmap(out himg, (uint) img.Width, (uint) img.Height, true, data.Bytes);
+				Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+				_himg = himg;
+			}
 		}
 #endif
 

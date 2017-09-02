@@ -15,12 +15,8 @@ namespace TestOSX
 			NSApplication.Init();
 
 			SciterWindow wnd = new SciterWindow();
-			wnd.CreateMainWindow(500, 500);
+			wnd.CreateMainWindow(800, 600);
 			host = new Host(wnd);
-
-			wnd.LoadPage("/Users/midiway/Desktop/SciterSharp/Tests/TestOSX/res/index.html");
-			wnd.CenterTopLevelWindow();
-			wnd.Show();
 
 			NSApplication.Main(args);
 		}
