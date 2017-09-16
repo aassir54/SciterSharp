@@ -38,7 +38,7 @@ namespace SciterSharp.Interop
 #elif GTKMONO
 			PInvokeGTK.gtk_main();
 #elif OSX
-			throw new Exception("Do not call it on OSX.");
+            throw new Exception("Do not call PInvokeUtils.RunMsgLoop() on OSX.");
 #endif
 		}
 

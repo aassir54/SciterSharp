@@ -81,15 +81,16 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="Host.cs" />
+    <Compile Include="ImgDrawBehavior.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="sciter-osx-64.dylib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SciterSharp\SciterSharpOSX.csproj">
       <Project>{42BB6EC1-E806-4B5B-A242-1662AAE7BF25}</Project>
       <Name>SciterSharpOSX</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="sciter-osx-64.dylib" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
