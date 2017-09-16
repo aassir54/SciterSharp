@@ -373,11 +373,12 @@ namespace SciterSharp.Interop
 			CLOSE_POPUP = 0x9E,				// close popup request,
 			REQUEST_TOOLTIP = 0x9F,			// request tooltip, evt.source <- is the tooltip element.
 
-			ANIMATION         = 0xA0,		// animation started (reason=1) or ended(reason=0) on the element.
-			DOCUMENT_CREATED  = 0xC0,		// document created, script namespace initialized. target -> the document
+			ANIMATION			= 0xA0,		// animation started (reason=1) or ended(reason=0) on the element.
+			DOCUMENT_CREATED	= 0xC0,		// document created, script namespace initialized. target -> the document
 			DOCUMENT_CLOSE_REQUEST = 0xC1,	// document is about to be closed, to cancel closing do: evt.data = sciter::value("cancel");
-			DOCUMENT_CLOSE    = 0xC2,		// last notification before document removal from the DOM
-			DOCUMENT_READY    = 0xC3,		// document has got DOM structure, styles and behaviors of DOM elements. Script loading run is complete at this moment. 
+			DOCUMENT_CLOSE		= 0xC2,		// last notification before document removal from the DOM
+			DOCUMENT_READY		= 0xC3,       // document has got DOM structure, styles and behaviors of DOM elements. Script loading run is complete at this moment. 
+			DOCUMENT_PARSED		= 0xC4,      // document just finished parsing - has got DOM structure. This event is generated before DOCUMENT_READY
 
 
 			VIDEO_INITIALIZED = 0xD1,		// <video> "ready" notification   
