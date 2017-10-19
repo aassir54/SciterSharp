@@ -70,7 +70,7 @@ namespace SciterSharp.Interop
 		public static extern int gtk_widget_get_visible(IntPtr widget);
 
 		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr gtk_message_dialog_new(IntPtr parent, int flags, int type, int buttons, [MarshalAs(UnmanagedType.LPStr)]string msgformat, __arglist);
+		public static extern IntPtr gtk_message_dialog_new(IntPtr parent, int flags, int type, int buttons, IntPtr msgformat);
 
 		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int gtk_dialog_run(IntPtr dialog);

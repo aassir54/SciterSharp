@@ -1,30 +1,24 @@
-﻿<Properties StartupConfiguration="{764A2B71-F267-4C2E-A4CD-33E050659BD6}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Tests/TestOSX/ImgDrawBehavior.cs">
+﻿<Properties StartupConfiguration="{95EE3B89-3300-4482-95A3-DC42EC8B3676}|Default" StartupItem="Tests/TestGTK/TestGTKGTK.csproj">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Tests/TestGTK/Src/ProgramWL.cs">
     <Files>
-      <File FileName="Tests/TestOSX/ImgDrawBehavior.cs" Line="35" Column="2" />
+      <File FileName="SciterSharp/Interop/SciterX.cs" Line="106" Column="17" />
+      <File FileName="Tests/TestGTK/Src/ProgramWL.cs" Line="24" Column="5" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="SciterSharp" expanded="True">
-            <Node name="TestsUI" expanded="True">
-              <Node name="TestOSX" selected="True" />
-            </Node>
-            <Node name="SciterSharpOSX" expanded="True" />
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x64" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.TestsUI.TestOSX PreferredExecutionTarget="Test1" />
   <MultiItemStartupConfigurations />
   <DisabledProjects>
-    <String>SciterSharp/SciterSharpGTK.csproj</String>
     <String>SciterSharp/SciterSharpWindows.csproj</String>
+    <String>Tests/TestWinForms/TestWinForms.csproj</String>
+    <String>Tests/TestIdioms/TestIdioms.csproj</String>
+    <String>OSXPublishNuget/OSXPublishNuget.csproj</String>
+    <String>Tests/TestOSX/TestOSX.csproj</String>
+    <String>Tests/TestGraphics/TestGraphics.csproj</String>
+    <String>Tests/TestCore/TestCore.csproj</String>
   </DisabledProjects>
+  <MonoDevelop.Ide.ItemProperties.TestsUI.TestGTKGTK PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>

@@ -18,6 +18,8 @@ namespace TestGTK
 		[STAThread]
 		static void Main(string[] args)
 		{
+			MessageBox.Show (IntPtr.Zero, "ola", "mnundo");
+
 			if(IntPtr.Size == 4)
 			{
 				Debug.Assert(false, "sciter.dll that comes bundled in TestGTK is the x64 version, make sure to change it to the x86 version if building for x86 (Windows only)");
