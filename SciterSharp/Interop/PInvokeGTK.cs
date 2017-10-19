@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with SciterSharp.  If not, see <http://www.gnu.org/licenses/>.
 
-#if GTKMONO
+#if true
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +68,31 @@ namespace SciterSharp.Interop
 
 		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int gtk_widget_get_visible(IntPtr widget);
+
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr gtk_message_dialog_new(IntPtr parent, int flags, int type, int buttons, [MarshalAs(UnmanagedType.LPStr)]string msgformat, __arglist);
+
+		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int gtk_dialog_run(IntPtr dialog);
+	}
+
+	enum GtkMessageType
+	{
+		GTK_MESSAGE_INFO,
+		GTK_MESSAGE_WARNING,
+		GTK_MESSAGE_QUESTION,
+		GTK_MESSAGE_ERROR,
+		GTK_MESSAGE_OTHER
+	}
+
+	enum GtkButtonsType
+	{
+		GTK_BUTTONS_NONE,
+		GTK_BUTTONS_OK,
+		GTK_BUTTONS_CLOSE,
+		GTK_BUTTONS_CANCEL,
+		GTK_BUTTONS_YES_NO,
+		GTK_BUTTONS_OK_CANCEL
 	}
 }
 #endif

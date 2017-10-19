@@ -21,6 +21,10 @@ namespace SciterSharp
 			NSAlert alert = new NSAlert();
 			alert.MessageText = text;
 			alert.RunModal();
+#elif GTKMONO
+			IntPtr dlg = PInvokeGTK.gtk_message_dialog_new(IntPtr.Zero, 0, (int) GtkMessageType.GTK_MESSAGE_INFO, (int) GtkButtonsType.GTK_BUTTONS_OK, "asdsad", __arglist());
+			PInvokeGTK.gtk_dialog_run(dlg);
+			PInvokeGTK.gtk_widget_destroy(dlg);
 #endif
 		}
 
