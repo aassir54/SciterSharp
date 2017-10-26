@@ -22,9 +22,7 @@ namespace SciterSharp
 			alert.MessageText = text;
 			alert.RunModal();
 #elif GTKMONO
-			IntPtr dlg = PInvokeGTK.gtk_message_dialog_new(IntPtr.Zero, 1, 1, 1, IntPtr.Zero);
-			PInvokeGTK.gtk_dialog_run(dlg);
-			PInvokeGTK.gtk_widget_destroy(dlg);
+			throw new Exception("MessageBox.Show not implemented in GTK");
 #endif
 		}
 

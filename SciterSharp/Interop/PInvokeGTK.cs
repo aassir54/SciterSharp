@@ -68,31 +68,6 @@ namespace SciterSharp.Interop
 
 		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int gtk_widget_get_visible(IntPtr widget);
-
-		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr gtk_message_dialog_new(IntPtr parent, int flags, int type, int buttons, IntPtr msgformat);
-
-		[DllImport("libgtk-3.so.0", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int gtk_dialog_run(IntPtr dialog);
-	}
-
-	enum GtkMessageType
-	{
-		GTK_MESSAGE_INFO,
-		GTK_MESSAGE_WARNING,
-		GTK_MESSAGE_QUESTION,
-		GTK_MESSAGE_ERROR,
-		GTK_MESSAGE_OTHER
-	}
-
-	enum GtkButtonsType
-	{
-		GTK_BUTTONS_NONE,
-		GTK_BUTTONS_OK,
-		GTK_BUTTONS_CLOSE,
-		GTK_BUTTONS_CANCEL,
-		GTK_BUTTONS_YES_NO,
-		GTK_BUTTONS_OK_CANCEL
 	}
 }
 #endif
