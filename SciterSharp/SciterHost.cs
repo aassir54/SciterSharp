@@ -105,6 +105,21 @@ namespace SciterSharp
 			_api.SciterWindowAttachEventHandler(_hwnd, evh._proc, IntPtr.Zero, (uint)SciterXBehaviors.EVENT_GROUPS.HANDLE_ALL);
 		}
 
+		/// <summary>
+		/// Detaches the event-handler previously attached with AttachEvh()
+		/// </summary>
+		/// <param name="evh"></param>
+		public void DetachEvh()
+		{
+			Debug.Assert(_window_evh != null);
+			if(_window_evh != null)
+			{
+				_api.SciterWindowDetachEventHandler(_hwnd, _window_evh._proc, IntPtr.Zero);
+				_window_evh = null;
+			}
+		}
+
+
 		public SciterValue CallFunction(string name, params SciterValue[] args)
 		{
 			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
@@ -154,7 +169,7 @@ namespace SciterSharp
 
 		/// <summary>
 		/// Runs the inspector process, waits 1 second, and calls view.connectToInspector() to inspect your page.
-		/// Assumes that the 'inspector(.exe)' executable is in the same directory of OmniCode.dll assembly (so just it to its dir)
+		/// The 'inspector(.exe)' executable must be found in the PATH or can be in the same directory of the executing assembly
 		/// (Before everything it kills any previous instance of the inspector process)
 		/// </summary>
 		public void DebugInspect()
@@ -184,7 +199,9 @@ namespace SciterSharp
 			string path = null;
 #if WINDOWS
 			if(!File.Exists(inspector_exe) && !File.Exists(inspector_exe + ".exe"))
+			{
 				path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + '\\' + inspector_exe;
+			}
 #elif OSX
 			if(!File.Exists(inspector_exe))
 				path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + "../../../" +  inspector_exe;
@@ -193,15 +210,17 @@ namespace SciterSharp
 				path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(SciterHost)).Location) + inspector_exe;
 #endif
 
-			Process proc;
+			Process proc = null;
 			try
 			{
-				proc = Process.Start(path);
+				if(path != null && File.Exists(path))
+					proc = Process.Start(path);
+				else
+					// try from PATH environment
+					proc = Process.Start(inspector_exe);
 			}
 			catch(Exception)
 			{
-				// try from PATH environment
-				proc = Process.Start(inspector_exe);
 			}
 			if(proc.HasExited)
 				throw new Exception("Could not run inspector. Make sure Sciter DLL is also present in the inspector tool directory.");

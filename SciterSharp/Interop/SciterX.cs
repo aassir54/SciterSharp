@@ -104,7 +104,7 @@ namespace SciterSharp.Interop
 				if(IntPtr.Size != 8)
 					throw new Exception("SciterSharp GTK/Mono only supports 64bits builds");
 
-				Debug.Assert(api_struct_size == 1296);
+				Debug.Assert(api_struct_size == 1304);
 				api_ptr = SciterAPI();
 #elif OSX
 				Debug.Assert(IntPtr.Size == 8);

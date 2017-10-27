@@ -67,6 +67,12 @@
     <Compile Include="Interop\SciterXValue.cs" />
     <Compile Include="Interop\SciterXVideoAPI.cs" />
     <Compile Include="Interop\TIScript.cs" />
+    <Compile Include="MessageBox.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SciterSharpGTK.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

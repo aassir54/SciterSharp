@@ -53,9 +53,9 @@ namespace Utils
 	function removeFile(path)
 	{
 		if(IsWindows)
-			await exec("cmd", "/c", "del " + path.replace("/", "\\"));
+			return exec("cmd", "/c", "del " + path.replace("/", "\\"));
 		else
-			await exec("rm", path);
+			return exec("rm", path);
 	}
 
 	function exec(args..)

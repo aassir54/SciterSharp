@@ -32,7 +32,6 @@ namespace TestCore
 			host.SetupPage("index.html");
 			host.DebugInspect();
 
-
 			Debug.Assert(!host.EvalScript("Utils").IsUndefined);
 
             // Show window and Run message loop
