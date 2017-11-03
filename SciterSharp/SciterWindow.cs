@@ -392,12 +392,9 @@ namespace SciterSharp
 			}
 		}
 #elif GTKMONO
-		public string Icon
+		public bool SetIcon(string file)
 		{
-			set
-			{
-				PInvokeGTK.gtk_window_set_icon_from_file(_gtkwindow, value, IntPtr.Zero);
-			}
+			return PInvokeGTK.gtk_window_set_icon_from_file(_gtkwindow, file, IntPtr.Zero) != 0;
 		}
 #endif
 
