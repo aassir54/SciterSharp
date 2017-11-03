@@ -391,6 +391,14 @@ namespace SciterSharp
 				PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, IntPtr.Zero, new Icon(value, 16, 16).Handle);
 			}
 		}
+#elif GTKMONO
+		public string Icon
+		{
+			set
+			{
+				PInvokeGTK.gtk_window_set_icon_from_file(_gtkwindow, value, IntPtr.Zero);
+			}
+		}
 #endif
 
 		public string Title
