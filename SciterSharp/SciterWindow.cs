@@ -383,6 +383,7 @@ namespace SciterSharp
 #if WINDOWS
 		public Icon Icon
 		{
+            // instead of using this property, you can use View.windowIcon on all platforms
 			set
 			{
 				// larger icon
@@ -391,14 +392,9 @@ namespace SciterSharp
 				PInvokeWindows.SendMessageW(_hwnd, PInvokeWindows.Win32Msg.WM_SETICON, IntPtr.Zero, new Icon(value, 16, 16).Handle);
 			}
 		}
-#elif GTKMONO
-		public bool SetIcon(string file)
-		{
-			return PInvokeGTK.gtk_window_set_icon_from_file(_gtkwindow, file, IntPtr.Zero) != 0;
-		}
 #endif
 
-		public string Title
+        public string Title
 		{
 			set
 			{
