@@ -55,6 +55,14 @@
     </LinkMode>
     <XamMacArch>
     </XamMacArch>
+    <CustomCommands>
+      <CustomCommands>
+        <Command>
+          <type>BeforeBuild</type>
+          <command>sh scripts/packOSX.sh</command>
+        </Command>
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -89,9 +97,6 @@
     <Compile Include="MessageBox.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SciterSharpOSX.dll.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="LibConsole\console.tis" />
     <None Include="LibConsole\utils.tis" />
     <None Include="LibConsole\debug-peer.tis" />
