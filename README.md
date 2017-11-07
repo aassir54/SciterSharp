@@ -54,7 +54,7 @@ Quick start your desktop app with our [Sciter Bootstrap](http://misoftware.rs/Bo
 
 All projects come with this library already configured and the necessary boilterplate code to create a Sciter window and load its initial HTML file.
 
-The cross-platform template contains a solution with 3 projects, which you build for **Windows** with VS, and for **Linux** and **OSX** with Xamarin.
+The cross-platform template contains a solution with 3 projects, allowing you to build for **Windows** (Visual Studio), for **OSX** (Visual Studio MAC), and for **Linux** (MonoDevelop).
 
 ### NuGet
 
