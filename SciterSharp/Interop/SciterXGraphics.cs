@@ -292,7 +292,7 @@ namespace SciterSharp.Interop
 			public delegate GRAPHIN_RESULT FPTR_pathQuadraticCurveTo(IntPtr path, float xc, float yc, float x, float y, bool relative);
 
 			// GRAPHIN_RESULT SCFN(pathBezierCurveTo) ( HPATH path, POS xc1, POS yc1, POS xc2, POS yc2, POS x, POS y, BOOL relative );
-			public delegate GRAPHIN_RESULT FPTR_pathBezierCurveTo(IntPtr path, float xc1, float yc1, float xc2, float yc2, float x, float y, bool relative );
+			public delegate GRAPHIN_RESULT FPTR_pathBezierCurveTo(IntPtr path, float xc1, float yc1, float xc2, float yc2, float x, float y, bool relative);
 
 			// GRAPHIN_RESULT SCFN(pathClosePath) ( HPATH path );
 			public delegate GRAPHIN_RESULT FPTR_pathClosePath(IntPtr path);
@@ -465,21 +465,21 @@ namespace SciterSharp.Interop
 
 			#region SECTION: VALUE interface
 
-			public delegate GRAPHIN_RESULT FPTR_vWrapGfx(IntPtr hgfx, ref SciterXValue.VALUE toValue);
+			public delegate GRAPHIN_RESULT FPTR_vWrapGfx(IntPtr hgfx, out SciterXValue.VALUE toValue);
 
-			public delegate GRAPHIN_RESULT FPTR_vWrapImage(IntPtr himg, ref SciterXValue.VALUE toValue);
+			public delegate GRAPHIN_RESULT FPTR_vWrapImage(IntPtr himg, out SciterXValue.VALUE toValue);
 
-			public delegate GRAPHIN_RESULT FPTR_vWrapPath(IntPtr hpath, ref SciterXValue.VALUE toValue);
+			public delegate GRAPHIN_RESULT FPTR_vWrapPath(IntPtr hpath, out SciterXValue.VALUE toValue);
 
-			public delegate GRAPHIN_RESULT FPTR_vWrapText(IntPtr htext, ref SciterXValue.VALUE toValue);
+			public delegate GRAPHIN_RESULT FPTR_vWrapText(IntPtr htext, out SciterXValue.VALUE toValue);
 
-			public delegate GRAPHIN_RESULT FPTR_vUnWrapGfx(ref SciterXValue.VALUE fromValue, ref IntPtr phgfx);
+			public delegate GRAPHIN_RESULT FPTR_vUnWrapGfx(ref SciterXValue.VALUE fromValue, out IntPtr phgfx);
 
-			public delegate GRAPHIN_RESULT FPTR_vUnWrapImage(ref SciterXValue.VALUE fromValue, ref IntPtr phimg);
+			public delegate GRAPHIN_RESULT FPTR_vUnWrapImage(ref SciterXValue.VALUE fromValue, out IntPtr phimg);
 
-			public delegate GRAPHIN_RESULT FPTR_vUnWrapPath(ref SciterXValue.VALUE fromValue, ref IntPtr phpath);
+			public delegate GRAPHIN_RESULT FPTR_vUnWrapPath(ref SciterXValue.VALUE fromValue, out IntPtr phpath);
 
-			public delegate GRAPHIN_RESULT FPTR_vUnWrapText(ref SciterXValue.VALUE fromValue, ref IntPtr phtext);
+			public delegate GRAPHIN_RESULT FPTR_vUnWrapText(ref SciterXValue.VALUE fromValue, out IntPtr phtext);
 
 			#endregion
 		}

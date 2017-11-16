@@ -194,6 +194,14 @@ namespace SciterSharp
 		}
 		#endregion
 
+		#region Path operations
+		public void DrawPath(SciterPath path, SciterXGraphics.DRAW_PATH_MODE mode)
+		{
+			var r = _gapi.gDrawPath(_hgfx, path._hpath, mode);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+		#endregion
+
 		#region Affine tranformations
 		public void Rotate(float radians, float cx, float cy)
 		{
@@ -432,10 +440,109 @@ namespace SciterSharp
 		#endregion
 	}
 
-	public class SciterPath
+	public class SciterPath : IDisposable
 	{
 		private static SciterXGraphics.ISciterGraphicsAPI _gapi = SciterX.GraphicsAPI;
 		public IntPtr _hpath { get; private set; }
+
+		private SciterPath() { }// non-user usable
+
+		public static SciterPath Create()
+		{
+			IntPtr hpath;
+			var r = _gapi.pathCreate(out hpath);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			Debug.Assert(hpath != IntPtr.Zero);
+
+			SciterPath st = new SciterPath();
+			st._hpath = hpath;
+			return st;
+		}
+
+		public static SciterPath FromSV(SciterValue sv)
+		{
+			IntPtr hpath;
+			SciterXValue.VALUE v = sv.ToVALUE();
+			var r = _gapi.vUnWrapPath(ref v, out hpath);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+
+			SciterPath st = new SciterPath();
+			st._hpath = hpath;
+			return st;
+		}
+
+		public SciterValue ToSV()
+		{
+			SciterXValue.VALUE v;
+			var r = _gapi.vWrapPath(_hpath, out v);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			return new SciterValue(v);
+		}
+
+		public void MoveTo(float x, float y, bool relative = false)
+		{
+			var r = _gapi.pathMoveTo(_hpath, x, y, relative);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void LineTo(float x, float y, bool relative = false)
+		{
+			var r = _gapi.pathLineTo(_hpath, x, y, relative);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void ArcTo(float x, float y, float angle, float rx, float ry, bool is_large_arc, bool clockwise, bool relative = false)
+		{
+			var r = _gapi.pathArcTo(_hpath, x, y, angle, rx, ry, is_large_arc, clockwise, relative);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void QuadraticCurveTo(float xc, float yc, float x, float y, bool relative = false)
+		{
+			var r = _gapi.pathQuadraticCurveTo(_hpath, xc, yc, x, y, relative);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void BezierCurveTo(float xc1, float yc1, float xc2, float yc2, float x, float y, bool relative = false)
+		{
+			var r = _gapi.pathBezierCurveTo(_hpath, xc1, yc1, xc2, yc2, x, y, relative);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		public void ClosePath()
+		{
+			var r = _gapi.pathClosePath(_hpath);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+		}
+
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if(!disposedValue)
+			{
+				if(disposing)
+				{
+					// TODO: dispose managed state (managed objects).
+				}
+
+				_gapi.pathRelease(_hpath);
+				disposedValue = true;
+			}
+		}
+
+		~SciterPath()
+		{
+			Dispose(false);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+		#endregion
 	}
 
 	public class SciterText
@@ -455,6 +562,26 @@ namespace SciterSharp
 			SciterText st = new SciterText();
 			st._htext = htext;
 			return st;
+		}
+
+		public static SciterText FromSV(SciterValue sv)
+		{
+			IntPtr htext;
+			SciterXValue.VALUE v = sv.ToVALUE();
+			var r = _gapi.vUnWrapText(ref v, out htext);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+
+			SciterText st = new SciterText();
+			st._htext = htext;
+			return st;
+		}
+
+		public SciterValue ToSV()
+		{
+			SciterXValue.VALUE v;
+			var r = _gapi.vWrapText(_htext, out v);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			return new SciterValue(v);
 		}
 
 		public static SciterText CreateForElement(string text, SciterElement element)
