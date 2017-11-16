@@ -88,8 +88,8 @@
     <None Include="SciterMidi.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LibConsole\tracewnd.html" />
-    <Content Include="LibConsole\unittest.html" />
+    <None Include="LibConsole\tracewnd.html" />
+    <None Include="LibConsole\unittest.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
