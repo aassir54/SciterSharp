@@ -159,6 +159,9 @@ namespace SciterSharp
 			Debug.Assert(list != null);
 
 			SciterValue sv = new SciterValue();
+			if(list.Count==0)
+				return FromJSONString("[]");
+
 			for(int i = 0; i < list.Count; i++)
 				sv.SetItem(i, new SciterValue(list[i]));
 			return sv;

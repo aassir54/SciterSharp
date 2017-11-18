@@ -25,8 +25,8 @@ namespace TestCore
 			wnd.Title = "TestCore";
 			wnd.Icon = Properties.Resources.IconMain;
 
-            // Prepares SciterHost and then load the page
-            var host = new Host();
+			// Prepares SciterHost and then load the page
+			var host = new Host();
 			host.Setup(wnd);
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
@@ -34,8 +34,8 @@ namespace TestCore
 
 			Debug.Assert(!host.EvalScript("Utils").IsUndefined);
 
-            // Show window and Run message loop
-            wnd.Show();
+			// Show window and Run message loop
+			wnd.Show();
 			PInvokeUtils.RunMsgLoop();
 		}
 	}
