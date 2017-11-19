@@ -160,7 +160,10 @@ namespace SciterSharp
 
 			SciterValue sv = new SciterValue();
 			if(list.Count==0)
-				return FromJSONString("[]");
+			{
+				_api.ValueIntDataSet(ref sv._data, 0, (uint) SciterXValue.VALUE_TYPE.T_ARRAY, 0);
+				return sv;
+			}
 
 			for(int i = 0; i < list.Count; i++)
 				sv.SetItem(i, new SciterValue(list[i]));
