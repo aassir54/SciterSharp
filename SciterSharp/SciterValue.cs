@@ -433,6 +433,19 @@ namespace SciterSharp
 			return vret;
 		}
 
+		public List<SciterValue> Keys
+		{
+			get
+			{
+				if(!IsObject && !IsMap)
+					throw new ArgumentException("This SciterValue is not an object");
+
+				List<SciterValue> keys = new List<SciterValue>();
+				for(int i = 0; i < Length; i++)
+					keys.Add(GetKey(i));
+				return keys;
+			}
+		}
 		/*public void SetObjectData(IntPtr p)
 		{
 			Debug.Assert(data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_NATIVE);
