@@ -80,7 +80,7 @@ namespace Utils
 	// Does work for a parent frame, so Utils.installLinkHandler($(frame))
 	function installLinkHandler(el)
 	{
-		el.on("~mouseup", "a[href]", function(evt) {
+		el.on("~click", "a[href]", function(evt) {
 			if(evt.target.@#href)
 				Sciter.launch(evt.target.@#href);
 			return true;

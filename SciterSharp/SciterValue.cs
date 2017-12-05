@@ -439,7 +439,8 @@ namespace SciterSharp
 			{
 				if(!IsObject && !IsMap)
 					throw new ArgumentException("This SciterValue is not an object");
-
+				if(IsObject)
+					throw new ArgumentException("Plz, call Isolate() for this SciterValue");
 				List<SciterValue> keys = new List<SciterValue>();
 				for(int i = 0; i < Length; i++)
 					keys.Add(GetKey(i));
