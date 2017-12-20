@@ -377,7 +377,7 @@ namespace SciterSharp
 		/// </summary>
 		/// <param name="bpp">24 or 32 if alpha needed</param>
 		/// <param name="quality">png: 0, jpeg: 10 - 100</param>
-		public byte[] Save(uint bpp, uint quality = 0)
+		public byte[] Save(SciterXGraphics.SCITER_IMAGE_ENCODING encoding, uint quality = 0)
 		{
 			byte[] ret = null;
 			SciterXGraphics.ISciterGraphicsAPI.image_write_function _proc = (IntPtr prm, IntPtr data, uint data_length) =>
@@ -388,7 +388,7 @@ namespace SciterSharp
 				ret = buffer;
 				return true;
 			};
-			_gapi.imageSave(_himg, _proc, IntPtr.Zero, bpp, quality);
+			_gapi.imageSave(_himg, _proc, IntPtr.Zero, encoding, quality);
 			return ret;
 		}
 

@@ -80,6 +80,14 @@ namespace SciterSharp.Interop
 			TEXT_DIRECTION_TTB,
 		}
 
+		public enum SCITER_IMAGE_ENCODING
+		{
+			SCITER_IMAGE_ENCODING_RAW,// [a,b,g,r,a,b,g,r,...] vector
+			SCITER_IMAGE_ENCODING_PNG,
+			SCITER_IMAGE_ENCODING_JPG,
+			SCITER_IMAGE_ENCODING_WEBP,
+		}
+
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SCITER_TEXT_FORMAT
 		{
@@ -218,7 +226,7 @@ namespace SciterSharp.Interop
 
 			public delegate bool image_paint_function(IntPtr prm, IntPtr hgfx, uint width, uint height);
 
-			public delegate GRAPHIN_RESULT FPTR_imageSave(IntPtr himg, image_write_function pfn, IntPtr prm, uint bpp, uint quality);
+			public delegate GRAPHIN_RESULT FPTR_imageSave(IntPtr himg, image_write_function pfn, IntPtr prm, SCITER_IMAGE_ENCODING bpp, uint quality);
 
 			#endregion
 
