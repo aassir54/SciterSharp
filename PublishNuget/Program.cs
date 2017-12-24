@@ -10,7 +10,7 @@ namespace PublishNuget
 	{
 		public static void Main(string[] args)
 		{
-			if(Environment.OSVersion.Platform == PlatformID.MacOSX)
+			if(Environment.OSVersion.Platform == PlatformID.Unix)
 			{
 				Environment.CurrentDirectory = "/Users/midiway/Downloads/desk/SciterSharp/SciterSharp";
 				string nuspec = File.ReadAllText("SciterSharpOSX.nuspec");
