@@ -79,7 +79,7 @@ Clone the repository and compile the project for your platform. In your project,
 
 - &gt;= .NET 4.5
 
-For running you desktop app, you need to **make sure that your program can find sciter32/64.dll**, so go and grab a copy from [Sciter SDK](http://sciter.com/sdk/sciter-sdk-3.zip), I don't redistribute it in any form. The best way is to put a copy of each DLL in the bin/Debug/ and bin/Release/ folders or simply add it to Windows PATH, as your prefer.
+For running your desktop app, you need to **make sure that your program can find sciter.dll**, and make sure to use the correct version for your application, depending if it is 32bits or 64bits. So go and grab a copy from [Sciter SDK](http://sciter.com/sdk/sciter-sdk-3.zip), I don't redistribute it in any form. The best way is to put a copy of the DLL in the bin/Debug/ and bin/Release/ folders or simply add it to Windows PATH, as your prefer.
 
 In Visual Studio, make sure to **enable native debugging** so you will see Sciter error messages in the Output window: ```Project Properties / Debug / Check 'Enable native code debugging'```
  
