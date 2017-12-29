@@ -373,10 +373,10 @@ namespace SciterSharp
 #endif
 
 		/// <summary>
-		/// Save this image to png/jpeg stream of bytes
+		/// Save this image to png/jpeg/WebP stream of bytes
 		/// </summary>
-		/// <param name="bpp">24 or 32 if alpha needed</param>
-		/// <param name="quality">png: 0, jpeg: 10 - 100</param>
+		/// <param name="encoding">The output image type</param>
+		/// <param name="quality">png: 0, jpeg/WebP: 10 - 100</param>
 		public byte[] Save(SciterXGraphics.SCITER_IMAGE_ENCODING encoding, uint quality = 0)
 		{
 			byte[] ret = null;
