@@ -119,7 +119,6 @@ namespace SciterSharp
 			}
 		}
 
-
 		public SciterValue CallFunction(string name, params SciterValue[] args)
 		{
 			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
