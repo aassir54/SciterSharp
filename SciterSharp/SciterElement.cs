@@ -439,6 +439,17 @@ namespace SciterSharp
 			return new SciterElement(child_he);
 		}
 
+		public IEnumerable<SciterElement> Children
+		{
+			get
+			{
+				var list = new List<SciterElement>();
+				for(uint i = 0; i < ChildrenCount; i++)
+					list.Add(this[i]);
+				return list;
+			}
+		}
+
 		public SciterElement Parent
 		{
 			get
