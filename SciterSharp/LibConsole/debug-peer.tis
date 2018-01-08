@@ -2,6 +2,8 @@ include "console.tis";
 
 //debugPeer
 !function() {
+
+  
   const PORT = 0x0DEB;
   
   const STATE_SYMS = [
@@ -14,21 +16,21 @@ include "console.tis";
  
   var root;
   var socket;
-  var connected;
+  var connected = null;
   var host;
     
   const PENDING_CAPACITY = 100; //items    
   var pending = []; // pending posts awaiting delivery
   var resources = {};
   
-  const DATA_HTML = 0;
+  /*const DATA_HTML = 0;
   const DATA_IMAGE = 1;
   const DATA_STYLE = 2;
   const DATA_CURSOR = 3;
   const DATA_SCRIPT = 4;
   const DATA_RAW_DATA = 5;    // raw data request
   const DATA_FONT = 6;
-  const DATA_SOUND = 7; // wav bytes
+  const DATA_SOUND = 7; // wav bytes*/
   
   function post( procname, args.. ) {
     args.unshift( procname );
@@ -202,7 +204,34 @@ include "console.tis";
     post(#deeLog, subsystem, severity, message);  
   });
   
-  view.resourceTracker( function(def) {
+
+  view.onRequestResponse = function(rq) {
+    var def = {
+        url:        rq.requestUrl,
+        contentUrl: rq.responseUrl,
+        type:       rq.requestDataType || 0,
+        mimeType:   rq.responseMimeType,
+        encoding:   rq.responseEncoding,
+        data:       rq.responseData
+    };
+
+    if( def.type == Request.DATA_RAW_DATA )
+      switch( def.url %~ "." ) // 
+      {
+        case "htm": case "html": def.type = Request.DATA_HTML; break;
+        case "png": case "jpg": case "bmp": case "gif": case "svg": def.type = Request.DATA_IMAGE; break;
+        case "js": case "json": case "tis": def.type = Request.DATA_SCRIPT; break;
+        case "css" : def.type = Request.DATA_STYLE; break;
+      }
+
+    resources[def.url] = def;
+
+    if( connected )
+      post(#deeResourceArrived, def);  
+  };
+
+ 
+/*  view.resourceTracker( function(def) {
   
     //if(resources[def.url])
     //  return false; // done it already
@@ -219,7 +248,7 @@ include "console.tis";
     resources[def.url] = def;
     if( connected )
       post(#deeResourceArrived, def);  
-  });
+  }); */
   
   var breakpointHitResponseCode = 0; // one of DEBUG_COMMAND
 
@@ -229,10 +258,11 @@ include "console.tis";
   }  
   
   // breakpointHitHandler setup  
-  if( !VM.breakpointHitHandler ) // setup breakpointHitHandler only once per VM 
+  if( !view.parent) // setup breakpointHitHandler only for root view
     VM.breakpointHitHandler = function(url,lineNo,env) {
-      if( !connected ) 
+      if( !connected ) {
         return 1 /*CONTINUE, can we do more here?*/;
+      }
       post(#deeBreakpointHit,url,lineNo,env); 
       // wait here until we
       while(breakpointHitResponseCode == 0 && connected)
@@ -266,12 +296,12 @@ include "console.tis";
     if(socket)
       return;
 
-
     socket = DataSocket.connect(PORT, inspectorHost || "localhost");
     if(!socket) 
     {
+      stderr.println("Debugger cannot create socket!");
       //rootElement().postEvent("inspector-connect",false);
-      view.msgbox(#error, "Debugger cannot create socket!");    
+      //view.msgbox(#error, "Debugger cannot create socket!");    
       return false;
     }
         
@@ -308,20 +338,23 @@ include "console.tis";
         root = null;
       view.highlightedNode = null;
       view.logHandler( null );
-      view.resourceTracker( null );
+      view.onRequestResponse = null;
       VM.breakpointHitHandler = null;  
     }
       
     var usedRoot;
     if(rootEl)
-      rootEl.on("newdocument", function() {
+      rootEl.on("newdocument", function(evt) {
+        if( evt.target !== rootEl[0] )
+          return;
         var title = rootEl.$(title);
         post(#deeReattach, (title ? title.text : "{no title}"), rootElement().url() );
         needSnapshotUpdate();
       });
     else {
-      view.on("newdocument", function() { if(socket && connected) view.connectToInspector(); });
-      view.root.on("close.debug-peer", shutdown);
+      view.on("newdocument", function(evt) { if(socket && connected) view.connectToInspector(); });
+      //view.connectToInspector();
+      //view.root.on("close.debug-peer", shutdown);
     }
       
     root = rootEl;

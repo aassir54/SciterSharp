@@ -3,7 +3,8 @@
 	<script type="text/tiscript">
 		include "console.tis";
 
-		trace(123);
+		var stream = self.request(0, #get, "sciter:debug-peer.tis");
+		view.clipboard(#put, stream.toString());
 	</script>
 </head>
 
