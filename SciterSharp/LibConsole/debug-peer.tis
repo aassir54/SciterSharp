@@ -296,7 +296,8 @@ include "console.tis";
     if(socket)
       return;
 
-    socket = DataSocket.connect(PORT, inspectorHost || "localhost");
+    //socket = DataSocket.connect(PORT, inspectorHost || "localhost");
+    socket = Net.DataSocket.connect("sciter-inspector");
     if(!socket) 
     {
       stderr.println("Debugger cannot create socket!");
@@ -398,15 +399,11 @@ include "console.tis";
     
     var wasError = false;
 
-    socket.on("error",function(errno) {
+    socket.on("error",function(errm) {
       wasError = true;
       if(!View.debugPeerPresentedError) {
         View.debugPeerPresentedError = true;
-        if( errno < 0) {
-          view.msgbox(#error, "timeout connecting with the Inspector!");
-        }
-        else 
-          view.msgbox(#error, "Inspector channel socket error:" + errno);
+        view.msgbox(#error, "Inspector channel socket error:" + errm);
       }
       //rootElement().postEvent("inspector-connect",false);
     });

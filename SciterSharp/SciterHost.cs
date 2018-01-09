@@ -173,15 +173,21 @@ namespace SciterSharp
 		/// </summary>
 		public void DebugInspect()
 		{
-#if WINDOWS
-			DebugInspect("inspector");
-#elif GTKMONO
-			DebugInspect("inspector64");
-#elif OSX
-			DebugInspect("inspector.app/Contents/MacOS/inspector");
-#else
-			throw new Exception("Not supported");
-#endif
+			string inspector_proc = "inspector";
+			var ps = Process.GetProcessesByName(inspector_proc);
+			if(ps.Length==0)
+			{
+				throw new Exception("Inspector process is not running. You should run it before calling DebugInspect()");
+			}
+
+			Task.Run(() =>
+			{
+				Thread.Sleep(1000);
+				InvokePost(() =>
+				{
+					EvalScript("view.connectToInspector()"); ;
+				});
+			});
 		}
 
 		/// <summary>
@@ -189,7 +195,7 @@ namespace SciterSharp
 		/// (Before everything it kills any previous instance of the inspector process)
 		/// </summary>
 		/// <param name="inspector_exe">Path to the inspector executable, can be an absolute or relative path.</param>
-		public void DebugInspect(string inspector_exe)
+		/*public void DebugInspect(string inspector_exe)
 		{
 			var ps = Process.GetProcessesByName(inspector_exe);
 			foreach(var p in ps)
@@ -232,7 +238,7 @@ namespace SciterSharp
 					EvalScript("view.connectToInspector()"); ;
 				});
 			});
-		}
+		}*/
 
 		/// <summary>
 		/// Sciter cross-platform alternative for posting a message in the message queue.
