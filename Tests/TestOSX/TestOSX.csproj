@@ -84,13 +84,16 @@
     <Compile Include="ImgDrawBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="sciter-osx-64.dylib" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\SciterSharp\SciterSharpOSX.csproj">
       <Project>{42BB6EC1-E806-4B5B-A242-1662AAE7BF25}</Project>
       <Name>SciterSharpOSX</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <NativeReference Include="libsciter-osx-64.dylib">
+      <Kind>Dynamic</Kind>
+      <SmartLink>False</SmartLink>
+    </NativeReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
