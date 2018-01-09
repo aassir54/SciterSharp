@@ -183,10 +183,7 @@ namespace SciterSharp
 			Task.Run(() =>
 			{
 				Thread.Sleep(1000);
-				InvokePost(() =>
-				{
-					EvalScript("view.connectToInspector()"); ;
-				});
+				EvalScript("view.connectToInspector()");
 			});
 		}
 
