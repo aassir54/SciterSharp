@@ -166,11 +166,6 @@ namespace SciterSharp
 			PostNotification(new IntPtr(INVOKE_NOTIFICATION), GCHandle.ToIntPtr(handle), timeout);
 		}
 
-		/// <summary>
-		/// Runs the inspector process, waits 1 second, and calls view.connectToInspector() to inspect your page.
-		/// The 'inspector(.exe)' executable must be found in the PATH or can be in the same directory of the executing assembly
-		/// (Before everything it kills any previous instance of the inspector process)
-		/// </summary>
 		public void DebugInspect()
 		{
 			string inspector_proc = "inspector";
