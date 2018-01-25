@@ -129,12 +129,13 @@ namespace SciterSharp
 
 			SciterXValue.FPTR_NATIVE_FUNCTOR_RELEASE fnfr = (IntPtr tag) =>
 			{
+				GCHandle.FromIntPtr(tag).Free();
 				return true;
 			};
 
-
+			var fhandle = GCHandle.Alloc(func, GCHandleType.Pinned);
 			_api.ValueInit(out _data);
-			_api.ValueNativeFunctorSet(ref _data, fnfi, fnfr, IntPtr.Zero);
+			_api.ValueNativeFunctorSet(ref _data, fnfi, fnfr, fhandle.AddrOfPinnedObject());
 		}
 
 

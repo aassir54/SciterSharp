@@ -296,8 +296,7 @@ include "console.tis";
     if(socket)
       return;
 
-    //socket = DataSocket.connect(PORT, inspectorHost || "localhost");
-    socket = Net.DataSocket.connect("sciter-inspector");
+    socket = System.Net.DataSocket.connect("sciter-inspector");
     if(!socket) 
     {
       stderr.println("Debugger cannot create socket!");

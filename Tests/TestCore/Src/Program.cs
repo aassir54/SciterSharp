@@ -31,8 +31,10 @@ namespace TestCore
 			host.Setup(wnd);
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
-			host.DebugInspect();
+			//host.DebugInspect();
 
+			byte[] css_bytes = File.ReadAllBytes(@"D:\ProjetosSciter\AssetsDrop\AssetsDrop\res\css\global.css");
+			SciterX.API.SciterAppendMasterCSS(css_bytes, (uint) css_bytes.Length);
 			Debug.Assert(!host.EvalScript("Utils").IsUndefined);
 
 			// Show window and Run message loop
