@@ -12,6 +12,9 @@ namespace TestCore
 {
 	class Program
 	{
+		public static SciterWindow AppWnd;
+		public static Host AppHost;
+
 		[STAThread]
 		static void Main(string[] args)
 		{
@@ -20,14 +23,16 @@ namespace TestCore
 			Debug.Assert(oleres == 0);
 			
 			// Create the window
-			var wnd = new SciterWindow();
+			AppWnd = new SciterWindow();
+			var wnd = AppWnd;
 			wnd.CreateMainWindow(1500, 800);
 			wnd.CenterTopLevelWindow();
 			wnd.Title = "TestCore";
 			wnd.Icon = Properties.Resources.IconMain;
 
 			// Prepares SciterHost and then load the page
-			var host = new Host();
+			AppHost = new Host();
+			var host = AppHost;
 			host.Setup(wnd);
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");

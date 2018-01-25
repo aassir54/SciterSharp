@@ -24,11 +24,16 @@ namespace TestCore
 			switch(name)
 			{
 				case "Host_HelloWorld":
-					result = new SciterValue("Hello World! (from native side)");
+					result = new SciterValue(argss =>
+					{
+						return new SciterValue("Hello World! (from native side)");
+					});
 					return true;
 			}
 
-			result = null;
+			Program.AppHost.InvokePost(() => GC.Collect());
+
+			result = new SciterValue();
 			return false;
 		}
 	}

@@ -112,11 +112,15 @@ namespace SciterSharp
 			else
 				throw new Exception("Can not create a SciterValue from type '" + ic.GetType() + "'");
 		}
-
-
 		public SciterValue(Func<SciterValue[], SciterValue> func)
 		{
-			SciterXValue.FPTR_NATIVE_FUNCTOR_INVOKE fnfi = (IntPtr tag, uint argc, IntPtr argv, out SciterXValue.VALUE retval) =>
+			SciterXValue.FPTR_NATIVE_FUNCTOR_INVOKE fnfi;
+			SciterXValue.FPTR_NATIVE_FUNCTOR_RELEASE fnfr;
+			GCHandle fnfi_gch = new GCHandle();
+			GCHandle fnfr_gch = new GCHandle();
+			GCHandle func_gch = GCHandle.Alloc(func);
+
+			fnfi = (IntPtr tag, uint argc, IntPtr argv, out SciterXValue.VALUE retval) =>
 			{
 				// Get the list of SciterXValue.VALUE from the ptr
 				SciterValue[] args = new SciterValue[argc];
@@ -127,15 +131,21 @@ namespace SciterSharp
 				return true;
 			};
 
-			SciterXValue.FPTR_NATIVE_FUNCTOR_RELEASE fnfr = (IntPtr tag) =>
+			fnfr = (IntPtr tag) =>
 			{
-				GCHandle.FromIntPtr(tag).Free();
+				// seems to never be called -> Sciter engine bug
+				fnfi_gch.Free();
+				fnfr_gch.Free();
+				func_gch.Free();
 				return true;
 			};
 
-			var fhandle = GCHandle.Alloc(func, GCHandleType.Pinned);
+			fnfi_gch = GCHandle.Alloc(fnfi, GCHandleType.Normal);
+			fnfr_gch = GCHandle.Alloc(fnfr, GCHandleType.Normal);
+			func_gch = GCHandle.Alloc(func, GCHandleType.Normal);
+
 			_api.ValueInit(out _data);
-			_api.ValueNativeFunctorSet(ref _data, fnfi, fnfr, fhandle.AddrOfPinnedObject());
+			_api.ValueNativeFunctorSet(ref _data, fnfi, fnfr, IntPtr.Zero);
 		}
 
 
