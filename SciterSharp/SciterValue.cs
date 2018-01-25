@@ -147,7 +147,42 @@ namespace SciterSharp
 			_api.ValueInit(out _data);
 			_api.ValueNativeFunctorSet(ref _data, fnfi, fnfr, IntPtr.Zero);
 		}
+		public SciterValue(Action<SciterValue[]> func)
+		{
+			SciterXValue.FPTR_NATIVE_FUNCTOR_INVOKE fnfi;
+			SciterXValue.FPTR_NATIVE_FUNCTOR_RELEASE fnfr;
+			GCHandle fnfi_gch = new GCHandle();
+			GCHandle fnfr_gch = new GCHandle();
+			GCHandle func_gch = GCHandle.Alloc(func);
 
+			fnfi = (IntPtr tag, uint argc, IntPtr argv, out SciterXValue.VALUE retval) =>
+			{
+				// Get the list of SciterXValue.VALUE from the ptr
+				SciterValue[] args = new SciterValue[argc];
+				for(int i = 0; i < argc; i++)
+					args[i] = new SciterValue((SciterXValue.VALUE)Marshal.PtrToStructure(IntPtr.Add(argv, i * Marshal.SizeOf(typeof(SciterXValue.VALUE))), typeof(SciterXValue.VALUE)));
+
+				func(args);
+				retval = new SciterXValue.VALUE();
+				return true;
+			};
+
+			fnfr = (IntPtr tag) =>
+			{
+				// seems to never be called -> Sciter engine bug
+				fnfi_gch.Free();
+				fnfr_gch.Free();
+				func_gch.Free();
+				return true;
+			};
+
+			fnfi_gch = GCHandle.Alloc(fnfi, GCHandleType.Normal);
+			fnfr_gch = GCHandle.Alloc(fnfr, GCHandleType.Normal);
+			func_gch = GCHandle.Alloc(func, GCHandleType.Normal);
+
+			_api.ValueInit(out _data);
+			_api.ValueNativeFunctorSet(ref _data, fnfi, fnfr, IntPtr.Zero);
+		}
 
 		public static SciterValue CreateFunctor(object f)
 		{
