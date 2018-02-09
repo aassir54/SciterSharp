@@ -307,6 +307,22 @@ namespace SciterSharp
 
 		private SciterImage() { }// non-user usable
 
+		public SciterImage(SciterValue sv)
+		{
+			SciterXValue.VALUE v = sv.ToVALUE();
+			IntPtr himg;
+			var r = _gapi.vUnWrapImage(ref v, out himg);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			_himg = himg;
+		}
+
+		public SciterValue ToSV()
+		{
+			SciterXValue.VALUE v;
+			var r = _gapi.vWrapImage(_himg, out v);
+			return new SciterValue(v);
+		}
+
 		public SciterImage(uint width, uint height, bool withAlpha)
 		{
 			IntPtr himg;

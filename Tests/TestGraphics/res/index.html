@@ -8,10 +8,13 @@
 			border: solid 1px silver;
 			size: 300px;
 			behavior: DrawGeometry;
+			background: red;
 		}
 	</style>
 
 	<script type="text/tiscript">
+		var img = new Image(200, 200, $(div));
+		view.OnScriptCall(img);
 	</script>
 </head>
 

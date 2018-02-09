@@ -1,5 +1,3 @@
-using SciterSharp;
-using SciterSharp.Interop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using SciterSharp;
+using SciterSharp.Interop;
 
 namespace TestGraphics
 {
@@ -21,8 +21,12 @@ namespace TestGraphics
 	{
 		protected override bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)
 		{
+			var r = new SciterImage(args[0]);
+			var b = r.Save(SciterXGraphics.SCITER_IMAGE_ENCODING.SCITER_IMAGE_ENCODING_PNG);
+			File.WriteAllBytes("d:/test.png", b);
+
 			result = null;
-			return false;
+			return true;
 		}
 	}
 

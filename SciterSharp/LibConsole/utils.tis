@@ -41,6 +41,14 @@ namespace Utils
 		stream.print(data);
 		stream.close();
 	}
+
+	function writeFileBytes(path, bytes)
+	{
+		var stream = Stream.openFile(path, "w+");
+		stream.wri
+	}
+
+
 	function readStreamToEnd(stream)
 	{
 		var txt = "";
