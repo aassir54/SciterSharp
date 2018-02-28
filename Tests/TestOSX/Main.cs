@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using AppKit;
 using Foundation;
 using SciterSharp;
+using SciterSharp.Interop;
 
 namespace TestOSX
 {
@@ -12,8 +14,11 @@ namespace TestOSX
 
 		static void Main(string[] args)
 		{
+			SciterX.API.SciterSetOption(IntPtr.Zero, SciterXDef.SCITER_RT_OPTIONS.SCITER_SET_GFX_LAYER, new IntPtr((int) SciterXDef.GFX_LAYER.GFX_LAYER_CG));
+
 			NSApplication.Init();
 
+			var img = new SciterImage(File.ReadAllBytes("/Users/midiway/Dropbox/Things/213.png"));
 			SciterWindow wnd = new SciterWindow();
 			wnd.CreateMainWindow(800, 600);
 			host = new Host(wnd);

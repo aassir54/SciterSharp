@@ -12,7 +12,7 @@ namespace PublishNuget
 		{
 			if(Environment.OSVersion.Platform == PlatformID.Unix)
 			{
-				Environment.CurrentDirectory = "/Users/midiway/Downloads/desk/SciterSharp/SciterSharp";
+				Environment.CurrentDirectory = "/Volumes/EXTERNO/Projetos/SciterSharp/SciterSharp";
 				string nuspec = File.ReadAllText("SciterSharpOSX.nuspec");
 				nuspec = Regex.Replace(nuspec,
 							  "<version>.*?</version>",
