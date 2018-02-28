@@ -91,6 +91,17 @@
     <None Include="LibConsole\tracewnd.html" />
     <None Include="LibConsole\unittest.html" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="LibConsole\popup.css" />
+    <None Include="LibConsole\show_data.html" />
+    <None Include="LibConsole\show_img.html" />
+    <None Include="sciter.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="sciter.dll.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>$(ProjectDir)scripts\packWindows.bat</PreBuildEvent>

@@ -44,8 +44,7 @@ namespace Utils
 
 	function writeFileBytes(path, bytes)
 	{
-		var stream = Stream.openFile(path, "w+");
-		stream.wri
+		bytes.save(path);
 	}
 
 
