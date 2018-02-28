@@ -80,9 +80,9 @@ namespace console
 			parameters: data,
 			screen: view.screen
 		};
+		self.post(::popup.root.state.focus = true);
 		return popup;
 	}
-
 
 	function foreach(param)
 	{
