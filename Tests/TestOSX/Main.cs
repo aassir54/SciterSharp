@@ -18,7 +18,9 @@ namespace TestOSX
 
 			NSApplication.Init();
 
-			var img = new SciterImage(File.ReadAllBytes("/Users/midiway/Dropbox/Things/213.png"));
+			//var a = File.ReadAllBytes("/Users/midiway/Dropbox/Things/213.png");
+			//var img = new SciterImage(a);
+
 			SciterWindow wnd = new SciterWindow();
 			wnd.CreateMainWindow(800, 600);
 			host = new Host(wnd);

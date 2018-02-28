@@ -98,10 +98,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LibConsole\console.tis" />
-    <None Include="LibConsole\utils.tis" />
     <None Include="LibConsole\debug-peer.tis" />
+    <None Include="LibConsole\popup.css" />
+    <None Include="LibConsole\show_data.html" />
+    <None Include="LibConsole\show_img.html" />
     <None Include="LibConsole\tracewnd.html" />
     <None Include="LibConsole\unittest.html" />
+    <None Include="LibConsole\utils.tis" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
