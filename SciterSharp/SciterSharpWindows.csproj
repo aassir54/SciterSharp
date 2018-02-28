@@ -92,15 +92,15 @@
     <None Include="LibConsole\unittest.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LibConsole\popup.css" />
-    <Content Include="LibConsole\show_data.html" />
-    <Content Include="LibConsole\show_img.html" />
-    <Content Include="sciter.dll">
+    <None Include="LibConsole\popup.css" />
+    <None Include="LibConsole\show_data.html" />
+    <None Include="LibConsole\show_img.html" />
+    <None Include="sciter.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="sciter.dll.pdb">
+    </None>
+    <None Include="sciter.dll.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
