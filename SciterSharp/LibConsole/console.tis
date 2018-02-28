@@ -32,11 +32,14 @@ namespace console
 			tracewnd = view.window({
 				type: View.TOOL_WINDOW,
 				url: "sciter:tracewnd.html",
-				alignment: 5
+				alignment: 5,
+				screen: view.screen
 			});
 		}
 		tracewnd.root.ns.View_AppendLine(params.join(" "));
 		View.tracewnd = tracewnd;
+
+		return tracewnd;
 	}
 	function ptrace(params..)
 	{
@@ -63,6 +66,23 @@ namespace console
 			ns_tcount_funcs[id] = 1;
 		trace(caller[1] + ": " + ns_tcount_funcs[id]);
 	}
+
+	function show(data)
+	{
+		var url = "sciter:show_data.html";
+		if(typeof data==#Image)
+			url = "sciter:show_img.html";
+
+		var popup = view.window{
+			type: View.TOOL_WINDOW,
+			url: url,
+			alignment: 5,
+			parameters: data,
+			screen: view.screen
+		};
+		return popup;
+	}
+
 
 	function foreach(param)
 	{
@@ -115,7 +135,6 @@ namespace console
 	}
 
 	// Omni ONLY
-	function show(el) {}
 	function dom(el) {}
 	function colorpick(el, css_prop) {}
 	function colortouch(el, what=#bg, mode=#hue-saturation) {}

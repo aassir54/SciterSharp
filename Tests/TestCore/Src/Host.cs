@@ -26,7 +26,7 @@ namespace TestCore
 				case "Host_HelloWorld":
 					result = new SciterValue(argss =>
 					{
-						return new SciterValue("Hello World! (from native side)");
+						return new SciterValue();
 					});
 					return true;
 			}

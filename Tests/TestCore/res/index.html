@@ -1,3 +1,4 @@
+<!-- OmniView:on -->
 <html>
 <head>
 	<style>
@@ -5,16 +6,17 @@
 	</style>
 
 	<script type="text/tiscript">
-		$(h1).text = view.Host_HelloWorld()();
+		function myfunction() {
+			return 1;
+		}
+		var (a, b, c) = myfunction();
+		log(a, b, c);
 
-		var version_major = Sciter.VERSION >> 16;
-		var version_minor = Sciter.VERSION & 0xFFFF;
-		var revision_major = Sciter.REVISION >> 16;
-		var revision_minor = Sciter.REVISION & 0xFFFF;
-		$(h2).text = "Sciter version: " + String.printf("%d.%d.%d.%d", version_major, version_minor, revision_major, revision_minor);
-
-		$(div).asViewMoveHandler();
-		gc();
+		console.show(self.loadImage("file://D:/Dropbox/Untitled.png"));
+		console.show({
+			test: 1234,
+			wow: [1,2,3,4]
+		});
 	</script>
 </head>
 

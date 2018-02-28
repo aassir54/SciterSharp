@@ -55,6 +55,9 @@ namespace SciterSharp
 				{ "sciter:console.tis", arch.Get("console.tis") },
 				{ "sciter:utils.tis", arch.Get("utils.tis") },
 				{ "sciter:tracewnd.html", arch.Get("tracewnd.html") },
+				{ "sciter:show_data.html", arch.Get("show_data.html") },
+				{ "sciter:show_img.html", arch.Get("show_img.html") },
+				{ "sciter:popup.css", arch.Get("popup.css") },
 			};
 			Debug.Assert(_lc_files.Values.All(v => v != null));
 
