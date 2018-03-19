@@ -14,7 +14,7 @@ namespace PublishNuget
 			{
 				Environment.CurrentDirectory += "/../../../SciterSharp";
 
-				Exec("msbuild", "SciterSharpOSX.csproj /t:Clean,Build /p:Configuration=Release");
+				SpawnProcess("msbuild", "SciterSharpOSX.csproj /t:Clean,Build /p:Configuration=Release");
 
 				string nuspec = File.ReadAllText("SciterSharpOSX.nuspec");
 				nuspec = Regex.Replace(nuspec,
@@ -23,8 +23,8 @@ namespace PublishNuget
 							  RegexOptions.None);
 				File.WriteAllText("SciterSharpOSX.nuspec", nuspec);
 
-				Exec("nuget", "pack SciterSharpOSX.nuspec");
-				Exec("nuget", "push SciterSharpOSX." + LibVersion.AssemblyVersion + ".nupkg " + NugetKeys.MIDI + " -Source nuget.org");
+				SpawnProcess("nuget", "pack SciterSharpOSX.nuspec");
+				SpawnProcess("nuget", "push SciterSharpOSX." + LibVersion.AssemblyVersion + ".nupkg " + NugetKeys.MIDI + " -Source nuget.org");
 			}
 			else
 			{
@@ -32,22 +32,46 @@ namespace PublishNuget
 				Environment.SetEnvironmentVariable("PATH", path + @";C:\Windows\Microsoft.NET\Framework64\v4.0.30319\");
 				Environment.CurrentDirectory = @"D:\ProjetosSciter\SciterSharp\SciterSharp";
 
-				Exec("msbuild", "SciterSharpWindows.csproj /t:Clean,Build /p:Configuration=Release");
-				Exec("nuget", "pack SciterSharpWindows.csproj -Prop Configuration=Release");
-				Exec("nuget", "push SciterSharpWindows." + LibVersion.AssemblyVersion + ".nupkg " + NugetKeys.MIDI + " -Source nuget.org");
+				SpawnProcess("msbuild", "SciterSharpWindows.csproj /t:Clean,Build /p:Configuration=Release");
+				SpawnProcess("nuget", "pack SciterSharpWindows.csproj -Prop Configuration=Release");
+				SpawnProcess("nuget", "push SciterSharpWindows." + LibVersion.AssemblyVersion + ".nupkg " + NugetKeys.MIDI + " -Source nuget.org");
 
-				Exec("msbuild", "SciterSharpGTK.csproj /t:Clean,Build /p:Configuration=Release");
-				Exec("nuget", "pack SciterSharpGTK.csproj -Prop Configuration=Release");
-				Exec("nuget", "push SciterSharpGTK." + LibVersion.AssemblyVersion + ".nupkg " + NugetKeys.MIDI + " -Source nuget.org");
+				SpawnProcess("msbuild", "SciterSharpGTK.csproj /t:Clean,Build /p:Configuration=Release");
+				SpawnProcess("nuget", "pack SciterSharpGTK.csproj -Prop Configuration=Release");
+				SpawnProcess("nuget", "push SciterSharpGTK." + LibVersion.AssemblyVersion + ".nupkg " + NugetKeys.MIDI + " -Source nuget.org");
 			}
 		}
 
-		public static void Exec(string exe, string args)
+		static void SpawnProcess(string exe, string args, bool ignore_error = false, bool wait = true)
 		{
-			var proc = Process.Start(exe, args);
-			proc.WaitForExit();
-			if(proc.ExitCode != 0)
-				throw new Exception();
+			var startInfo = new ProcessStartInfo(exe, args)
+			{
+				FileName = exe,
+				Arguments = args,
+				UseShellExecute = false
+			};
+
+			var p = Process.Start(startInfo);
+			if(wait)
+			{
+				p.WaitForExit();
+
+				if(p.ExitCode != 0 && ignore_error == false)
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+
+					string msg = exe + ' ' + args;
+					Console.WriteLine("");
+					Console.WriteLine("-------------------------");
+					Console.WriteLine("FAILED: " + msg);
+					Console.WriteLine("EXIT CODE: " + p.ExitCode);
+					Console.WriteLine("Press ENTER to exit");
+					Console.WriteLine("-------------------------");
+
+					Console.ReadLine();
+					Environment.Exit(0);
+				}
+			}
 		}
 	}
 }
