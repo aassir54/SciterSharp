@@ -35,6 +35,8 @@
 				gfx.blendImage(view.parameters, 0, 0, 0, 0, w, h);
 			return true;
 		};
+
+		view.focus = self;
 	</script>
 
 	<style>
@@ -44,7 +46,7 @@
 		#top { flow: horizontal; border-spacing: 5px; vertical-align: middle; white-space: nowrap; }
 		#top button { margin-left: *; behavior: check; }
 		#top button:checked { background-image: url(theme:toolbar-button-pressed); }
-		#img { size: *; margin-top: 4px; outline: solid 1px silver; cursor: pointer; }
+		#img { size: *; margin-top: 4px; outline: solid 1px silver; cursor: pointer; fill: none; stroke: none; }
 	</style>
 </head>
 
