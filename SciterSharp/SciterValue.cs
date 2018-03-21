@@ -517,7 +517,8 @@ namespace SciterSharp
 
 		public SciterValue Call(IList<SciterValue> args, SciterValue self = null, string url_or_script_name = null)
 		{
-			Debug.Assert(IsFunction || IsObjectFunction);
+			if(!IsFunction && !IsObjectFunction)
+				throw new Exception("Can't Call() this SciterValue because it is not a function");
 
 			SciterValue rv = new SciterValue();
 			SciterXValue.VALUE[] arr_VALUE = args.Select(sv => sv._data).ToArray();
