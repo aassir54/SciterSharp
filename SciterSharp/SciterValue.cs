@@ -64,7 +64,40 @@ namespace SciterSharp
 
 		public override string ToString()
 		{
-			return "SciterValue JSON: " + Regex.Replace(ToJSONString(), @"\t|\n|\r", "");
+			string what = "";
+			if(IsUndefined) what = "IsUndefined";
+			if(IsBool) what = "IsBool";
+			if(IsInt) what = "IsInt";
+			if(IsFloat) what = "IsFloat";
+			if(IsString) what = "IsString " + Get("");
+			if(IsSymbol) what = "IsSymbol";
+			if(IsErrorString) what = "IsErrorString";
+			if(IsDate) what = "IsDate";
+			if(IsCurrency) what = "IsCurrency";
+			if(IsMap) what = "IsMap";
+			if(IsArray) what = "IsArray";
+			if(IsFunction) what = "IsFunction";
+			if(IsBytes) what = "IsBytes";
+			if(IsObject) what = "IsObject";
+			if(IsDomElement) what = "IsDomElement";
+			if(IsNativeFunction) what = "IsNativeFunction";
+			if(IsColor) what = "IsColor";
+			if(IsDuration) what = "IsDuration";
+			if(IsAngle) what = "IsAngle";
+			if(IsNull) what = "IsNull";
+			if(IsObjectNative) what = "IsObjectNative";
+			if(IsObjectArray) what = "IsObjectArray";
+			if(IsObjectFunction) what = "IsObjectFunction";
+			if(IsObjectObject) what = "IsObjectObject";
+			if(IsObjectClass) what = "IsObjectClass";
+			if(IsObjectError) what = "IsObjectError";
+#if WINDOWS
+			if(IsDate)
+				what += " - " + GetDate().ToString();
+#endif
+			if(IsMap) what = "IsMap " + Regex.Replace(ToJSONString(), @"\t|\n|\r", "");
+
+			return what;// + " - SciterValue JSON: " + Regex.Replace(ToJSONString(), @"\t|\n|\r", "");
 		}
 
 		public SciterValue() { _api.ValueInit(out _data); }
@@ -274,26 +307,33 @@ namespace SciterSharp
 			return sv;
 		}
 
-		public bool IsUndefined		{ get { return _data.t == (uint)SciterXValue.VALUE_TYPE.T_UNDEFINED; } }
-		public bool IsBool			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_BOOL; } }
-		public bool IsInt			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_INT; } }
-		public bool IsFloat			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_FLOAT; } }
-		public bool IsString		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING; } }
-		public bool IsSymbol		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL; } }
-		public bool IsErrorString	{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_ERROR; } }
-		public bool IsDate			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_DATE; } }
-		public bool IsCurrency		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_CURRENCY; } }
-		public bool IsMap			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_MAP; } }
-		public bool IsArray			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_ARRAY; } }
-		public bool IsFunction		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_FUNCTION; } }
-		public bool IsBytes			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_BYTES; } }
-		public bool IsObject		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT; } }
-		public bool IsDomElement	{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_DOM_OBJECT; } }
-		public bool IsNativeFunction{ get { return _api.ValueIsNativeFunctor(ref _data) != 0; } }
-		public bool IsColor			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_COLOR; } }
-		public bool IsDuration		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_DURATION; } }
-		public bool IsAngle			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_ANGLE; } }
-		public bool IsNull			{ get { return _data.t == (uint)SciterXValue.VALUE_TYPE.T_NULL; } }
+		public bool IsUndefined			{ get { return _data.t == (uint)SciterXValue.VALUE_TYPE.T_UNDEFINED; } }
+		public bool IsBool				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_BOOL; } }
+		public bool IsInt				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_INT; } }
+		public bool IsFloat				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_FLOAT; } }
+		public bool IsString			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING; } }
+		public bool IsSymbol			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_SYMBOL; } }
+		public bool IsErrorString		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_STRING && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_STRING.UT_STRING_ERROR; } }
+		public bool IsDate				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_DATE; } }
+		public bool IsCurrency			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_CURRENCY; } }
+		public bool IsMap				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_MAP; } }
+		public bool IsArray				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_ARRAY; } }
+		public bool IsFunction			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_FUNCTION; } }
+		public bool IsBytes				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_BYTES; } }
+		public bool IsObject			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT; } }
+		public bool IsDomElement		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_DOM_OBJECT; } }
+		public bool IsNativeFunction	{ get { return _api.ValueIsNativeFunctor(ref _data) != 0; } }
+		public bool IsColor				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_COLOR; } }
+		public bool IsDuration			{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_DURATION; } }
+		public bool IsAngle				{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_ANGLE; } }
+		public bool IsNull				{ get { return _data.t == (uint)SciterXValue.VALUE_TYPE.T_NULL; } }
+
+		public bool IsObjectNative		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_NATIVE; } }
+		public bool IsObjectArray		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_ARRAY; } }
+		public bool IsObjectFunction	{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_FUNCTION; } }
+		public bool IsObjectObject		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_OBJECT; } }
+		public bool IsObjectClass		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_CLASS; } }
+		public bool IsObjectError		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_ERROR; } }
 
 		public bool Get(bool defv)
 		{
@@ -359,7 +399,7 @@ namespace SciterSharp
 			return Get(0.0);
 		}
 
-#if WINDOWS
+#if WINDOWS || OSX
 		public DateTime GetDate()
 		{
 			long v;
@@ -505,14 +545,6 @@ namespace SciterSharp
 			_api.ValueBinaryData(ref _data, out p, out dummy);
 			return p;
 		}
-		
-
-		public bool IsObjectNative		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_NATIVE; } }
-		public bool IsObjectArray		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_ARRAY; } }
-		public bool IsObjectFunction	{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_FUNCTION; } }
-		public bool IsObjectObject		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_OBJECT; } }
-		public bool IsObjectClass		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_CLASS; } }
-		public bool IsObjectError		{ get { return _data.t == (uint) SciterXValue.VALUE_TYPE.T_OBJECT && _data.u == (uint) SciterXValue.VALUE_UNIT_TYPE_OBJECT.UT_OBJECT_ERROR; } }
 
 
 		public SciterValue Call(IList<SciterValue> args, SciterValue self = null, string url_or_script_name = null)
