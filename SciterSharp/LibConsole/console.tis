@@ -49,12 +49,12 @@ namespace console
 	function count()
 	{
 		var caller = __TRACE__[1];
-		var id = caller.toString();
+		var id = caller[1] + " line " + caller[0];
 		if(ns_count_funcs.exists(id))
 			ns_count_funcs[id]++;
 		else
 			ns_count_funcs[id] = 1;
-		log(caller[1] + ": " + ns_count_funcs[id]);
+		log(id + ": " + ns_count_funcs[id]);
 	}
 	function tcount()
 	{
@@ -140,7 +140,10 @@ namespace console
 	function colortouch(el, what=#bg, mode=#hue-saturation) {}
 	function texturepick(el, what=#bg) {}
 	function fontpick(el) {}
-	function mypick(cbk_creator = undefined, el = undefined) {}
+	function mypick(el)
+	{
+
+	}
 
 
 	// ------------------------------------------------------

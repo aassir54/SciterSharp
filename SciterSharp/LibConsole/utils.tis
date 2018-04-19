@@ -225,7 +225,6 @@ function Element.tagname()
 	}
 
 	return "<" + name + ">";
-
 }
 function Element.hide()
 {

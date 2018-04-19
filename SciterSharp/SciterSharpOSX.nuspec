@@ -8,7 +8,6 @@
     <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.en.html</licenseUrl>
     <projectUrl>http://misoftware.com.br/</projectUrl>
     <iconUrl>http://cdn.misoftware.com.br/PublicImages/sciter-sharp.png</iconUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>C# bindings for the Sciter engine</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright MI Software 2018</copyright>
