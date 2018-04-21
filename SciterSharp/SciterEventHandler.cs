@@ -62,33 +62,59 @@ namespace SciterSharp
 		protected virtual bool OnMethodCall(SciterElement se, SciterXBehaviors.BEHAVIOR_METHOD_IDENTIFIERS methodID) { return false; }
 		protected virtual bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)
 		{
-			var method = this.GetType().GetMethod(name);
+			result = null;
+
+			var method = GetType().GetMethod(name);
 			if(method != null)
 			{
 				// This base class tries to handle it by searching for a method with the same 'name'
-				object[] call_parameters = new object[] { se, args, null };
-				Debug.Assert(call_parameters.Length == 3);
+				var mparams = method.GetParameters();
 
-				// Signature of that method should be:
+				// match signature:
+				// 'void MethodName()' or 'SciterValue MethodName()'
+				{
+					if(mparams.Length == 0 && 
+						(method.ReturnType == typeof(void) || method.ReturnType == typeof(SciterValue)))
+					{
+						var ret = method.Invoke(this, null);
+						if(method.ReturnType == typeof(SciterValue))
+							result = (SciterValue)ret;
+						return true;
+					}
+				}
+
+				// match signature:
+				// 'void MethodName(SciterValue[] args)' or 'SciterValue MethodName(SciterValue[] args)'
+				{
+					if(mparams.Length==1 && mparams[0].ParameterType.Name == "SciterValue[]" &&
+						(method.ReturnType == typeof(void) || method.ReturnType == typeof(SciterValue)))
+					{
+						object[] call_parameters = new object[] { args };
+						var ret = method.Invoke(this, call_parameters);
+						if(method.ReturnType == typeof(SciterValue))
+							result = (SciterValue)ret;
+						return true;
+					}
+				}
+
+				// match signature:
 				// bool MethodName(SciterElement el, SciterValue[] args, out SciterValue result)
-				//
-				// Verify correct signature:
-				Debug.Assert(method.ReturnType == typeof(Boolean));
-				Debug.Assert(method.GetParameters().Length == 3);
-				Debug.Assert(method.GetParameters()[0].ParameterType.Name == "SciterElement");
-				Debug.Assert(method.GetParameters()[1].ParameterType.Name == "SciterValue[]");
-				Debug.Assert(method.GetParameters()[2].ParameterType.Name == "SciterValue&");
-
-				// invoke method and verify return
-				bool res = (bool)method.Invoke(this, call_parameters);
-				Debug.Assert(call_parameters[2] == null || call_parameters[2].GetType().IsAssignableFrom(typeof(SciterValue)));
-
-				result = call_parameters[2] as SciterValue;
-				return res;
+				{
+					if(method.ReturnType == typeof(bool) && mparams.Length == 3
+						&& mparams[0].ParameterType.Name == "SciterElement"
+						&& mparams[1].ParameterType.Name == "SciterValue[]"
+						&& mparams[2].ParameterType.Name == "SciterValue&")
+					{
+						object[] call_parameters = new object[] { se, args, null };
+						bool res = (bool)method.Invoke(this, call_parameters);
+						Debug.Assert(call_parameters[2] == null || call_parameters[2].GetType().IsAssignableFrom(typeof(SciterValue)));
+						result = call_parameters[2] as SciterValue;
+						return res;
+					}
+				}
 			}
 
 			// not handled
-			result = null;
 			return false;
 		}
 
