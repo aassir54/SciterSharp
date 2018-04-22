@@ -1,10 +1,14 @@
 ﻿<!-- OmniView:on -->
-<html>
+<html window-resizable>
 <head>
 	<title>console.show() inspector</title>
 
 	<script type="text/tiscript">
-		//view.parameters = { asd: { what: { hey: 123 } } };
+		self.onKey = function(evt) {
+			if(evt.type == Event.KEY_DOWN && evt.keyCode == Event.VK_ESCAPE)
+				view.close();
+		};
+		//view.parameters = view.mediaVars();
 
 		class DataTree : Behavior
 		{
@@ -48,7 +52,7 @@
 						var (vcomposite, vdisplay) = getValueDisplay(item);
 						vdisplay = "<span.field>[" + i.toString() + "]:</span> " + vdisplay; 
 
-						if(vcomposite && vcomposite !== vdisplay)
+						if(vcomposite)
 							appendCompositeOption(el_parent, vdisplay, item);
 						else
 							appendOption(el_parent, vdisplay);
@@ -124,6 +128,7 @@
 						var arr = [];
 						for(var el in data)
 							arr.push(el);
+
 						appendCompositeOption(el_parent, "<span.pseudo>DOM childs[" + data.length + "]</span>", arr);
 					}
 
@@ -398,7 +403,10 @@
 						return (true, "<span>Object</span>");
 
 				case #Element:
-					return (true, "<span>Element</span> <span.val>" + val.tagname().htmlEscape() + "</span>");
+				{
+					var tag = val.tagname().htmlEscape();
+					return (true, "<span>Element</span> <span.val>" + tag + "</span>");
+				}
 
 				case #event:
 					return (true, "<span>" + val.toString() + "</span>");
@@ -462,10 +470,11 @@
 				display: block;
 				size: *;
 				padding: 0;
+				overflow-y: scroll-indicator;
+
 				font-size: 12px;
 				color: #0a3860;
-				background: none;
-				//border: solid 2px;// fica legal essa bordinha
+				//border: solid 3px blue;
 			}
 
 			option

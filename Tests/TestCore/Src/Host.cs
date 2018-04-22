@@ -19,22 +19,13 @@ namespace TestCore
 
 	class HostEvh : SciterEventHandler
 	{
-		protected override bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)
+		public bool Host_HelloWorld(SciterElement el, SciterValue[] args, out SciterValue result)
 		{
-			switch(name)
+			result = new SciterValue(argss =>
 			{
-				case "Host_HelloWorld":
-					result = new SciterValue(argss =>
-					{
-						return new SciterValue();
-					});
-					return true;
-			}
-
-			Program.AppHost.InvokePost(() => GC.Collect());
-
-			result = new SciterValue();
-			return false;
+				return new SciterValue();
+			}); ;
+			return true;
 		}
 	}
 
