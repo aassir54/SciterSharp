@@ -174,7 +174,7 @@ namespace Utils
 				case 2:
 				{
 					var addh = startY - evt.yScreen;
-					view.move(x, y, width, height + addh);
+					view.move(x, y, width, height - addh);
 					break;
 				}
 				default:
