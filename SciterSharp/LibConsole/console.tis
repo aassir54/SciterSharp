@@ -1,20 +1,7 @@
-if(View.omni)
-	return;
-
 include "utils.tis";
-
-namespace Omni
-{
-	function openConsole() {}
-	function colorpick() {}
-
-	property show_tree_timing(val) {}
-}
 
 namespace console
 {
-	const omni = Omni;
-
 	function log(params..)
 	{
 		stdout.println(params.join(" "));
@@ -35,6 +22,7 @@ namespace console
 				alignment: 5,
 				screen: view.screen
 			});
+			ns_arr_popups.push(tracewnd);
 		}
 		tracewnd.root.ns.View_AppendLine(params.join(" "));
 		View.tracewnd = tracewnd;
@@ -80,6 +68,7 @@ namespace console
 			parameters: data,
 			screen: view.screen
 		};
+		ns_arr_popups.push(popup);
 		self.post(::popup.root.state.focus = true);
 		return popup;
 	}
@@ -134,6 +123,17 @@ namespace console
 			log("\t" + frame[1] + ", " + frame[2] + ", line " + frame[0]);
 	}
 
+
+	function reset()
+	{
+		for(var item in ns_arr_popups)
+			item.close();
+		ns_arr_popups = [];
+		ns_count_funcs = {};
+		ns_tcount_funcs = {};
+		ns_bench_timers = {};
+	}
+
 	// Omni ONLY
 	function dom(el) {}
 	function colorpick(el, css_prop) {}
@@ -147,10 +147,10 @@ namespace console
 
 
 	// ------------------------------------------------------
-	const ns_popups = [];
-	const ns_count_funcs = {};
-	const ns_tcount_funcs = {};
-	const ns_bench_timers = {};
+	var ns_arr_popups = [];
+	var ns_count_funcs = {};
+	var ns_tcount_funcs = {};
+	var ns_bench_timers = {};
 }
 
 function DummyAspect()
@@ -159,10 +159,8 @@ function DummyAspect()
 
 
 // aliases
-//var Omni = View.omnidata;
-
 const log = console.log;
 const plog = console.plog;
-const trace = console.trace;// OMNI only
+const trace = console.trace;
 const ptrace = console.ptrace;
 const count = console.count;

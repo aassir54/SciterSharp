@@ -86,6 +86,9 @@
     <None Include="LibConsole\debug-peer.tis" />
     <None Include="LibConsole\utils.tis" />
     <None Include="SciterMidi.snk" />
+    <None Include="scripts\packfolder" />
+    <None Include="scripts\packOSX.sh" />
+    <None Include="scripts\packWindows.bat" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LibConsole\tracewnd.html" />
@@ -101,6 +104,9 @@
     <None Include="sciter.dll.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scripts\packfolder.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
