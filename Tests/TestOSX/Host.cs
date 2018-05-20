@@ -1,5 +1,7 @@
 ﻿using System;
 using SciterSharp;
+using AppKit;
+using Foundation;
 
 namespace TestOSX
 {
@@ -11,10 +13,6 @@ namespace TestOSX
 			RegisterBehaviorHandler(typeof(ImgDrawBehavior));
 
 			wnd.LoadPage("/Users/midiway/Documents/SciterSharp/Tests/TestOSX/res/index.html");
-			wnd.CallFunction("CallMe", new SciterValue((args) =>
-			{
-				return new SciterValue(123);
-			}));
 			wnd.CenterTopLevelWindow();
 			wnd.Show();
 		}

@@ -207,6 +207,12 @@ namespace SciterSharp
 			{
 				Thread.Sleep(1000);
 				EvalScript("view.connectToInspector()");
+
+#if OSX
+				var app_inspector = AppKit.NSRunningApplication.GetRunningApplications("terrainformatica.inspector");
+				if(app_inspector.Length==1)
+					app_inspector[0].Activate(AppKit.NSApplicationActivationOptions.ActivateAllWindows);
+#endif
 			});
 		}
 
