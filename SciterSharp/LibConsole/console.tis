@@ -1,4 +1,4 @@
-include "utils.tis";
+include "scitersharp:utils.tis";
 
 namespace console
 {
@@ -18,7 +18,7 @@ namespace console
 		{
 			tracewnd = view.window({
 				type: View.TOOL_WINDOW,
-				url: "sciter:tracewnd.html",
+				url: "scitersharp:tracewnd.html",
 				alignment: 5,
 				screen: view.screen
 			});
@@ -57,9 +57,9 @@ namespace console
 
 	function show(data)
 	{
-		var url = "sciter:show_data.html";
+		var url = "scitersharp:show_data.html";
 		if(typeof data==#Image)
-			url = "sciter:show_img.html";
+			url = "scitersharp:show_img.html";
 
 		var popup = view.window{
 			type: View.TOOL_WINDOW,

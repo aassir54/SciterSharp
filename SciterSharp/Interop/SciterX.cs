@@ -39,7 +39,12 @@ namespace SciterSharp.Interop
 		{
 			get { return LoadRequestAPI(); }
 		}
-		public static string Version
+        public static TIScript.ISciterTIScriptAPI TIScriptAPI
+        {
+            get { return LoadTIScriptAPI(); }
+        }
+
+        public static string Version
 		{
 			get
 			{
@@ -52,10 +57,10 @@ namespace SciterSharp.Interop
 		}
 
 
-
 		private static ISciterAPI? _api = null;
 		private static SciterXGraphics.ISciterGraphicsAPI? _gapi = null;
 		private static SciterXRequest.ISciterRequestAPI? _rapi = null;
+		private static TIScript.ISciterTIScriptAPI? _tiapi = null;
 
 #if WINDOWS
 		public static bool Use3264DLLNaming { get; set; }
@@ -132,7 +137,7 @@ namespace SciterSharp.Interop
 			{
 				int api_struct_size = Marshal.SizeOf(typeof(SciterXGraphics.ISciterGraphicsAPI));
 				if(IntPtr.Size == 8)
-					Debug.Assert(api_struct_size == 268*2);
+					Debug.Assert(api_struct_size == 268 * 2);
 				else
 					Debug.Assert(api_struct_size == 268);
 
@@ -156,6 +161,22 @@ namespace SciterSharp.Interop
 				_rapi = (SciterXRequest.ISciterRequestAPI)Marshal.PtrToStructure(api_ptr, typeof(SciterXRequest.ISciterRequestAPI));
 			}
 			return _rapi.Value;
+		}
+
+		private static TIScript.ISciterTIScriptAPI LoadTIScriptAPI()
+		{
+			if(_tiapi == null)
+			{
+				int api_struct_size = Marshal.SizeOf(typeof(TIScript.ISciterTIScriptAPI));
+				if(IntPtr.Size == 8)
+					Debug.Assert(api_struct_size == 616);
+				else
+					Debug.Assert(api_struct_size == 308);
+
+				IntPtr api_ptr = API.TIScriptAPI();
+				_tiapi = (TIScript.ISciterTIScriptAPI)Marshal.PtrToStructure(api_ptr, typeof(TIScript.ISciterTIScriptAPI));
+			}
+			return _tiapi.Value;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -363,7 +384,7 @@ namespace SciterSharp.Interop
 
 
 
-			// JUST FOR NOTE, IF NECESSARY TO DECORATED THE CallingConvention OR CharSet OF THE FPTR's
+			// JUST FOR NOTE, IF NECESSARY TO DECORATED THE CallingConvention OR CharSet OF THE FPTR's use:
 			//[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
 
 			// LPCWSTR	function() SciterClassName;

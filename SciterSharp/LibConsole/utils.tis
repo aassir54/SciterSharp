@@ -3,7 +3,7 @@ namespace Utils
 	const IsWindows = System.PLATFORM == #Windows;
 	const IsLinux = System.PLATFORM == #Linux;
 	const IsOSX = System.PLATFORM == #OSX;
-	const IsOSX_UI = view.mediaVars()["os-vendor"] == "Apple";
+	//const IsOSX_UI = view.mediaVars()["os-vendor"] == "Apple";
 	property InDBGView(val) { get { return !!View.omni || !!View.omniview; } }
 	const SciterVersion = String.printf("%d.%d.%d.%d", 
 		(Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
@@ -67,17 +67,17 @@ namespace Utils
 
 	function exec(args..)
 	{
-		var oath = promise();
+		var prom = promise();
 		var out = "";
-		var proc = Process.proxy();
+
+		var proc = System.Process.exec.apply(proc, args);
 		proc << event stdout (text) { out += text; log(text); }
 		proc << event stderr (text) { out += text; log(text); }
 		proc << event terminate(status) {
-			if( status == 0 ) oath(true,[out]);
-			else oath(false,[out]);
+			if( status == 0 ) prom(true,[out]);
+			else prom(false,[out]);
 		}
-		proc.exec.apply(proc,args);
-		return oath;
+		return prom;
 	}
 
 

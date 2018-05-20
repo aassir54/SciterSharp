@@ -1,6 +1,7 @@
 using SciterSharp;
 using SciterSharp.Interop;
 using System;
+using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace TestCore
 		[STAThread]
 		static void Main(string[] args)
 		{
+			Debug.WriteLine("Sciter " + SciterX.Version);
+
 			// Sciter needs this for drag'n'drop support; STAThread is required for OleInitialize succeess
 			int oleres = PInvokeWindows.OleInitialize(IntPtr.Zero);
 			Debug.Assert(oleres == 0);
@@ -35,7 +38,7 @@ namespace TestCore
 			wnd.CenterTopLevelWindow();
 			wnd.Title = "TestCore";
 			wnd.Icon = Properties.Resources.IconMain;
-
+			
 			// Prepares SciterHost and then load the page
 			AppHost = new Host();
 			var host = AppHost;

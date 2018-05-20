@@ -85,7 +85,6 @@ namespace SciterSharp.Interop
         /// </summary>
         private class GDI32
         {
-            
             public const int SRCCOPY = 0x00CC0020; // BitBlt dwRop parameter
 
             [DllImport("gdi32.dll")]

@@ -41,8 +41,9 @@ namespace SciterSharp
 		private SciterEventHandler _window_evh;
 
 		private static Dictionary<string, byte[]> _lc_files = new Dictionary<string, byte[]>();
+
 		public static bool InjectLibConsole = true;
-		public static bool InjectLibConsoleDebugPeer = true;
+		private static IntPtr _lib_console_vm;
 
 		static SciterHost()
 		{
@@ -51,22 +52,19 @@ namespace SciterSharp
 
 			_lc_files = new Dictionary<string, byte[]>
 			{
-				{ "sciter:debug-peer.tis", arch.Get("debug-peer.tis") },
-				{ "sciter:console.tis", arch.Get("console.tis") },
-				{ "sciter:utils.tis", arch.Get("utils.tis") },
-				{ "sciter:tracewnd.html", arch.Get("tracewnd.html") },
-				{ "sciter:show_data.html", arch.Get("show_data.html") },
-				{ "sciter:show_img.html", arch.Get("show_img.html") },
-				{ "sciter:popup.css", arch.Get("popup.css") },
+				{ "scitersharp:console.tis", arch.Get("console.tis") },
+				{ "scitersharp:utils.tis", arch.Get("utils.tis") },
+				{ "scitersharp:tracewnd.html", arch.Get("tracewnd.html") },
+				{ "scitersharp:show_data.html", arch.Get("show_data.html") },
+				{ "scitersharp:show_img.html", arch.Get("show_img.html") },
+				{ "scitersharp:popup.css", arch.Get("popup.css") },
 			};
 			Debug.Assert(_lc_files.Values.All(v => v != null));
 
 			arch.Close();
 		}
 
-		public SciterHost()
-		{
-		}
+		public SciterHost() { }
 
 		public SciterHost(SciterWindow wnd)
 		{
@@ -89,15 +87,43 @@ namespace SciterSharp
 
 			_hwnd = hwnd;
 
-			_cbk = this.HandleNotification;
+			_cbk = HandleNotification;
 			_api.SciterSetCallback(hwnd, Marshal.GetFunctionPointerForDelegate(_cbk), IntPtr.Zero);
+
+			// The callback is set, now we can load LibConsole
+			if(InjectLibConsole)
+			{
+				InjectGlobalTISript("include \"scitersharp:console.tis\";");
+				var vm = SciterX.API.SciterGetVM(hwnd);
+				if(_lib_console_vm != IntPtr.Zero)
+				{
+					if(_lib_console_vm != vm)
+						throw new Exception("Problem man!");
+				}
+				else
+				{
+					InjectGlobalTISript("include \"scitersharp:console.tis\";");
+
+					_lib_console_vm = vm;// now LibConsole is globally loaded!
+				}
+			}
+		}
+
+		public void InjectGlobalTISript(string script)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero);
+			var vm = SciterX.API.SciterGetVM(_hwnd);
+			var global_ns = SciterX.TIScriptAPI.get_global_ns(vm);
+
+			TIScript.tiscript_value ret;
+			var res = SciterX.TIScriptAPI.eval_string(vm, global_ns, script, (uint)script.Length, out ret);
+			Debug.Assert(res);
 		}
 
 		/// <summary>
 		/// Attacheds a window level event-handler: it receives every event for all elements of the page.
 		/// You can only attach a single event-handler.
 		/// </summary>
-		/// <param name="evh"></param>
 		public void AttachEvh(SciterEventHandler evh)
 		{
 			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
@@ -111,7 +137,6 @@ namespace SciterSharp
 		/// <summary>
 		/// Detaches the event-handler previously attached with AttachEvh()
 		/// </summary>
-		/// <param name="evh"></param>
 		public void DetachEvh()
 		{
 			Debug.Assert(_window_evh != null);
@@ -321,7 +346,7 @@ namespace SciterSharp
 						IntPtr EVENTPROC_OFFSET = Marshal.OffsetOf(typeof(SciterXDef.SCN_ATTACH_BEHAVIOR), "elementProc");
 						IntPtr EVENTPROC_OFFSET2 = Marshal.OffsetOf(typeof(SciterXDef.SCN_ATTACH_BEHAVIOR), "elementTag");
 						Marshal.WriteIntPtr(ptrNotification, EVENTPROC_OFFSET.ToInt32(), ptrProc);
-						Marshal.WriteInt32(ptrNotification, EVENTPROC_OFFSET2.ToInt32(), 1234);
+						Marshal.WriteInt32(ptrNotification, EVENTPROC_OFFSET2.ToInt32(), 0);
 						return 1;
 					}
 					return 0;
@@ -370,16 +395,14 @@ namespace SciterSharp
 		// Overridables
 		protected virtual SciterXDef.LoadResult OnLoadData(SciterXDef.SCN_LOAD_DATA sld)
 		{
+			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
+
 			if(InjectLibConsole)
 			{
-				Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
-				// Do default loading of lib_console
 				if(_lc_files.ContainsKey(sld.uri))
 				{
-					if(InjectLibConsoleDebugPeer == false && sld.uri=="sciter:debug-peer.tis")
-						_api.SciterDataReady(_hwnd, sld.uri, _lc_files["sciter:console.tis"], (uint)_lc_files["sciter:console.tis"].Length);
-					else
-						_api.SciterDataReady(_hwnd, sld.uri, _lc_files[sld.uri], (uint)_lc_files[sld.uri].Length);
+					var data = _lc_files[sld.uri];
+					_api.SciterDataReady(_hwnd, sld.uri, data, (uint)data.Length);
 				}
 			}
 			return (uint)SciterXDef.LoadResult.LOAD_OK;

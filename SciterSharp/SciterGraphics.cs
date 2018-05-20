@@ -82,10 +82,28 @@ namespace SciterSharp
 		public SciterGraphics(IntPtr hgfx)
 		{
 			Debug.Assert(hgfx != IntPtr.Zero);
-			// TODO: C++ sciter::graphics does a gAddRef() here
 			_hgfx = hgfx;
 			_gapi.gAddRef(hgfx);
 		}
+
+		public static SciterGraphics FromSV(SciterValue sv)
+		{
+			IntPtr hgfx;
+			SciterXValue.VALUE v = sv.ToVALUE();
+			var r = _gapi.vUnWrapGfx(ref v, out hgfx);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+
+			return new SciterGraphics(hgfx);
+		}
+
+		public SciterValue ToSV()
+		{
+			SciterXValue.VALUE v;
+			var r = _gapi.vWrapGfx(_hgfx, out v);
+			Debug.Assert(r == SciterXGraphics.GRAPHIN_RESULT.GRAPHIN_OK);
+			return new SciterValue(v);
+		}
+
 
 		/*
 		DON'T KNOW IF IT WORKS AND IF YOU MUST CALL gAddRef()
@@ -484,6 +502,7 @@ namespace SciterSharp
 
 			SciterPath st = new SciterPath();
 			st._hpath = hpath;
+
 			return st;
 		}
 
@@ -589,6 +608,7 @@ namespace SciterSharp
 
 			SciterText st = new SciterText();
 			st._htext = htext;
+
 			return st;
 		}
 
