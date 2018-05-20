@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +26,8 @@ using SciterSharp.Interop;
 #if OSX
 using AppKit;
 using Foundation;
+#else
+using System.Drawing;
 #endif
 
 namespace SciterSharp

@@ -40,6 +40,8 @@ namespace PublishNuget
 				SpawnProcess("nuget", "pack SciterSharpGTK.csproj -Prop Configuration=Release");
 				SpawnProcess("nuget", "push SciterSharpGTK." + LibVersion.AssemblyVersion + ".nupkg " + NugetKeys.MIDI + " -Source nuget.org");
 			}
+
+			File.WriteAllText("version.json", "{ \"version\": \"" + LibVersion.AssemblyVersion + "\" }"); // latest version for shields.io
 		}
 
 		static void SpawnProcess(string exe, string args, bool ignore_error = false, bool wait = true)

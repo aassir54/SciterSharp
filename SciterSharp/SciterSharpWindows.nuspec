@@ -6,7 +6,7 @@
     <authors>$author$</authors>
     <owners>Ramon F. Mendes</owners>
     <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.en.html</licenseUrl>
-    <projectUrl>http://misoftware.com.br/</projectUrl>
+    <projectUrl>https://github.com/MISoftware/SciterSharp</projectUrl>
     <iconUrl>http://cdn.misoftware.com.br/PublicImages/sciter-sharp.png</iconUrl>
     <description>$description$</description>
     <releaseNotes></releaseNotes>
