@@ -98,9 +98,6 @@
     <None Include="LibConsole\popup.css" />
     <None Include="LibConsole\show_data.html" />
     <None Include="LibConsole\show_img.html" />
-    <None Include="sciter.dll.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="scripts\packfolder.exe" />

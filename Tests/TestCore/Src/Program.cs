@@ -19,7 +19,9 @@ namespace TestCore
 		[STAThread]
 		static void Main(string[] args)
 		{
-			Debug.WriteLine("Sciter " + SciterX.Version);
+			Console.WriteLine();
+			Console.WriteLine("Sciter " + SciterX.Version);
+			Console.WriteLine(IntPtr.Size);
 
 			// Sciter needs this for drag'n'drop support; STAThread is required for OleInitialize succeess
 			int oleres = PInvokeWindows.OleInitialize(IntPtr.Zero);
@@ -46,6 +48,8 @@ namespace TestCore
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
 			//host.DebugInspect();
+
+
 
 			//byte[] css_bytes = File.ReadAllBytes(@"D:\ProjetosSciter\AssetsDrop\AssetsDrop\res\css\global.css");
 			//SciterX.API.SciterAppendMasterCSS(css_bytes, (uint) css_bytes.Length);
