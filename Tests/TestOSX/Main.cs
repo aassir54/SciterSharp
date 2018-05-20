@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using AppKit;
 using Foundation;
@@ -14,16 +15,15 @@ namespace TestOSX
 
 		static void Main(string[] args)
 		{
+			Debug.WriteLine(SciterX.Version);
 			SciterX.API.SciterSetOption(IntPtr.Zero, SciterXDef.SCITER_RT_OPTIONS.SCITER_SET_GFX_LAYER, new IntPtr((int) SciterXDef.GFX_LAYER.GFX_LAYER_CG));
 
 			NSApplication.Init();
 
-			//var a = File.ReadAllBytes("/Users/midiway/Dropbox/Things/213.png");
-			//var img = new SciterImage(a);
-
 			SciterWindow wnd = new SciterWindow();
 			wnd.CreateMainWindow(800, 600);
 			host = new Host(wnd);
+			host.DebugInspect();
 
 			NSApplication.Main(args);
 		}
