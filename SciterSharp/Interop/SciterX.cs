@@ -174,6 +174,10 @@ namespace SciterSharp.Interop
 					Debug.Assert(api_struct_size == 308);
 
 				IntPtr api_ptr = API.TIScriptAPI();
+
+				var a = new TIScript.Test();
+				Marshal.PtrToStructure(api_ptr, a);
+
 				_tiapi = (TIScript.ISciterTIScriptAPI)Marshal.PtrToStructure(api_ptr, typeof(TIScript.ISciterTIScriptAPI));
 			}
 			return _tiapi.Value;

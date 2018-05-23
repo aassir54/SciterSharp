@@ -27,10 +27,25 @@ namespace SciterSharp.Interop
 	public static class TIScript
 	{
 		[StructLayout(LayoutKind.Sequential)]
+		public class Test
+		{
+			public IntPtr p1;
+			public IntPtr p2;
+			public IntPtr p3;
+			public IntPtr p4;
+			public IntPtr p5;
+			public IntPtr p6;
+			public IntPtr p7;
+			public IntPtr p8;
+			public IntPtr p9;
+			public IntPtr p10;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
 		public struct ISciterTIScriptAPI
 		{
-			public FPTR_dummy create_vm;
-			public FPTR_dummy destroy_vm;
+			public FPTR_create_vm create_vm;
+			public FPTR_destroy_vm destroy_vm;
 			public FPTR_dummy invoke_gc;
 			public FPTR_dummy set_std_streams;
 			public FPTR_dummy get_current_vm;
@@ -150,8 +165,20 @@ namespace SciterSharp.Interop
 			public FPTR_dummy set_extra_data;
 			public FPTR_dummy get_extra_data;
 
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 			public delegate void FPTR_dummy();
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+			public delegate IntPtr FPTR_create_vm(uint features = 0xffffffff, uint heap_size = 1024 * 1024, uint stack_size = 64 * 1024);
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+			public delegate void FPTR_destroy_vm(IntPtr pvm);
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 			public delegate tiscript_value FPTR_get_global_ns(IntPtr tiscript_VM_ptr);
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 			public delegate bool FPTR_eval_string(IntPtr tiscript_VM_ptr, tiscript_value ns, [MarshalAs(UnmanagedType.LPWStr)]string script, uint script_length, out tiscript_value pretval);
 		}
 

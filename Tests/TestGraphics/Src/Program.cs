@@ -20,8 +20,13 @@ namespace TestGraphics
 			Debug.Assert(oleres == 0);
 #endif
 
-            // Create the window
-            var wnd = new SciterWindow();
+			Console.WriteLine("Sciter: " + SciterX.Version);
+
+			var vm = SciterX.TIScriptAPI.create_vm();
+			SciterX.TIScriptAPI.destroy_vm(vm);
+
+			// Create the window
+			var wnd = new SciterWindow();
 			wnd.CreateMainWindow(1500, 800);
 			wnd.CenterTopLevelWindow();
 			wnd.Title = "Sciter Bootstrap";
