@@ -17,12 +17,10 @@ namespace Utils
 	function fileExists(path)
 	{
 		var stream = Stream.openFile(path, "r");
-		if(stream != null)
-		{
-			stream.close();
-			return true;
-		}
-		return false;
+		if(stream === null)
+			return false;
+		stream.close();
+		return true;
 	}
 
 	function readFileText(path)

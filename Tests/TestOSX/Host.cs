@@ -8,11 +8,11 @@ namespace TestOSX
 	public class Host : SciterHost
 	{
 		public Host(SciterWindow wnd)
+			: base(wnd)
 		{
-			SetupWindow(wnd);
 			RegisterBehaviorHandler(typeof(ImgDrawBehavior));
 
-			wnd.LoadPage("/Users/midiway/Documents/SciterSharp/Tests/TestOSX/res/index.html");
+			wnd.LoadPage("file:///Users/midiway/Documents/SciterSharp/Tests/TestOSX/res/index.html");
 			wnd.CenterTopLevelWindow();
 			wnd.Show();
 		}

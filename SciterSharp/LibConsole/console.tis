@@ -1,5 +1,10 @@
 include "scitersharp:utils.tis";
 
+function MsgBox()
+{
+	view.msgbox(#question, "Do you really want to remove this project?");
+}
+
 namespace console
 {
 	function log(params..)

@@ -23,7 +23,7 @@ namespace TestOSX
 			SciterWindow wnd = new SciterWindow();
 			wnd.CreateMainWindow(800, 600);
 			host = new Host(wnd);
-			host.DebugInspect();
+			//host.DebugInspect();
 
 			NSApplication.Main(args);
 		}

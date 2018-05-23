@@ -98,13 +98,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LibConsole\console.tis" />
-    <None Include="LibConsole\debug-peer.tis" />
     <None Include="LibConsole\popup.css" />
     <None Include="LibConsole\show_data.html" />
     <None Include="LibConsole\show_img.html" />
     <None Include="LibConsole\tracewnd.html" />
     <None Include="LibConsole\unittest.html" />
     <None Include="LibConsole\utils.tis" />
+    <None Include="scripts\packOSX.sh" />
+    <None Include="scripts\packWindows.bat" />
+    <None Include="scripts\packfolder" />
+    <None Include="scripts\packfolder.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>

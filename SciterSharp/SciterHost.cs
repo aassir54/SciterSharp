@@ -40,28 +40,14 @@ namespace SciterSharp
 		private SciterXDef.FPTR_SciterHostCallback _cbk;
 		private SciterEventHandler _window_evh;
 
-		private static Dictionary<string, byte[]> _lc_files = new Dictionary<string, byte[]>();
-
 		public static bool InjectLibConsole = true;
 		private static IntPtr _lib_console_vm;
+		private static SciterArchive _arch;
 
 		static SciterHost()
 		{
-			var arch = new SciterArchive();
-			arch.Open(SciterAppResource.ArchiveResource.resources);
-
-			_lc_files = new Dictionary<string, byte[]>
-			{
-				{ "scitersharp:console.tis", arch.Get("console.tis") },
-				{ "scitersharp:utils.tis", arch.Get("utils.tis") },
-				{ "scitersharp:tracewnd.html", arch.Get("tracewnd.html") },
-				{ "scitersharp:show_data.html", arch.Get("show_data.html") },
-				{ "scitersharp:show_img.html", arch.Get("show_img.html") },
-				{ "scitersharp:popup.css", arch.Get("popup.css") },
-			};
-			Debug.Assert(_lc_files.Values.All(v => v != null));
-
-			arch.Close();
+			_arch = new SciterArchive();
+			_arch.Open(SciterAppResource.ArchiveResource.resources);
 		}
 
 		public SciterHost() { }
@@ -93,7 +79,6 @@ namespace SciterSharp
 			// The callback is set, now we can load LibConsole
 			if(InjectLibConsole)
 			{
-				InjectGlobalTISript("include \"scitersharp:console.tis\";");
 				var vm = SciterX.API.SciterGetVM(hwnd);
 				if(_lib_console_vm != IntPtr.Zero)
 				{
@@ -293,22 +278,15 @@ namespace SciterSharp
 
 
 		// Properties
-		private SciterElement _root;
-
 		public SciterElement RootElement
 		{
 			get
 			{
-				if (_root == null)
-				{
-					Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
-					IntPtr heRoot;
-					_api.SciterGetRootElement(_hwnd, out heRoot);
-					Debug.Assert(heRoot != IntPtr.Zero);
-					_root = new SciterElement(heRoot);
-				}
-
-				return _root;
+				Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
+				IntPtr heRoot;
+				_api.SciterGetRootElement(_hwnd, out heRoot);
+				Debug.Assert(heRoot != IntPtr.Zero);
+				return new SciterElement(heRoot);
 			}
 		}
 
@@ -403,13 +381,11 @@ namespace SciterSharp
 		{
 			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 
-			if(InjectLibConsole)
+			if(InjectLibConsole && sld.uri.StartsWith("scitersharp:"))
 			{
-				if(_lc_files.ContainsKey(sld.uri))
-				{
-					var data = _lc_files[sld.uri];
+				var data = _arch.Get(sld.uri.Substring("scitersharp:".Length));
+				if(data != null)
 					_api.SciterDataReady(_hwnd, sld.uri, data, (uint)data.Length);
-				}
 			}
 			return (uint)SciterXDef.LoadResult.LOAD_OK;
 		}

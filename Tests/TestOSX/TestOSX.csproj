@@ -79,6 +79,7 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="res\index.html" />
+    <None Include="res\dlg.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -96,6 +97,9 @@
       <Kind>Dynamic</Kind>
       <SmartLink>False</SmartLink>
     </NativeReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="res\OXS_Logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
