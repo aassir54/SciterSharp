@@ -98,18 +98,9 @@
     <None Include="LibConsole\popup.css" />
     <None Include="LibConsole\show_data.html" />
     <None Include="LibConsole\show_img.html" />
-    <None Include="sciter.dll.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="scripts\packfolder.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\..\sciter-sdk\bin\64\sciter.dll">
-      <Link>sciter.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
