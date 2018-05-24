@@ -94,8 +94,10 @@ namespace Utils
 
 	function revealPath(path)
 	{
+		assert(path);
 		if(Utils.IsWindows)
-			Utils.exec("explorer.exe", "/select," + path.replace("/", "\\"));
+			System.exec("explorer.exe", "/select," + path.replace("/", "\\"));
+			//Utils.exec("explorer.exe", "/select," + path.replace("/", "\\"));
 		else if(Utils.IsOSX)
 			Utils.exec("open", "-R", path);
 	}
