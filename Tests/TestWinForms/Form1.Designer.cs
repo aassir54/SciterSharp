@@ -33,7 +33,7 @@
 			// 
 			// sciterControl1
 			// 
-			this.sciterControl1.Location = new System.Drawing.Point(74, 52);
+			this.sciterControl1.Location = new System.Drawing.Point(105, 69);
 			this.sciterControl1.Name = "sciterControl1";
 			this.sciterControl1.Size = new System.Drawing.Size(452, 217);
 			this.sciterControl1.TabIndex = 0;

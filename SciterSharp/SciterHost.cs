@@ -41,7 +41,7 @@ namespace SciterSharp
 		private SciterEventHandler _window_evh;
 
 		public static bool InjectLibConsole = true;
-		private static IntPtr _lib_console_vm;
+		private static List<IntPtr> _lib_console_vms = new List<IntPtr>();
 		private static SciterArchive _arch;
 
 		static SciterHost()
@@ -76,38 +76,37 @@ namespace SciterSharp
 			// Register a global event handler for this Sciter window
 			_cbk = HandleNotification;
 			_api.SciterSetCallback(hwnd, Marshal.GetFunctionPointerForDelegate(_cbk), IntPtr.Zero);
-
-			// The callback is set, now we can load LibConsole
-			if(InjectLibConsole)
-			{
-				var vm = SciterX.API.SciterGetVM(hwnd);
-				if(_lib_console_vm != IntPtr.Zero)
-				{
-					if(_lib_console_vm != vm)
-						throw new Exception("Problem man!");
-				}
-				else
-				{
-					InjectGlobalTISript("include \"scitersharp:console.tis\";");
-
-					_lib_console_vm = vm;// now LibConsole is globally loaded!
-				}
-			}
 		}
 
 		public void InjectGlobalTISript(string script)
 		{
-			Debug.Assert(_hwnd != IntPtr.Zero);
-			var vm = SciterX.API.SciterGetVM(_hwnd);
-			var global_ns = SciterX.TIScriptAPI.get_global_ns(vm);
-
-			TIScript.tiscript_value ret;
-			var res = SciterX.TIScriptAPI.eval_string(vm, global_ns, script, (uint)script.Length, out ret);
+			var ret = new TIScript.tiscript_value();
+			var res = EvalGlobalTISript(script, out ret);
 			Debug.Assert(res);
 		}
 
+		public bool EvalGlobalTISript(string script, out TIScript.tiscript_value ret)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero);
+			var vm = SciterX.API.SciterGetVM(_hwnd);
+			Debug.Assert(vm != IntPtr.Zero);
+
+			var global_ns = SciterX.TIScriptAPI.get_global_ns(vm);
+
+			return SciterX.TIScriptAPI.eval_string(vm, global_ns, script, (uint)script.Length, out ret);
+		}
+
+		public bool EvalGlobalTISriptValuePath(string path, out TIScript.tiscript_value ret)
+		{
+			Debug.Assert(_hwnd != IntPtr.Zero);
+			var vm = SciterX.API.SciterGetVM(_hwnd);
+
+			return SciterX.TIScriptAPI.get_value_by_path(vm, out ret, path);
+		}
+
 		/// <summary>
-		/// Attacheds a window level event-handler: it receives every event for all elements of the page.
+		/// Attaches a window level event-handler: it receives every event for all elements of the page.
+		/// You normally attaches it before loading the page HTML with <see cref="SciterWindow.LoadPage(string)"/>
 		/// You can only attach a single event-handler.
 		/// </summary>
 		public void AttachEvh(SciterEventHandler evh)
@@ -116,6 +115,7 @@ namespace SciterSharp
 			Debug.Assert(evh != null);
 			Debug.Assert(_window_evh == null, "You can attach only a single SciterEventHandler per SciterHost/window");
 
+			evh.LibConsoleInjector = InjectLibConsole;
 			_window_evh = evh;
 			_api.SciterWindowAttachEventHandler(_hwnd, evh._proc, IntPtr.Zero, (uint)SciterXBehaviors.EVENT_GROUPS.HANDLE_ALL);
 		}

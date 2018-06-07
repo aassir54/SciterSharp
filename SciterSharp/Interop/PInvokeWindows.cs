@@ -144,6 +144,81 @@ namespace SciterSharp.Interop
 			public uint dwFlags;
 		}
 
+		#region Windows flags
+		public enum SetWindowLongFlags : uint
+		{
+			WS_OVERLAPPED = 0,
+			WS_TILED = 0,
+			WS_EX_LEFT = 0,
+			WS_EX_LTRREADING = 0,
+			WS_EX_RIGHTSCROLLBAR = 0,
+			WS_EX_DLGMODALFRAME = 1,
+			WS_EX_NOPARENTNOTIFY = 4,
+			WS_EX_TOPMOST = 8,
+			WS_EX_ACCEPTFILES = 16,
+			WS_EX_TRANSPARENT = 32,
+			WS_EX_MDICHILD = 64,
+			WS_EX_TOOLWINDOW = 128,
+			WS_EX_WINDOWEDGE = 256,
+			WS_EX_PALETTEWINDOW = 392,
+			WS_EX_CLIENTEDGE = 512,
+			WS_EX_OVERLAPPEDWINDOW = 768,
+			WS_EX_CONTEXTHELP = 1024,
+			WS_EX_RIGHT = 4096,
+			WS_EX_RTLREADING = 8192,
+			WS_EX_LEFTSCROLLBAR = 16384,
+			WS_TABSTOP = 65536,
+			WS_MAXIMIZEBOX = 65536,
+			WS_EX_CONTROLPARENT = 65536,
+			WS_GROUP = 131072,
+			WS_MINIMIZEBOX = 131072,
+			WS_EX_STATICEDGE = 131072,
+			WS_THICKFRAME = 262144,
+			WS_SIZEBOX = 262144,
+			WS_EX_APPWINDOW = 262144,
+			WS_SYSMENU = 524288,
+			WS_EX_LAYERED = 524288,
+			WS_HSCROLL = 1048576,
+			WS_EX_NOINHERITLAYOUT = 1048576,
+			WS_VSCROLL = 2097152,
+			WS_DLGFRAME = 4194304,
+			WS_EX_LAYOUTRTL = 4194304,
+			WS_BORDER = 8388608,
+			WS_CAPTION = 12582912,
+			WS_MAXIMIZE = 16777216,
+			WS_CLIPCHILDREN = 33554432,
+			WS_EX_COMPOSITED = 33554432,
+			WS_CLIPSIBLINGS = 67108864,
+			WS_DISABLED = 134217728,
+			WS_EX_NOACTIVATE = 134217728,
+			WS_VISIBLE = 268435456,
+			WS_MINIMIZE = 536870912,
+			WS_ICONIC = 536870912,
+			WS_CHILD = 1073741824,
+			WS_POPUP = 2147483648
+		}
+
+		[DllImport("user32.dll", EntryPoint = "GetWindowLong")]
+		public static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+
+		// This helper static method is required because the 32-bit version of user32.dll does not contain this API
+		// (on any versions of Windows), so linking the method will fail at run-time. The bridge dispatches the request
+		// to the correct function (GetWindowLong in 32-bit mode and GetWindowLongPtr in 64-bit mode)
+		public static IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
+		{
+			if(IntPtr.Size == 8)
+				return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
+			else
+				return new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
+		}
+
+		[DllImport("user32.dll", EntryPoint = "SetWindowLong")]
+		private static extern int SetWindowLong32(IntPtr hWnd, int nIndex, int dwNewLong);
+
+		[DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
+		private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+		#endregion
+
 
 		#region CreateChildWindow workaround
 		[DllImport("user32.dll", SetLastError=true)]
