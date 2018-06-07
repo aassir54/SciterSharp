@@ -104,6 +104,8 @@ namespace Utils
 
 	function emulateMoveWnd(el)
 	{
+		assert(el);
+
 		var moving = false;
 		var offX, offY;
 
