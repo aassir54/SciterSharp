@@ -164,33 +164,33 @@ namespace SciterSharp.Interop
 
 		public enum CTL_TYPE : uint
 		{
-			CTL_NO = 0,					///< This dom element has no behavior at all.
-			CTL_UNKNOWN = 1,			///< This dom element has behavior but its type is unknown.
-
-			CTL_EDIT = 2,				///< Single line edit box.
-			CTL_NUMERIC = 3,			///< Numeric input with optional spin buttons.
-			CTL_CLICKABLE = 4,			///< toolbar button, behavior:clickable.
-			CTL_BUTTON = 5,				///< Command button.
-			CTL_CHECKBOX = 6,			///< CheckBox (button).
-			CTL_RADIO = 7,				///< OptionBox (button).
-			CTL_SELECT_SINGLE = 8,		///< Single select, ListBox or TreeView.
-			CTL_SELECT_MULTIPLE = 9,	///< Multiselectable select, ListBox or TreeView.
-			CTL_DD_SELECT = 10,			///< Dropdown single select.
-			CTL_TEXTAREA = 11,			///< Multiline TextBox.
-			CTL_HTMLAREA = 12,			///< HTML selection behavior.
-			CTL_PASSWORD = 13,			///< Password input element.
-			CTL_PROGRESS = 14,			///< Progress element.
-			CTL_SLIDER = 15,			///< Slider input element.  
-			CTL_DECIMAL = 16,			///< Decimal number input element.
-			CTL_CURRENCY = 17,			///< Currency input element.
+			CTL_NO = 0,					// This dom element has no behavior at all.
+			CTL_UNKNOWN = 1,			// This dom element has behavior but its type is unknown.
+			
+			CTL_EDIT = 2,				// Single line edit box.
+			CTL_NUMERIC = 3,			// Numeric input with optional spin buttons.
+			CTL_CLICKABLE = 4,			// toolbar button, behavior:clickable.
+			CTL_BUTTON = 5,				// Command button.
+			CTL_CHECKBOX = 6,			// CheckBox (button).
+			CTL_RADIO = 7,				// OptionBox (button).
+			CTL_SELECT_SINGLE = 8,		// Single select, ListBox or TreeView.
+			CTL_SELECT_MULTIPLE = 9,	// Multiselectable select, ListBox or TreeView.
+			CTL_DD_SELECT = 10,			// Dropdown single select.
+			CTL_TEXTAREA = 11,			// Multiline TextBox.
+			CTL_HTMLAREA = 12,			// HTML selection behavior.
+			CTL_PASSWORD = 13,			// Password input element.
+			CTL_PROGRESS = 14,			// Progress element.
+			CTL_SLIDER = 15,			// Slider input element.  
+			CTL_DECIMAL = 16,			// Decimal number input element.
+			CTL_CURRENCY = 17,			// Currency input element.
 			CTL_SCROLLBAR = 18,
 			CTL_LIST = 19,
 			CTL_RICHTEXT = 20,
 			CTL_CALENDAR = 21,
 			CTL_DATE = 22,
 			CTL_TIME = 23,
-			CTL_FILE = 24,				///< file input element.
-			CTL_PATH = 25,				///< path input element.
+			CTL_FILE = 24,				// file input element.
+			CTL_PATH = 25,				// path input element.
 
 			CTL_LAST_INPUT = 26,
 
@@ -207,14 +207,14 @@ namespace SciterSharp.Interop
 			CTL_TOOLTIP = 33,
 
 			CTL_HIDDEN = 34,
-			CTL_URL = 35,				///< URL input element.
+			CTL_URL = 35,				// URL input element.
 			CTL_TOOLBAR = 36,
 
-			CTL_WINDOW = 37,			///< has HWND attached to it
+			CTL_WINDOW = 37,			// has HWND attached to it
 
 			CTL_LABEL = 38,
-			CTL_IMAGE = 39,				///< image/video object.  
-			CTL_PLAINTEXT = 40,			///< Multiline TextBox + colorizer.
+			CTL_IMAGE = 39,				// image/video object.  
+			CTL_PLAINTEXT = 40,			// Multiline TextBox + colorizer.
 		}
 
 		public enum NODE_TYPE : uint

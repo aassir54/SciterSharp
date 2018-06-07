@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LibConsole\console.tis" />
-    <None Include="LibConsole\debug-peer.tis" />
     <None Include="LibConsole\utils.tis" />
     <None Include="SciterMidi.snk" />
     <None Include="scripts\packfolder" />

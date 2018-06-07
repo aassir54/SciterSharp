@@ -47,7 +47,7 @@ namespace SciterSharp
 		static SciterHost()
 		{
 			_arch = new SciterArchive();
-			_arch.Open(SciterAppResource.ArchiveResource.resources);
+			_arch.Open(ArchiveResource.resources);
 		}
 
 		public SciterHost() { }
@@ -73,6 +73,7 @@ namespace SciterSharp
 
 			_hwnd = hwnd;
 
+			// Register a global event handler for this Sciter window
 			_cbk = HandleNotification;
 			_api.SciterSetCallback(hwnd, Marshal.GetFunctionPointerForDelegate(_cbk), IntPtr.Zero);
 
@@ -201,12 +202,13 @@ namespace SciterSharp
 			});
 		}
 
+		/*
 		/// <summary>
 		/// Runs the inspector process, waits 1 second, and calls view.connectToInspector() to inspect your page.
 		/// (Before everything it kills any previous instance of the inspector process)
 		/// </summary>
 		/// <param name="inspector_exe">Path to the inspector executable, can be an absolute or relative path.</param>
-		/*public void DebugInspect(string inspector_exe)
+		public void DebugInspect(string inspector_exe)
 		{
 			var ps = Process.GetProcessesByName(inspector_exe);
 			foreach(var p in ps)
