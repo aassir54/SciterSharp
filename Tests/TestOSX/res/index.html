@@ -1,10 +1,7 @@
 ﻿<html>
 	<head>
 		<script type="text/tiscript">
-			MsgBox()
-			$(button).onClick = function() {
-				MsgBox()
-			};
+			var proc = System.Process.exec.apply("open", "-R", "~");
 		</script>
 
 		<style>
