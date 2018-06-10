@@ -1,4 +1,4 @@
-<!-- OmniView:on, console:off -->
+<!-- OmniView:on -->
 <html>
 <head>
 	<style>
@@ -13,8 +13,9 @@
 	</style>
 
 	<script type="text/tiscript">
-		var img = new Image(200, 200, $(div));
-		view.OnScriptCall(img);
+		self.post(function() {
+			console.show({ asd: 123 });
+		});
 	</script>
 </head>
 

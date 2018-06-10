@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 
-namespace TestCore
+namespace TestWinForms
 {
 	class Host : BaseHost
 	{
@@ -19,32 +19,19 @@ namespace TestCore
 
 	class HostEvh : SciterEventHandler
 	{
-		public bool Host_HelloWorld(SciterElement el, SciterValue[] args, out SciterValue result)
+		protected override bool OnScriptCall(SciterElement se, string name, SciterValue[] args, out SciterValue result)
 		{
-			result = new SciterValue(argss =>
+			switch(name)
 			{
-				return new SciterValue();
-			}); ;
-			return true;
-		}
-
-		public bool Host_DoSomething(SciterElement el, SciterValue[] args, out SciterValue result)
-		{
-			result = null;
-			return true;
-		}
-
-		protected override bool OnEvent(SciterElement elSource, SciterElement elTarget, SciterXBehaviors.BEHAVIOR_EVENTS type, IntPtr reason, SciterValue data)
-		{
-			if(type == SciterXBehaviors.BEHAVIOR_EVENTS.DOCUMENT_CREATED)
-			{
-
+				case "Host_HelloWorld":
+					result = new SciterValue("Hello World! (from native side)");
+					return true;
 			}
-			return base.OnEvent(elSource, elTarget, type, reason, data);
+
+			result = null;
+			return false;
 		}
 	}
-
-
 
 	// This base class overrides OnLoadData and does the resource loading strategy
 	// explained at http://misoftware.rs/Bootstrap/Dev
@@ -97,6 +84,6 @@ namespace TestCore
 					_api.SciterDataReady(_wnd._hwnd, sld.uri, data, (uint) data.Length);
 			}
 			return base.OnLoadData(sld);
-		}
-	}
+        }
+    }
 }

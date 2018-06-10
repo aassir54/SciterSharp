@@ -22,9 +22,6 @@ namespace TestGraphics
 
 			Console.WriteLine("Sciter: " + SciterX.Version);
 
-			var vm = SciterX.TIScriptAPI.create_vm();
-			SciterX.TIScriptAPI.destroy_vm(vm);
-
 			// Create the window
 			var wnd = new SciterWindow();
 			wnd.CreateMainWindow(1500, 800);

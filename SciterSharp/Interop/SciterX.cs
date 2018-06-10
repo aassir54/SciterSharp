@@ -175,9 +175,6 @@ namespace SciterSharp.Interop
 
 				IntPtr api_ptr = API.TIScriptAPI();
 
-				var a = new TIScript.Test();
-				Marshal.PtrToStructure(api_ptr, a);
-
 				_tiapi = (TIScript.ISciterTIScriptAPI)Marshal.PtrToStructure(api_ptr, typeof(TIScript.ISciterTIScriptAPI));
 			}
 			return _tiapi.Value;

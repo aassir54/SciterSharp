@@ -156,21 +156,24 @@ namespace SciterSharp
 		}*/
 
 #if WINDOWS
-		public void CreateChildWindow(IntPtr hwnd_parent)
+		public void CreateChildWindow(IntPtr hwnd_parent, SciterXDef.SCITER_CREATE_WINDOW_FLAGS flags = SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CHILD)
 		{
-			if(PInvokeWindows.IsWindow(hwnd_parent) == false) throw new ArgumentException("Invalid parent window");
+			if(PInvokeWindows.IsWindow(hwnd_parent) == false)
+				throw new ArgumentException("Invalid parent window");
 
-			PInvokeUtils.RECT rc;
-			PInvokeWindows.GetClientRect(hwnd_parent, out rc);
+			PInvokeUtils.RECT frame;
+			PInvokeWindows.GetClientRect(hwnd_parent, out frame);
 
+#if true
 			string wndclass = Marshal.PtrToStringUni(_api.SciterClassName());
-			_hwnd = PInvokeWindows.CreateWindowEx(0, wndclass, null, PInvokeWindows.WS_CHILD, 0, 0, rc.right, rc.bottom, hwnd_parent, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+			_hwnd = PInvokeWindows.CreateWindowEx(0, wndclass, null, PInvokeWindows.WS_CHILD, 0, 0, frame.right, frame.bottom, hwnd_parent, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
 			//SetSciterOption(SciterXDef.SCITER_RT_OPTIONS.SCITER_SET_DEBUG_MODE, new IntPtr(1));// NO, user should opt for it
+#else
+			_hwnd = _api.SciterCreateWindow(flags, ref frame, _proc, IntPtr.Zero, hwnd_parent);
+#endif
 
-			/*PInvokeUtils.RECT frame = new PInvokeUtils.RECT();
-			_hwnd = _api.SciterCreateWindow(SciterXDef.SCITER_CREATE_WINDOW_FLAGS.SW_CHILD, ref frame, _proc, IntPtr.Zero, hwnd_parent);
 			if(_hwnd == IntPtr.Zero)
-				throw new Exception("CreateChildWindow() failed");*/
+				throw new Exception("CreateChildWindow() failed");
 		}
 #endif
 
@@ -182,6 +185,21 @@ namespace SciterSharp
 			PInvokeGTK.gtk_widget_destroy(_gtkwindow);
 #endif
 		}
+
+#if WINDOWS
+		public bool ModifyStyleEx(PInvokeWindows.SetWindowLongFlags dwRemove, PInvokeWindows.SetWindowLongFlags dwAdd)
+		{
+			int GWL_EXSTYLE = -20;
+
+			PInvokeWindows.SetWindowLongFlags dwStyle = (PInvokeWindows.SetWindowLongFlags)PInvokeWindows.GetWindowLongPtr(_hwnd, GWL_EXSTYLE);
+			PInvokeWindows.SetWindowLongFlags dwNewStyle = (dwStyle & ~dwRemove) | dwAdd;
+			if(dwStyle == dwNewStyle)
+				return false;
+
+			PInvokeWindows.SetWindowLongPtr(_hwnd, GWL_EXSTYLE, (IntPtr)dwNewStyle);
+			return true;
+		}
+#endif
 
 		/// <summary>
 		/// Centers the window in the screen. You must call it after the window is created, but before it is shown to avoid flickering

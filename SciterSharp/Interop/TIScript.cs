@@ -27,42 +27,27 @@ namespace SciterSharp.Interop
 	public static class TIScript
 	{
 		[StructLayout(LayoutKind.Sequential)]
-		public class Test
-		{
-			public IntPtr p1;
-			public IntPtr p2;
-			public IntPtr p3;
-			public IntPtr p4;
-			public IntPtr p5;
-			public IntPtr p6;
-			public IntPtr p7;
-			public IntPtr p8;
-			public IntPtr p9;
-			public IntPtr p10;
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
 		public struct ISciterTIScriptAPI
 		{
 			public FPTR_create_vm create_vm;
 			public FPTR_destroy_vm destroy_vm;
 			public FPTR_dummy invoke_gc;
 			public FPTR_dummy set_std_streams;
-			public FPTR_dummy get_current_vm;
+			public FPTR_get_current_vm get_current_vm;
 			public FPTR_get_global_ns get_global_ns;
 			public FPTR_dummy get_current_ns;
 
 			public FPTR_dummy is_int;
 			public FPTR_dummy is_float;
 			public FPTR_dummy is_symbol;
-			public FPTR_dummy is_string;
+			public FPTR_is_string is_string;
 			public FPTR_dummy is_array;
 			public FPTR_dummy is_object;
 			public FPTR_dummy is_native_object;
 			public FPTR_dummy is_function;
 			public FPTR_dummy is_native_function;
 			public FPTR_dummy is_instance_of;
-			public FPTR_dummy is_undefined;
+			public FPTR_is_undefined is_undefined;
 			public FPTR_dummy is_nothing;
 			public FPTR_dummy is_null;
 			public FPTR_dummy is_true;
@@ -132,7 +117,7 @@ namespace SciterSharp.Interop
 			// path here is global "path" of the object, something like
 			// "one"
 			// "one.two", etc.
-			public FPTR_dummy get_value_by_path;
+			public FPTR_get_value_by_path get_value_by_path;
 
 			// pins
 			public FPTR_dummy pin;
@@ -155,7 +140,7 @@ namespace SciterSharp.Interop
 			public FPTR_dummy make_val_list;
 
 			// returns number of props in object, elements in array, or bytes in byte array.
-			public FPTR_dummy get_length;
+			public FPTR_get_length get_length;
 			// for( var val in coll ) {...}
 			public FPTR_dummy get_next;
 			// for( var (key,val) in coll ) {...}
@@ -176,16 +161,36 @@ namespace SciterSharp.Interop
 			public delegate void FPTR_destroy_vm(IntPtr pvm);
 
 			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+			public delegate IntPtr FPTR_get_current_vm();
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 			public delegate tiscript_value FPTR_get_global_ns(IntPtr tiscript_VM_ptr);
 
 			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+			public delegate bool FPTR_is_string(ref tiscript_value v);
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+			public delegate bool FPTR_is_undefined(ref tiscript_value v);
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 			public delegate bool FPTR_eval_string(IntPtr tiscript_VM_ptr, tiscript_value ns, [MarshalAs(UnmanagedType.LPWStr)]string script, uint script_length, out tiscript_value pretval);
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+			public delegate bool FPTR_get_value_by_path(IntPtr tiscript_VM_ptr, out tiscript_value ns, [MarshalAs(UnmanagedType.LPStr)]string path);
+
+			[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+			public delegate int FPTR_get_length(IntPtr tiscript_VM_ptr, tiscript_value obj);
+			
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct tiscript_value
 		{
 			ulong value;
+
+			public bool IsString { get { return SciterX.TIScriptAPI.is_string(ref this); } }
+			public bool IsUndefined { get { return SciterX.TIScriptAPI.is_undefined(ref this); } }
+			public int Length { get { return SciterX.TIScriptAPI.get_length(SciterX.TIScriptAPI.get_current_vm(), this); } }
 		}
 	}
 }
