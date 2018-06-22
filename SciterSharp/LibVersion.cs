@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SciterSharp
 {
-	static class LibVersion
+	public static class LibVersion
 	{
-		public const string AssemblyVersion = "2.0.66";
+		public const string AssemblyVersion = "2.0.67";
 	}
 }
