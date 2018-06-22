@@ -164,6 +164,8 @@ namespace SciterSharp.Interop
 
 			public FPTR_textCreateForElement	textCreateForElement;
 			public FPTR_textCreate				textCreate;
+			public FPTR_textAddRef				textAddRef;
+			public FPTR_textRelease				textRelease;
 			public FPTR_textGetMetrics			textGetMetrics;
 			public FPTR_textSetBox				textSetBox;
 			public FPTR_gDrawText				gDrawText;
@@ -396,6 +398,9 @@ namespace SciterSharp.Interop
 			// create text layout using explicit format declaration
 			// GRAPHIN_RESULT SCFN(textCreate)(HTEXT* ptext, LPCWSTR text, UINT textLength, const SCITER_TEXT_FORMAT* format );
 			public delegate GRAPHIN_RESULT FPTR_textCreate(out IntPtr htext, [MarshalAs(UnmanagedType.LPWStr)]string text, uint textLength, ref SCITER_TEXT_FORMAT format);
+
+			public delegate GRAPHIN_RESULT FPTR_textAddRef(IntPtr htext);
+			public delegate GRAPHIN_RESULT FPTR_textRelease(IntPtr htext);
 
 			// GRAPHIN_RESULT SCFN(textGetMetrics)(HTEXT text, DIM* minWidth, DIM* maxWidth, DIM* height, DIM* ascent, DIM* descent, UINT* nLines);
 			public delegate GRAPHIN_RESULT FPTR_textGetMetrics(IntPtr htext, out float minWidth, out float maxWidth, out float height, out float ascent, out float descent, out uint nLines);

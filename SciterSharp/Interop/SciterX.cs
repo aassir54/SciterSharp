@@ -135,11 +135,16 @@ namespace SciterSharp.Interop
 		{
 			if(_gapi == null)
 			{
+				uint major = _api.Value.SciterVersion(1);
+				uint minor = _api.Value.SciterVersion(0);
+				Debug.Assert(major >= 0x00040000);
+				Debug.Assert(minor >= 0x000a1763);
+
 				int api_struct_size = Marshal.SizeOf(typeof(SciterXGraphics.ISciterGraphicsAPI));
 				if(IntPtr.Size == 8)
-					Debug.Assert(api_struct_size == 268 * 2);
+					Debug.Assert(api_struct_size == 276 * 2);
 				else
-					Debug.Assert(api_struct_size == 268);
+					Debug.Assert(api_struct_size == 276);
 
 				IntPtr api_ptr = API.GetSciterGraphicsAPI();
 				_gapi = (SciterXGraphics.ISciterGraphicsAPI)Marshal.PtrToStructure(api_ptr, typeof(SciterXGraphics.ISciterGraphicsAPI));

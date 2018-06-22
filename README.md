@@ -1,6 +1,6 @@
 ![](http://misoftware.rs/Content/BlogCDN/csharp-bindings.png)
 
-ACTUAL SCITER VERSION: 4.0.1.1
+ACTUAL SCITER VERSION: 4.1.10.5987
 
 Windows NuGet: [![NuGet](https://img.shields.io/badge/dynamic/json.svg?label=nuget&url=https%3A%2F%2Fraw.githubusercontent.com%2FMISoftware%2FSciterSharp%2Fmaster%2FSciterSharp%2Fversion.json&query=%24.version&colorB=3085C0)](https://www.nuget.org/packages/SciterSharpWindows/)
 
