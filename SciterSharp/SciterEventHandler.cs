@@ -38,7 +38,6 @@ namespace SciterSharp
 		public SciterEventHandler() { _proc = EventProc; Name = this.GetType().FullName; }
 		public SciterEventHandler(string name) { Name = name; }
 		public string Name { get; set; }
-		public bool LibConsoleInjector { get; set; }
 		public readonly SciterXBehaviors.FPTR_ElementEventProc _proc;// keep a copy of the delegate so it survives GC
 
 
@@ -203,11 +202,6 @@ namespace SciterSharp
 					{
 						SciterXBehaviors.BEHAVIOR_EVENT_PARAMS p = (SciterXBehaviors.BEHAVIOR_EVENT_PARAMS)Marshal.PtrToStructure(prms, typeof(SciterXBehaviors.BEHAVIOR_EVENT_PARAMS));
 						SciterElement se2 = p.he != IntPtr.Zero ? new SciterElement(p.he) : null;
-						if(LibConsoleInjector && p.cmd == SciterXBehaviors.BEHAVIOR_EVENTS.DOCUMENT_CREATED)
-						{
-							if(se2.Parent == null)
-								se2.Eval("include \"scitersharp:console.tis\";");
-						}
 						return OnEvent(se, se2, p.cmd, p.reason, new SciterValue(p.data));
 					}
 

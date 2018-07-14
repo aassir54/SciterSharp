@@ -207,6 +207,12 @@ namespace SciterSharp.Interop
 
 			/// <summary>hWnd, value - TRUE/FALSE - window uses per pixel alpha (e.g. WS_EX_LAYERED/UpdateLayeredWindow() window)</summary>
 			SCITER_ALPHA_WINDOW = 12,
+
+			/// <summary>
+			///	hWnd - N/A , value LPCSTR - UTF-8 encoded script source to be loaded into each view before any other script execution.
+			/// The engine copies this string inside the call.
+			/// </summary>
+			SCITER_SET_INIT_SCRIPT = 13,
 		}
 
 #if WINDOWS

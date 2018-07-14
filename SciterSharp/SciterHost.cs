@@ -48,6 +48,15 @@ namespace SciterSharp
 		{
 			_arch = new SciterArchive();
 			_arch.Open(ArchiveResource.resources);
+
+			if(InjectLibConsole)
+			{
+				byte[] byteArray = Encoding.UTF8.GetBytes("include \"scitersharp:console.tis\";");
+				GCHandle pinnedArray = GCHandle.Alloc(byteArray, GCHandleType.Pinned);
+				IntPtr pointer = pinnedArray.AddrOfPinnedObject();
+				SciterX.API.SciterSetOption(IntPtr.Zero, SciterXDef.SCITER_RT_OPTIONS.SCITER_SET_INIT_SCRIPT, pointer);
+				pinnedArray.Free();
+			}
 		}
 
 		public SciterHost() { }
@@ -114,8 +123,7 @@ namespace SciterSharp
 			Debug.Assert(_hwnd != IntPtr.Zero, "Call SciterHost.SetupWindow() first");
 			Debug.Assert(evh != null);
 			Debug.Assert(_window_evh == null, "You can attach only a single SciterEventHandler per SciterHost/window");
-
-			evh.LibConsoleInjector = InjectLibConsole;
+			
 			_window_evh = evh;
 			_api.SciterWindowAttachEventHandler(_hwnd, evh._proc, IntPtr.Zero, (uint)SciterXBehaviors.EVENT_GROUPS.HANDLE_ALL);
 		}

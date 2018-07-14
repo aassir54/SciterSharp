@@ -4,9 +4,12 @@
 	<title>WHOW</title>
 
 	<script type="text/tiscript">
-		$(button).onClick = function() {
-			var proc = System.Process.exec("explorer.exe");
-		}
+		console.log("WOW");
+		view.dialog({
+			url: self.url("glyphs.html"),
+			width: 1320,
+			height: 800,
+		});
 	</script>
 </head>
 

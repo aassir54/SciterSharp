@@ -12,9 +12,6 @@ namespace TestCore
 {
 	class Host : BaseHost
 	{
-		// Things to do here:
-		// -override OnLoadData() to customize or track resource loading
-		// -override OnPostedNotification() to handle notifications generated with SciterHost.PostNotification()
 	}
 
 	class HostEvh : SciterEventHandler
@@ -24,7 +21,7 @@ namespace TestCore
 			result = new SciterValue(argss =>
 			{
 				return new SciterValue();
-			}); ;
+			});
 			return true;
 		}
 
@@ -33,24 +30,9 @@ namespace TestCore
 			result = null;
 			return true;
 		}
-
-		protected override bool OnEvent(SciterElement elSource, SciterElement elTarget, SciterXBehaviors.BEHAVIOR_EVENTS type, IntPtr reason, SciterValue data)
-		{
-			if(type == SciterXBehaviors.BEHAVIOR_EVENTS.DOCUMENT_CREATED)
-			{
-
-			}
-			return base.OnEvent(elSource, elTarget, type, reason, data);
-		}
 	}
 
 
-
-	// This base class overrides OnLoadData and does the resource loading strategy
-	// explained at http://misoftware.rs/Bootstrap/Dev
-	//
-	// - in DEBUG mode: resources loaded directly from the file system
-	// - in RELEASE mode: resources loaded from by a SciterArchive (packed binary data contained as C# code in ArchiveResource.cs)
 	class BaseHost : SciterHost
 	{
 		protected static SciterX.ISciterAPI _api = SciterX.API;

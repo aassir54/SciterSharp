@@ -85,6 +85,9 @@
       <Name>SciterSharpWindows</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\glyphs.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>$(ProjectDir)scripts\packWindows.bat $(ConfigurationName)</PreBuildEvent>
