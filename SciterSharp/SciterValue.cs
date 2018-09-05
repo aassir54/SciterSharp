@@ -233,6 +233,9 @@ namespace SciterSharp
 		}
 
 
+		/// <summary>
+		/// Constructs a TIScript array T[] where T is a basic type like int or string
+		/// </summary>
 		public static SciterValue FromList<T>(IList<T> list) where T : /*struct,*/ IConvertible
 		{
 			Debug.Assert(list != null);
@@ -248,6 +251,10 @@ namespace SciterSharp
 				sv.SetItem(i, new SciterValue(list[i]));
 			return sv;
 		}
+
+		/// <summary>
+		/// Constructs a TIScript key-value object from a dictionary with string as keys and T as values, where T is a basic type like int or string
+		/// </summary>
 		public static SciterValue FromDictionary<T>(IDictionary<string, T> dic) where T : /*struct,*/ IConvertible
 		{
 			Debug.Assert(dic != null);
@@ -257,6 +264,10 @@ namespace SciterSharp
 				sv.SetItem(new SciterValue(item.Key), new SciterValue(item.Value));
 			return sv;
 		}
+
+		/// <summary>
+		/// Constructs a TIScript key-value object from a dictionary with string as keys and SciterValue as values
+		/// </summary>
 		public static SciterValue FromDictionary(IDictionary<string, SciterValue> dic)
 		{
 			Debug.Assert(dic != null);
