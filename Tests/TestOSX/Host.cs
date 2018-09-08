@@ -12,6 +12,7 @@ namespace TestOSX
 		{
 			RegisterBehaviorHandler(typeof(ImgDrawBehavior));
 
+			AttachEvh(new HostEVH());
 			wnd.LoadPage("file:///Users/midiway/Documents/SciterSharp/Tests/TestOSX/res/index.html");
 			wnd.CenterTopLevelWindow();
 			wnd.Show();
@@ -21,5 +22,10 @@ namespace TestOSX
 		{
 			return base.OnLoadData(sld);
 		}
+	}
+
+	class HostEVH : SciterEventHandler
+	{
+
 	}
 }

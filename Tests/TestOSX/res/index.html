@@ -1,7 +1,11 @@
 ﻿<html>
 	<head>
 		<script type="text/tiscript">
-			var proc = System.Process.exec.apply("open", "-R", "~");
+			var popup = view.window{
+				type: View.TOOL_WINDOW,
+				url: self.url("dlg.html"),
+				parameters: { abc: 123 },
+			};
 		</script>
 
 		<style>

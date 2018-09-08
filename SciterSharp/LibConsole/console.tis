@@ -65,12 +65,12 @@ namespace console
 		var url = "scitersharp:show_data.html";
 		if(typeof data==#Image)
 			url = "scitersharp:show_img.html";
-
+		
 		var popup = view.window{
 			type: View.TOOL_WINDOW,
 			url: url,
 			alignment: 5,
-			parameters: data,
+			parameters: { abc: 123 },
 			screen: view.screen
 		};
 		ns_arr_popups.push(popup);

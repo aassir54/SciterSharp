@@ -10,6 +10,8 @@ namespace PublishNuget
 	{
 		public static void Main(string[] args)
 		{
+			Console.WriteLine("SciterSharp: " + LibVersion.AssemblyVersion);
+
 			if(Environment.OSVersion.Platform == PlatformID.Unix)
 			{
 				Environment.CurrentDirectory += "/../../../SciterSharp";

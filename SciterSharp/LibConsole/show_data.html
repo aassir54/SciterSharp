@@ -17,8 +17,7 @@
 				if(view.parameters)
 					this.expandOptionData(this, 0, view.parameters);
 			}
-
-
+			
 			function expandOptionData(el_parent, ideep, data)
 			{
 				function appendOption(el_parent, vdisplay)
@@ -50,7 +49,7 @@
 					for(var (i, item) in data)
 					{
 						var (vcomposite, vdisplay) = getValueDisplay(item);
-						vdisplay = "<span.field>[" + i.toString() + "]:</span> " + vdisplay; 
+						vdisplay = "<span.field>[" + i.toString() + "]:</span> " + vdisplay;
 
 						if(vcomposite)
 							appendCompositeOption(el_parent, vdisplay, item);
@@ -65,7 +64,7 @@
 						var arr_kv = [];
 						for(var (k,v) in data)
 							arr_kv.push([k, v]);
-						
+
 						if(data.length==0)
 						{
 							var el_opt = appendOption(el_parent, "<span.empty>empty</span>");
@@ -89,7 +88,7 @@
 						}
 						break;
 					}
-		
+
 				case #Node:
 					// membersOf
 					appendCompositeOption(el_parent, "<span.pseudo>membersOf</span>", membersOf(data));
@@ -271,12 +270,12 @@
 						appendOption(el_parent, "<span.field>isComment:</span> " + vdisplay);
 					}
 					break;
-			
+
 				case #function:
 					// membersOf
 					appendCompositeOption(el_parent, "<span.pseudo>membersOf</span>", membersOf(data));
 					break;
-			
+
 				case #Event:
 					{
 						var (vcomposite, vdisplay);
@@ -388,7 +387,7 @@
 					break;
 				}
 			}
-	
+
 			function getValueDisplay(val)
 			{
 				switch(typeof val)
