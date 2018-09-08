@@ -13,15 +13,24 @@ namespace TestCore
 {
 	class Program
 	{
+		class SciterMessages : SciterDebugOutputHandler
+		{
+			protected override void OnOutput(SciterXDef.OUTPUT_SUBSYTEM subsystem, SciterXDef.OUTPUT_SEVERITY severity, string text)
+			{
+				Console.WriteLine(text);
+				//Debug.Write(text);// so I can see Debug output even if 'native debugging' is off
+			}
+		}
+
 		public static SciterWindow AppWnd;
 		public static Host AppHost;
+		private static SciterMessages sm = new SciterMessages();
 
 		[STAThread]
 		static void Main(string[] args)
 		{
-			Console.WriteLine();
-			Console.WriteLine("Sciter " + SciterX.Version);
-			Console.WriteLine(IntPtr.Size);
+			Console.WriteLine("Sciter: " + SciterX.Version);
+			Console.WriteLine("Bitness: " + IntPtr.Size);
 
 			// Sciter needs this for drag'n'drop support; STAThread is required for OleInitialize succeess
 			int oleres = PInvokeWindows.OleInitialize(IntPtr.Zero);
@@ -48,8 +57,6 @@ namespace TestCore
 			host.AttachEvh(new HostEvh());
 			host.SetupPage("index.html");
 			//host.DebugInspect();
-
-
 
 			//byte[] css_bytes = File.ReadAllBytes(@"D:\ProjetosSciter\AssetsDrop\AssetsDrop\res\css\global.css");
 			//SciterX.API.SciterAppendMasterCSS(css_bytes, (uint) css_bytes.Length);

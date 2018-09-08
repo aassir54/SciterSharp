@@ -187,7 +187,7 @@ namespace SciterSharp
 		}
 
 #if WINDOWS
-		public bool ModifyStyleEx(PInvokeWindows.SetWindowLongFlags dwRemove, PInvokeWindows.SetWindowLongFlags dwAdd)
+		public bool ModifyStyle(PInvokeWindows.SetWindowLongFlags dwRemove, PInvokeWindows.SetWindowLongFlags dwAdd)
 		{
 			int GWL_EXSTYLE = -20;
 
@@ -197,6 +197,19 @@ namespace SciterSharp
 				return false;
 
 			PInvokeWindows.SetWindowLongPtr(_hwnd, GWL_EXSTYLE, (IntPtr)dwNewStyle);
+			return true;
+		}
+
+		public bool ModifyStyleEx(PInvokeWindows.SetWindowLongFlags dwRemove, PInvokeWindows.SetWindowLongFlags dwAdd)
+		{
+			int GWL_STYLE = -16;
+
+			PInvokeWindows.SetWindowLongFlags dwStyle = (PInvokeWindows.SetWindowLongFlags)PInvokeWindows.GetWindowLongPtr(_hwnd, GWL_STYLE);
+			PInvokeWindows.SetWindowLongFlags dwNewStyle = (dwStyle & ~dwRemove) | dwAdd;
+			if(dwStyle == dwNewStyle)
+				return false;
+
+			PInvokeWindows.SetWindowLongPtr(_hwnd, GWL_STYLE, (IntPtr)dwNewStyle);
 			return true;
 		}
 #endif

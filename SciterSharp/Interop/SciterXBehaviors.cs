@@ -205,6 +205,25 @@ namespace SciterSharp.Interop
 			SCROLL_CORNER_RELEASED,
 		}
 
+		public enum SCROLL_SOURCE
+		{
+			SCROLL_SOURCE_UNKNOWN,
+			SCROLL_SOURCE_KEYBOARD,  // SCROLL_PARAMS::reason <- keyCode
+			SCROLL_SOURCE_SCROLLBAR, // SCROLL_PARAMS::reason <- SCROLLBAR_PART 
+			SCROLL_SOURCE_ANIMATOR,
+		}
+
+		public enum SCROLLBAR_PART
+		{
+			SCROLLBAR_BASE,
+			SCROLLBAR_PLUS,
+			SCROLLBAR_MINUS,
+			SCROLLBAR_SLIDER,
+			SCROLLBAR_PAGE_MINUS,
+			SCROLLBAR_PAGE_PLUS,
+			SCROLLBAR_CORNER,
+		}
+
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SCROLL_PARAMS
 		{
@@ -212,6 +231,8 @@ namespace SciterSharp.Interop
 			public IntPtr			target;// HELEMENT
 			public int				pos;
 			public bool				vertical;
+			public SCROLL_SOURCE	source;	// SCROLL_SOURCE
+			public uint				reason; // key or SCROLLBAR_PART
 		}
 
 		public enum GESTURE_CMD : uint
@@ -265,6 +286,7 @@ namespace SciterSharp.Interop
 			DRAW_BACKGROUND = 0,
 			DRAW_CONTENT = 1,
 			DRAW_FOREGROUND = 2,
+			DRAW_OUTLINE = 3,
 		}
 
 		//struct SCITER_GRAPHICS;
